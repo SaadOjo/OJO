@@ -1,2 +1,2 @@
-# WeeklyReports
-Contains the weekly reports for EE493 design project
+# OJO
+Colaboration platform for OJO company
