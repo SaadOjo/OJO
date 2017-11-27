@@ -1,0 +1,19 @@
+Using blinking LED in a sphere as a flag.
+
+The led is placed in a sphere for it to propagate radially in every direction.
+
+* Can also add color as additional information to confirm.
+
+1) Identify the ball. Circle detection algorithim perhaps.
+
+2) Normalize the off state. Compensate for ambient lighting conditions.
+
+3) Identify led on state reliably. Measure on time. 
+
+
+2*) Calibration phase.
+*) Identify the sphere. 
+ Analyse the video for few seconds.
+-> Average luminace of pixels inside the circle.
+-> Determine off and on ambient levels. use the leser values as normal values.
+-> Average three periods.
