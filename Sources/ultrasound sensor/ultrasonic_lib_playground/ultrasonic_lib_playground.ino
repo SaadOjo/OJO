@@ -33,7 +33,7 @@
  * This example code is released into the MIT License.
  */
 
-#include <Ultrasonic.h>
+#include "Ultrasonic.h"
 
 /*
  * Pass as a parameter the trigger and echo pin, respectively,
