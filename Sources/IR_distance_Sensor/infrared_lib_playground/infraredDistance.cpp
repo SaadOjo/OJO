@@ -17,6 +17,7 @@ bool infraredDistance::init(){
 float infraredDistance::getDistance()
 {
   _count = analogRead(_pin);
-  _distance = (float)_count*_referenceVoltage/1024;
+  _voltage = (float)_count*_referenceVoltage/1024;
+  _distance = 36.8*(1/_voltage);
   return _distance;
 }

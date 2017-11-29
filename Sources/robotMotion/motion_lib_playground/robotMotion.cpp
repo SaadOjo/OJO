@@ -4,13 +4,31 @@
  */
 #include "robotMotion.h"
 
-robotMotion::robotMotion(int pin)
+robotMotion::robotMotion(int motor_1_in_1, int motor_1_in_2, int motor_2_in_1, int motor_2_in_2)
 {
-  _pin = pin;
+  _motor_1_in_1 = motor_1_in_1;
+  _motor_1_in_2 = motor_1_in_2; 
+  _motor_2_in_1 = motor_2_in_1;
+  _motor_2_in_2 = motor_2_in_2;
  
 }
 
-bool robotMotion::init(){
+bool robotMotion::init()
+{
+  pinMode(_motor_1_in_1,OUTPUT);
+  pinMode(_motor_1_in_2,OUTPUT);
+  pinMode(_motor_2_in_1,OUTPUT);
+  pinMode(_motor_2_in_2,OUTPUT);
 
+}
+
+bool setSpeed()
+{
+  
+}
+bool robotMotion::setLeftSpeed(unsigned short int speed)
+{
+  analogWrite( _motor_1_in_1, speed);
+  analogWrite( _motor_1_in_2, 255 - speed);
 }
 

@@ -15,6 +15,7 @@ class infraredDistance
     float getDistance();
   private:
     float _distance;
+    float _voltage;
     int _count;
     int _pin;
     float _referenceVoltage = 5;

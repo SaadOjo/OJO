@@ -1,6 +1,6 @@
 #include "infraredDistance.h"
 
-infraredDistance mySensor(3);
+infraredDistance mySensor(2);
 float distance;
 
 void setup()
@@ -12,8 +12,9 @@ void setup()
 void loop()
 {
   distance = mySensor.getDistance();
-  Serial.println(String("The distance is:") + distance);
-  delay(1000);
+  //Serial.println(String("The distance is:") + distance);
+  Serial.println(distance);
+  delay(100);
   
 }
 
