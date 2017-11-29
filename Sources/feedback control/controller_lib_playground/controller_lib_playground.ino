@@ -1,9 +1,14 @@
 #include "controller.h"
+infraredDistance mySensor(1);
+controller myController(mySensor);
 
-setup()
+void setup()
 {
+  Serial.begin(9600);
 }
 
-loop()
+void loop()
 {
+  myController.followRobot(20);
+  delay(100);
 }
