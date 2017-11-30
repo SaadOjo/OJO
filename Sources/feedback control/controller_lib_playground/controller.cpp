@@ -10,7 +10,7 @@
 #include "controller.h"
 
 
-controller::controller(infraredDistance &sensor):_mySensor(&sensor)
+controller::controller(infraredDistance &sensor, robotMotion &motion):_mySensor(&sensor), _myMotion(&motion)
 {
   
 }
@@ -24,6 +24,7 @@ void controller::maintainDistance(int referenceDistance)
   _propotionalControl = _K_p * (referenceDistance - _relativeDistance);
   Serial.println(String("The relative distance is: ") + _relativeDistance);
   Serial.println(String("The controller output is: ") + _propotionalControl);
-  //myMotion.setSpeed(_propotionalControl); //Have to scale
+  _propotionalControl += 128;
+  _myMotion->setSpeed(_propotionalControl); //Have to scale
 }
 

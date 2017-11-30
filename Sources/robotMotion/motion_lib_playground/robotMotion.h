@@ -13,7 +13,7 @@ class robotMotion
     robotMotion(int motor_1_in_1, int motor_1_in_2, int motor_2_in_1, int motor_2_in_2);
     bool setSpeed(unsigned short int speed);
     bool setDirection();
-    bool setRightSpeed();
+    bool setRightSpeed(unsigned short int speed); 
     bool setLeftSpeed(unsigned short int speed); 
     bool init();
 

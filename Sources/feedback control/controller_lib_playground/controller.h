@@ -12,13 +12,11 @@
 #include "infraredDistance.h"
 #include "robotMotion.h"
 
-
-
 class controller
 {
   
   public:
-  controller(infraredDistance &sensor); //Sensor library will contain two sensors. It will take the best available data and send it to the controller
+  controller(infraredDistance &sensor, robotMotion &motion); //Sensor library will contain two sensors. It will take the best available data and send it to the controller
   void followRobot(int referenceDistance); //This code will run in the main loop
 
   private:
@@ -28,7 +26,8 @@ class controller
   int _relativeDistance;
   int _propotionalControl;
   infraredDistance *_mySensor;
-  float _K_p = 1;
+  robotMotion *_myMotion;
+  float _K_p = 20;
  
 };
 

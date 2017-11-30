@@ -22,13 +22,20 @@ bool robotMotion::init()
 
 }
 
-bool setSpeed()
+bool robotMotion::setSpeed(unsigned short int speed)
 {
-  
+  setLeftSpeed(speed);
+  setRightSpeed(speed);
 }
 bool robotMotion::setLeftSpeed(unsigned short int speed)
 {
   analogWrite( _motor_1_in_1, speed);
   analogWrite( _motor_1_in_2, 255 - speed);
+}
+
+bool robotMotion::setRightSpeed(unsigned short int speed)
+{
+  analogWrite( _motor_2_in_1, speed);
+  analogWrite( _motor_2_in_2, 255 - speed);
 }
 

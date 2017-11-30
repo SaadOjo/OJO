@@ -1,6 +1,7 @@
 #include "controller.h"
+robotMotion myMotion(5,6,10,9);
 infraredDistance mySensor(1);
-controller myController(mySensor);
+controller myController(mySensor, myMotion);
 
 void setup()
 {
@@ -9,6 +10,6 @@ void setup()
 
 void loop()
 {
-  myController.followRobot(20);
+  myController.followRobot(30);
   delay(100);
 }

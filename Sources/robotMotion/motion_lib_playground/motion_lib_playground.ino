@@ -10,9 +10,10 @@ void setup()
 
 void loop()
 {
-  myMotion.setLeftSpeed(0);
-  Serial.println("calisyor");
-  delay(1000);
+  myMotion.setSpeed(0);
+
+  //Serial.println("calisyor");
+  //delay(1000);
   /*
   for(int i = 0;i<256;i++)
   {
