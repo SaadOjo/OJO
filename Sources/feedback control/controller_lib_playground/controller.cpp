@@ -22,9 +22,23 @@ void controller::maintainDistance(int referenceDistance)
 {
   _relativeDistance = _mySensor -> getDistance();
   _propotionalControl = _K_p * (referenceDistance - _relativeDistance);
+
+  _propotionalControl += _controllerBias; //Add bias term for steady state
+
+  //Condition Output
+  if(_propotionalControl>255)
+  {
+    _propotionalControl = 255;
+  }
+  if(_propotionalControl<0)
+  {
+    _propotionalControl = 0;
+  }
+  _propotionalControl = map(_propotionalControl,0,255,128,255);
+
+  
   Serial.println(String("The relative distance is: ") + _relativeDistance);
   Serial.println(String("The controller output is: ") + _propotionalControl);
-  _propotionalControl += 128;
   _myMotion->setSpeed(_propotionalControl); //Have to scale
 }
 

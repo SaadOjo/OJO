@@ -1,5 +1,5 @@
 /*
- A custom library written for wireless lvdt LCD display
+ A custom library written IR diatance sensor
  Library wrıtten by Syed Saad Saif
  */
 #include "infraredDistance.h"

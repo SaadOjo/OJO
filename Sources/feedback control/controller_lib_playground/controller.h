@@ -21,13 +21,15 @@ class controller
 
   private:
   
-  //robotMotion myMotion(5,6,10,9);
   void maintainDistance(int referenceDistance);  
   int _relativeDistance;
   int _propotionalControl;
+  float _K_p = 20;
+  int _controllerBias;
+  
   infraredDistance *_mySensor;
   robotMotion *_myMotion;
-  float _K_p = 20;
+  
  
 };
 
