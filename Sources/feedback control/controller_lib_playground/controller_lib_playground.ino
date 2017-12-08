@@ -1,8 +1,7 @@
 #include "controller.h"
 #include "sensor.h"
-//include library here. declare ibrary inside servo lib as well
 robotMotion myMotion(5,6,10,9);
-sensor mySensor;
+sensor mySensor; //pass pins from here
 controller myController(mySensor, myMotion);
 
 void setup()
