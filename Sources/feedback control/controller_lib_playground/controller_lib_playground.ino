@@ -1,4 +1,5 @@
 #include "controller.h"
+//include library here. declare ibrary inside servo lib as well
 robotMotion myMotion(5,6,10,9);
 infraredDistance mySensor(1);
 controller myController(mySensor, myMotion);
