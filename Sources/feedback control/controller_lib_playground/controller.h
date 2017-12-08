@@ -11,14 +11,14 @@
 
 #define AVERAGE_SAMPLES 10
 
-#include "infraredDistance.h"
+#include "sensor.h"
 #include "robotMotion.h"
 
 class controller
 {
   
   public:
-  controller(infraredDistance &sensor, robotMotion &motion); //Sensor library will contain two sensors. It will take the best available data and send it to the controller
+  controller(sensor &sensor, robotMotion &motion); //Sensor library will contain two sensors. It will take the best available data and send it to the controller
   void followRobot(int referenceDistance); //This code will run in the main loop
 
   private:
@@ -31,7 +31,7 @@ class controller
   int _controllerBias;
   int _relativeDistanceArray[AVERAGE_SAMPLES];
   unsigned short int _ringCounter = 0;
-  infraredDistance *_mySensor;
+  sensor *_mySensor;
   robotMotion *_myMotion;
   
  

@@ -8,7 +8,7 @@
 #include "Arduino.h"
 #include "controller.h"
 
-controller::controller(infraredDistance &sensor, robotMotion &motion):_mySensor(&sensor), _myMotion(&motion)
+controller::controller(sensor &sensor, robotMotion &motion):_mySensor(&sensor), _myMotion(&motion)
 {
   
 }
