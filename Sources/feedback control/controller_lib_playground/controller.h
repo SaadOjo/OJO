@@ -9,6 +9,8 @@
 #ifndef controller_h
 #define controller_h
 
+#define AVERAGE_SAMPLES 10
+
 #include "infraredDistance.h"
 #include "robotMotion.h"
 
@@ -21,12 +23,14 @@ class controller
 
   private:
   
-  void maintainDistance(int referenceDistance);  
+  void maintainDistance(int referenceDistance); 
+  int getAverageDistance(); 
   int _relativeDistance;
   int _propotionalControl;
-  float _K_p = 20;
+  float _K_p = 10;
   int _controllerBias;
-  
+  int _relativeDistanceArray[AVERAGE_SAMPLES];
+  unsigned short int _ringCounter = 0;
   infraredDistance *_mySensor;
   robotMotion *_myMotion;
   
