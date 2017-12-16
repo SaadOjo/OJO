@@ -6,12 +6,14 @@ void setup()
 {
   Serial.begin(9600);
   myMotion.init();
+  myMotion.setSpeed(0);
+  myMotion.setDirection(0);
 }
 
 void loop()
 {
-  myMotion.setSpeed(0);
-
+  
+myMotion.run();
   //Serial.println("calisyor");
   //delay(1000);
   /*
