@@ -15,7 +15,7 @@ int posSaturate(int number, int saturationLevel)
 int negSaturate(int number, int saturationLevel)
 {
 
-  number = aSymmetricSaturate(number, saturationLevel, 0);
+  number = aSymmetricSaturate(number, -saturationLevel, 0);
 
   return number;
 }

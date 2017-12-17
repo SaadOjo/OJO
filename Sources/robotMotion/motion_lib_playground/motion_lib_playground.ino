@@ -2,16 +2,33 @@
 
 robotMotion myMotion(5,6,10,9);
 
+#define IN_BUFFER_SIZE 256
+char inputArray[IN_BUFFER_SIZE];
+char inChar;
 void setup()
 {
   Serial.begin(9600);
   myMotion.init();
-  myMotion.setSpeed(0);
+  myMotion.setSpeed(60);
   myMotion.setDirection(0);
 }
 
 void loop()
 {
+
+  if(Serial.available()>0)
+  {
+    inChar = Serial.read();
+    
+    inChar = inChar - 48;
+    inChar = inChar*10;
+    int s = inChar; 
+    Serial.println(s);
+    myMotion.setDirection(-s);
+  }
+
+
+  
   
 myMotion.run();
   //Serial.println("calisyor");

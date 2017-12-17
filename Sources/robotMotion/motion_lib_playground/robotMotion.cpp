@@ -32,36 +32,37 @@ _speed = speed;
 bool robotMotion::run()
 {
   //also consider direction
-  satDirection = symmetricSaturation(_direction,100);
+  int satDirection = symmetricSaturate(_direction,100);
   int leftSpeed;
   int rightSpeed;
   if(satDirection>0)//turn Right
   {
-    leftSpeed = 100;
-    rightSpeed = 100 - satDirection;
+    leftSpeed = _speed;
+    rightSpeed = (_speed*(100 - satDirection))/100;
   }
   else              //turn right
   {
     satDirection = -satDirection;
-    leftSpeed = 100 - satDirection; //I know that we can remove - satDirection and change the minus to plus. Don't be such a smart ass. It is done like this for code symmetry.
-    rightSpeed = 100;
+    rightSpeed = _speed;
+    leftSpeed = (_speed*(100 - satDirection))/100;//I know that we can remove - satDirection and change the minus to plus. Don't be such a smart ass. It is done like this for code symmetry.
   }
-  
-  runLeft(leftSpeed*_leftCalibrationFactor);
-  runRight(rightSpeed*_rightCalibrationFactor);
+  int calLeft = (leftSpeed*_leftCalibrationFactor)/100; //for debugging. use directly
+  int calRight = (rightSpeed*_rightCalibrationFactor)/100; 
+  //Serial.println(String("Left Speed: " + String(calLeft) + ",Right speed: " + String(calRight) ));
+  runLeft(calLeft);
+  runRight(calRight);
 }
 bool robotMotion::runLeft(unsigned short int speed)
 {
   int satSpeed = posSaturate(speed,100);
-  analogWrite( _motor_1_in_1, (satSpeed*128)/100);
-  analogWrite( _motor_1_in_2, ((satSpeed-100)*128)/100);
+  analogWrite( _motor_2_in_1, (satSpeed*255)/100);
+  analogWrite( _motor_2_in_2, 0);
 }
 
 bool robotMotion::runRight(unsigned short int speed)
 {
   int satSpeed = posSaturate(speed,100);
-  int satSpeed = posSaturate(speed,100);
-  analogWrite( _motor_1_in_1, (satSpeed*128)/100);
-  analogWrite( _motor_1_in_2, ((satSpeed-100)*128)/100);
+  analogWrite( _motor_1_in_1, (satSpeed*255)/100);
+  analogWrite( _motor_1_in_2, 0);
 }
 
