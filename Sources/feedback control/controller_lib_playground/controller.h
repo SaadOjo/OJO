@@ -27,6 +27,7 @@ class controller
   void maintainDistance(int referenceDistance); 
   int getAverageDistance(); 
   int _relativeDistance;
+  int _relativeDirection;
   int _propotionalControl;
   float _K_p = 4;
   int _controllerBias;

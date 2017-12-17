@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include "infraredDistance.h"
 #include "Ultrasonic.h"
+#include "infraredDirection.h"
 
 class sensor
 {
@@ -15,10 +16,13 @@ class sensor
     sensor();
     bool init();
     float getDistance();
+    float getDirection();
     
   private:
     float _distance;
     infraredDistance _mySensor;
+    infraredDirection _myDirectionSensor;
+    
     
 };
 

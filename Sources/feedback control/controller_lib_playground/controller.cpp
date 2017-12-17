@@ -20,6 +20,7 @@ void controller::maintainDistance(int referenceDistance)
 {
   
   _relativeDistance = getAverageDistance();
+  _relativeDirection = _mySensor -> getDirection();
   
   _propotionalControl = _K_p *  (_relativeDistance - referenceDistance);
 
@@ -40,8 +41,10 @@ void controller::maintainDistance(int referenceDistance)
   _propotionalControl = map(_propotionalControl,0,255,0,100);
 
   Serial.print(String("The relative distance is: ") + _relativeDistance);
-  Serial.println(String(" CO:") + _propotionalControl);
+  Serial.println(String(" SPD:") + _propotionalControl);
+  Serial.println(String(" DIR:") + _relativeDirection);
   _myMotion->setSpeed(_propotionalControl); //Have to scale
+  _myMotion->setDirection(_relativeDirection); //Have to scale
   _myMotion->run();
 }
 int controller::getAverageDistance()
