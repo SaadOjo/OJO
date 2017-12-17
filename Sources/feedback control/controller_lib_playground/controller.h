@@ -13,6 +13,7 @@
 
 #include "sensor.h"
 #include "robotMotion.h"
+#include "signalConditioner.h"
 
 class controller
 {
@@ -27,7 +28,7 @@ class controller
   int getAverageDistance(); 
   int _relativeDistance;
   int _propotionalControl;
-  float _K_p = 10;
+  float _K_p = 4;
   int _controllerBias;
   int _relativeDistanceArray[AVERAGE_SAMPLES];
   unsigned short int _ringCounter = 0;
