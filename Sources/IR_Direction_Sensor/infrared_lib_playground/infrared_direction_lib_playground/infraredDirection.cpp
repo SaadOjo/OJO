@@ -17,6 +17,9 @@ bool infraredDirection::init(){
 
 float infraredDirection::getDirection()
 {
+  _direction = (getRightVoltage() - getLeftVoltage())*20; //don't need saturation (no scaling required)
+
+  return _direction;
 }
 
 float infraredDirection::getLeftVoltage()
