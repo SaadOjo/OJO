@@ -2,23 +2,27 @@
  A custom library written for IR distance sensor
  Library wrıtten by Syed Saad Saif
  */
-#ifndef INFRARED_DISTANCE_H
-#define INFRARED_DISTANCE_H
+#ifndef REMOTE_DECODER_H
+#define REMOTE_DECODER_H
 
 #include <Arduino.h>
 
-class infraredDistance
+class remoteDecoder
 {
   public:
-    infraredDistance(int pin);
+    remoteDecoder(int pin);
     bool init();
-    float getDistance();
+    bool detectPulse();
+    int decode();
+
   private:
-    float _distance;
-    float _voltage;
-    int _count;
+    short int  detectEdge();
     int _pin;
-    float _referenceVoltage = 5;
+    bool lastEdgeType;
+    bool edgeType;
+    bool lastLevel = true;
+    bool level = true;
+    
 };
 
 #endif

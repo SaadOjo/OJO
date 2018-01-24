@@ -1,20 +1,26 @@
-#include "infraredDistance.h"
+#include "remoteDecoder.h"
 
-infraredDistance mySensor(1);
-float distance;
+remoteDecoder myDecoder(2);
+
+int decoded;
 
 void setup()
 {
-  Serial.begin(9600);
-  mySensor.init();
+  Serial.begin(115200);
+  myDecoder.init();
 }
 
 void loop()
 {
-  distance = mySensor.getDistance();
-  //Serial.println(String("The distance is:") + distance);
-  Serial.println(distance);
-  delay(100);
+ bool test = myDecoder.detectPulse();
+ Serial.println(test); 
+  if(test)
+  {
+    //decoded = myDecoder.decode();
+    Serial.println("Pulse Detected!");
+    //Serial.println(String("Input Recieved: ") + decoded):
+    delay(100);
+  }
   
 }
 

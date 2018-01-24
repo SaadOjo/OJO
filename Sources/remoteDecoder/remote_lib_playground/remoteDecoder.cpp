@@ -1,23 +1,66 @@
 /*
- A custom library written for wireless lvdt LCD display
+ A custom library written for IR distance sensor
  Library wrıtten by Syed Saad Saif
  */
-#include "infraredDistance.h"
+#include "remoteDecoder.h"
 
-infraredDistance::infraredDistance(int pin)
+remoteDecoder::remoteDecoder(int pin)
 {
   _pin = pin;
  
 }
 
-bool infraredDistance::init(){
-//Analog declaration
+bool remoteDecoder::init(){
+
+pinMode(_pin,INPUT);
+
 }
 
-float infraredDistance::getDistance()
-{
-  _count = analogRead(_pin);
-  _voltage = (float)_count*_referenceVoltage/1024;
-  _distance = 25.5*(1/_voltage);
-  return _distance;
+bool remoteDecoder::detectPulse(){
+bool edgeDetected = false;
+
+short int edge = detectEdge();
+
+//Serial.println(edge);
+
+  if(!edge)
+  {
+  }
+  
+  else 
+  {
+    if((edge == 1)&&(lastEdgeType == -1))
+    {
+      edgeDetected = true;
+    }
+
+    lastEdgeType = edge;
+  }
+  
+ return edgeDetected;
+}
+
+int remoteDecoder::decode(){
+}
+
+short int remoteDecoder::detectEdge(){
+  
+  level = digitalRead(_pin);
+  short int edge = 0;
+  if(level != lastLevel)
+  {
+    if(level)
+    {
+      edge = 1;
+    }
+    else if(level == 0) //Redundant
+    {
+      edge = -1;
+    }
+  }
+  else
+  {
+  }
+  lastLevel = level;
+  return edge;
 }
