@@ -1,12 +1,13 @@
 #include "controller.h"
 #include "sensor.h"
-robotMotion myMotion(5,6,10,9);
+robotMotion myMotion(5,6);
 sensor mySensor; //pass pins from here
 controller myController(mySensor, myMotion);
 
 void setup()
 {
   Serial.begin(9600);
+  myController.setMaxSpeed(40);
 }
 
 void loop()

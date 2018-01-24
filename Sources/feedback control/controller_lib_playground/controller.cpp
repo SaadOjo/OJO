@@ -12,6 +12,10 @@ controller::controller(sensor &sensor, robotMotion &motion):_mySensor(&sensor), 
 {
   
 }
+ bool controller::setMaxSpeed(unsigned char maxSpeed)
+{
+  _maxSpeed = maxSpeed;
+}
 void controller::followRobot(int referenceDistance)
 {
   maintainDistance(referenceDistance);
@@ -39,6 +43,7 @@ void controller::maintainDistance(int referenceDistance)
 
   _propotionalControl = posSaturate(_propotionalControl,255);
   _propotionalControl = map(_propotionalControl,0,255,0,100);
+  _propotionalControl = posSaturate(_propotionalControl,_maxSpeed);
 
   Serial.print(String("The relative distance is: ") + _relativeDistance);
   Serial.println(String(" SPD:") + _propotionalControl);
