@@ -9,7 +9,7 @@ void setup()
 {
   Serial.begin(9600);
   myMotion.init();
-  myMotion.setSpeed(50);
+  myMotion.setSpeed(15);
   myMotion.setDirection(0);
 }
 
