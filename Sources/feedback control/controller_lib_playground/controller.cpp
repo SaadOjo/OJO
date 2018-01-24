@@ -23,7 +23,8 @@ void controller::followRobot(int referenceDistance)
 void controller::maintainDistance(int referenceDistance)
 {
   
-  _relativeDistance = getAverageDistance();
+  //_relativeDistance = getAverageDistance();
+  _relativeDistance = _mySensor -> getDistance();
   _relativeDirection = _mySensor -> getDirection();
   
   _propotionalControl = _K_p *  (_relativeDistance - referenceDistance);
@@ -44,6 +45,11 @@ void controller::maintainDistance(int referenceDistance)
   _propotionalControl = posSaturate(_propotionalControl,255);
   _propotionalControl = map(_propotionalControl,0,255,0,100);
   _propotionalControl = posSaturate(_propotionalControl,_maxSpeed);
+  if(_propotionalControl<_minSpeed)
+  {
+    _propotionalControl = 0;
+  }
+  
 
   Serial.print(String("The relative distance is: ") + _relativeDistance);
   Serial.println(String(" SPD:") + _propotionalControl);
