@@ -11,7 +11,7 @@
 class robotMotion
 {
   public:
-    robotMotion(int motor_1_in_1, int motor_1_in_2, int motor_2_in_1, int motor_2_in_2);
+    robotMotion(int motor_1, int motor_2);
     bool run();
     bool setSpeed(unsigned short int speed);
     bool setDirection(short int direction);
@@ -20,10 +20,9 @@ class robotMotion
     bool init();
 
   private:
-    int _motor_1_in_1;
-    int _motor_1_in_2; 
-    int _motor_2_in_1; 
-    int _motor_2_in_2;
+    int _motor_1;
+    int _motor_2; 
+
     int _leftCalibrationFactor = 100; //Percentage
     int _rightCalibrationFactor = 100; //Percentage
     int _speed;

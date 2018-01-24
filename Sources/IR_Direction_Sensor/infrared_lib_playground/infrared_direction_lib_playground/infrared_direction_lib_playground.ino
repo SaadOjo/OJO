@@ -6,7 +6,7 @@ float leftVoltage;
 float rightVoltage;
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   mySensor.init();
 }
 

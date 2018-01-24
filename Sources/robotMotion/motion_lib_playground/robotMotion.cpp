@@ -4,20 +4,16 @@
  */
 #include "robotMotion.h"
 
-robotMotion::robotMotion(int motor_1_in_1, int motor_1_in_2, int motor_2_in_1, int motor_2_in_2)
+robotMotion::robotMotion(int motor_1, int motor_2)
 {
-  _motor_1_in_1 = motor_1_in_1;
-  _motor_1_in_2 = motor_1_in_2; 
-  _motor_2_in_1 = motor_2_in_1;
-  _motor_2_in_2 = motor_2_in_2;
+  _motor_1 = motor_1;
+  _motor_2 = motor_2; 
 }
 
 bool robotMotion::init()
 {
-  pinMode(_motor_1_in_1,OUTPUT);
-  pinMode(_motor_1_in_2,OUTPUT);
-  pinMode(_motor_2_in_1,OUTPUT);
-  pinMode(_motor_2_in_2,OUTPUT);
+  pinMode(_motor_1,OUTPUT);
+  pinMode(_motor_2,OUTPUT);
 }
 
 bool robotMotion::setDirection(short int direction) // -100 to 100
@@ -55,14 +51,12 @@ bool robotMotion::run()
 bool robotMotion::runLeft(unsigned short int speed)
 {
   int satSpeed = posSaturate(speed,100);
-  analogWrite( _motor_2_in_1, (satSpeed*255)/100);
-  analogWrite( _motor_2_in_2, 0);
+  analogWrite( _motor_1, (satSpeed*255)/100);
 }
 
 bool robotMotion::runRight(unsigned short int speed)
 {
   int satSpeed = posSaturate(speed,100);
-  analogWrite( _motor_1_in_1, (satSpeed*255)/100);
-  analogWrite( _motor_1_in_2, 0);
+  analogWrite( _motor_2, (satSpeed*255)/100);
 }
 
