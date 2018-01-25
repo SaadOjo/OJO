@@ -7,11 +7,11 @@ controller myController(mySensor, myMotion);
 void setup()
 {
   Serial.begin(9600);
-  myController.setMaxSpeed(60);
+  myController.setMaxSpeed(40);
 }
 
 void loop()
 {
-  myController.followRobot(30);
+  myController.followRobot(15);
   delay(100);
 }
