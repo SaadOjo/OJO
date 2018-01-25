@@ -57,20 +57,25 @@ unsigned int remoteDecoder::decode(){
   unsigned char bitNumber = 0;
 
   startTime =  micros();
+  Serial.println(startTime);
 
    while((loopTime - startTime)< DECODE_TIMEOUT) //Timer to protect against infinte loop
    {
+    
     loopTime = micros();
-
-      edge = detectEdge();
+    edge = detectEdge();
+      
+    Serial.println("lol");
 
       if(edge)
       {
-        if(dataStartDetected = false)             //Improve efficiency. Only runs algorithim when data start is detected
+        
+        if(!dataStartDetected)             //Improve efficiency. Only runs algorithim when data start is detected
         {
           if(edge == -1)
           {
             dataStartDetected = true;
+            Serial.println("data begins");
           }
         }
         else
@@ -106,13 +111,14 @@ unsigned int remoteDecoder::decode(){
           {
             lastEdgeType = false;
           }
+
+          
         }
       }
       
      
        //Can add delay for stability?
    }
-
 
  return decoded;
 }

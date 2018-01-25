@@ -10,7 +10,7 @@
 #define ZERO_PULSE_MIN 300
 #define ZERO_PULSE_MAX 600
 
-#define ONE_PULSE_MIN 1500
+#define ONE_PULSE_MIN 1000
 #define ONE_PULSE_MAX 2000
 
 #include <Arduino.h>

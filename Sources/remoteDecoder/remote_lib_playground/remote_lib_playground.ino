@@ -17,7 +17,7 @@ void loop()
   {
     Serial.println("Pulse Detected!");
     decoded = myDecoder.decode();
-    Serial.println(String("Input Recieved: ") + decoded);
+    //Serial.println(String("Input Recieved: ") + decoded);
     delay(1000);
   }
   
