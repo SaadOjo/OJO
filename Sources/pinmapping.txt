@@ -7,5 +7,5 @@ A3: IR direction 2
 Digital Pins:
 
 2: IR Remote
-5:Motor 1
-6:Motor 2
+5:Motor 1 (LEFT)
+6:Motor 2 (RIGHT)

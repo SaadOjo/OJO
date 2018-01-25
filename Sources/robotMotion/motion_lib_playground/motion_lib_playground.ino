@@ -1,6 +1,6 @@
 #include "robotMotion.h"
 
-robotMotion myMotion(5,6);
+robotMotion myMotion(5,6); // (LEFT, RIGHT)
 
 #define IN_BUFFER_SIZE 256
 char inputArray[IN_BUFFER_SIZE];
@@ -9,7 +9,7 @@ void setup()
 {
   Serial.begin(9600);
   myMotion.init();
-  myMotion.setSpeed(15);
+  myMotion.setSpeed(30);
   myMotion.setDirection(0);
 }
 
