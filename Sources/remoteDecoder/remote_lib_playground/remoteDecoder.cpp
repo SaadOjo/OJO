@@ -57,16 +57,14 @@ unsigned int remoteDecoder::decode(){
   unsigned char bitNumber = 0;
 
   startTime =  micros();
-  Serial.println(startTime);
-
-   while((loopTime - startTime)< DECODE_TIMEOUT) //Timer to protect against infinte loop
+  loopTime = startTime;
+ 
+   while(loopTime - startTime < DECODE_TIMEOUT) //Timer to protect against infinte loop
    {
     
     loopTime = micros();
-    edge = detectEdge();
-      
-    Serial.println("lol");
 
+      edge = detectEdge();
       if(edge)
       {
         
@@ -75,7 +73,7 @@ unsigned int remoteDecoder::decode(){
           if(edge == -1)
           {
             dataStartDetected = true;
-            Serial.println("data begins");
+            //Serial.println("data begins");
           }
         }
         else
@@ -87,15 +85,17 @@ unsigned int remoteDecoder::decode(){
           }
           else if(edge == -1)
           {
-            pulseTime = risingEdgeTime - loopTime;
+            pulseTime = loopTime - risingEdgeTime;
 
             if((pulseTime>ZERO_PULSE_MIN)&&(pulseTime<ZERO_PULSE_MAX))
             {
-              recievedBit = true;
+              recievedBit = false;
+              Serial.print("0");
             }
             else if((pulseTime>ONE_PULSE_MIN)&&(pulseTime<ONE_PULSE_MAX))
             {
-              recievedBit = false;
+              recievedBit = true;
+              Serial.print("1");
             }
             bitWrite(decoded,bitNumber,recievedBit);
             bitNumber++;
