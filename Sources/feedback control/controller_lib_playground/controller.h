@@ -30,8 +30,8 @@ class controller
   int _relativeDistance;
   int _relativeDirection;
   int _propotionalControl;
-  unsigned char _maxSpeed = 15;
-  unsigned char _minSpeed = 0;
+  unsigned char _maxSpeed = 60;
+  unsigned char _minSpeed = 40;
   float _K_p = 4;
   int _controllerBias;
   int _relativeDistanceArray[AVERAGE_SAMPLES];
