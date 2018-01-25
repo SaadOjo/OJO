@@ -24,7 +24,7 @@ class robotMotion
     int _motor_right; 
 
     int _leftCalibrationFactor = 100; //Percentage
-    int _rightCalibrationFactor = 100; //Percentage
+    int _rightCalibrationFactor = 85; //Percentage
     int _speed;
     int _direction;
 };
