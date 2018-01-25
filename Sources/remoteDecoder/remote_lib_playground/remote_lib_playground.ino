@@ -13,13 +13,12 @@ void setup()
 void loop()
 {
  bool test = myDecoder.detectPulse();
- Serial.println(test); 
   if(test)
   {
-    //decoded = myDecoder.decode();
     Serial.println("Pulse Detected!");
-    //Serial.println(String("Input Recieved: ") + decoded):
-    delay(100);
+    decoded = myDecoder.decode();
+    Serial.println(String("Input Recieved: ") + decoded);
+    delay(1000);
   }
   
 }
