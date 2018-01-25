@@ -1,0 +1,45 @@
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture(0)
+
+while(1):
+
+    # Take each frame
+    _, frame = cap.read()
+
+    # Convert BGR to HSV
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # define range of green color in HSV
+    sensitivity = 25;
+    lower_green = np.array([60-sensitivity,100,50])
+    upper_green = np.array([60+sensitivity,255,255])
+
+    # Threshold the HSV image to get only green colors
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+
+    # Bitwise-AND mask and original image
+    res = cv2.bitwise_and(frame,frame, mask= mask)
+    im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(mask, contours, -1, (0,255,0), 3 )
+    cv2.drawContours(res, contours, -1, (0,255,0), 3 )
+    #area=cv2.contourArea(contours[2])
+    #if area>100:
+        #print (area)
+    # Find the index of the largest contour
+    areas = [cv2.contourArea(c) for c in contours]
+    max_index = np.argmax(areas)
+    cnt=contours[max_index]
+
+    x,y,w,h = cv2.boundingRect(cnt)
+    cv2.rectangle(res,(x,y),(x+w,y+h),(0,255,0),2)
+    cv2.rectangle(mask,(x,y),(x+w,y+h),(0,255,0),2)
+
+    cv2.imshow('frame',frame)
+    cv2.imshow('mask',mask)
+    cv2.imshow('res',res)
+    if cv2.waitKey(20) & 0xFF == ord('q'):
+        break
+
+cv2.destroyAllWindows()
