@@ -1,8 +1,8 @@
 Analog Pins:
 
 A1: IR distance sensor
-A2: IR direction 1
-A3: IR direction 2
+A2: IR direction 1 (LEFT)
+A3: IR direction 2 (RIGHT)
 
 Digital Pins:
 

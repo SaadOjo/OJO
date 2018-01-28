@@ -26,6 +26,20 @@ void controller::maintainDistance(int referenceDistance)
   //_relativeDistance = getAverageDistance();
   _relativeDistance = _mySensor -> getDistance();
   _relativeDirection = _mySensor -> getDirection();
+
+ // TEST CODE
+  if(_relativeDirection<0)
+  {
+    _relativeDirection = -50;
+  }
+  else if(_relativeDirection>0)
+  {
+    _relativeDirection = 50;
+  }
+  else
+  {
+    _relativeDirection = 0;
+  }
   
   _propotionalControl = _K_p *  (_relativeDistance - referenceDistance);
 
