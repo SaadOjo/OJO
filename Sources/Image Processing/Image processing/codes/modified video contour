@@ -1,0 +1,76 @@
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture(0)
+
+while(1):
+
+    # Take each frame
+    _, frame = cap.read()
+
+    # Convert BGR to HSV
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # define range of green color in HSV
+    sensitivity = 25;
+    lower_green = np.array([60-sensitivity,100,50])
+    upper_green = np.array([60+sensitivity,255,255])
+
+    # Threshold the HSV image to get only green colors
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+
+    # Bitwise-AND mask and original image
+    res = cv2.bitwise_and(frame,frame, mask= mask)
+    im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    #cv2.drawContours(mask, contours, -1, (255,0,0), 3 )
+    #cv2.drawContours(res, contours, -1, (255,0,0), 3 )
+    #cv2.drawContours(frame, contours, -1, (255,0,0), 3 )
+
+
+    cnt = contours[-1]
+    max_area = cv2.contourArea(cnt)
+
+    for cont in contours:
+        if cv2.contourArea(cont) > 20:
+            cnt = cont
+            max_area = cv2.contourArea(cont)
+
+    perimeter = cv2.arcLength(cnt,True)
+    epsilon = 0.05*cv2.arcLength(cnt,True)
+    approx = cv2.approxPolyDP(cnt,epsilon,True)
+    img = cv2.drawContours(frame, [approx], -1, (0,0,255), 3)
+
+
+#x,y,w,h = cv2.boundingRect(cnt)
+#img = cv2.rectangle(im,(x,y),(x+w,y+h),(0,255,0),2)        
+
+
+
+    
+    img = cv2.drawContours(res, [cnt], 0, (255,0,0), 3)
+
+  
+
+    #area = cv2.contourArea(cnt)
+    #perimeter = cv2.arcLength(cnt,True)
+    
+    #if area>10:
+        #x,y,w,h = cv2.boundingRect(cnt)
+        #img = cv2.rectangle(res,(x,y),(x+w,y+h),(0,0,255),2)
+        #img = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
+        #rect = cv2.minAreaRect(cnt)
+        #box = cv2.boxPoints(rect)
+        #box = np.int0(box)
+        #im = cv2.drawContours(res,[box],0,(0,0,255),2)
+        #im = cv2.drawContours(frame,[box],0,(0,0,255),2)
+        #print area
+    #if 50>100:
+     #   print perimeter
+
+    cv2.imshow('frame',frame)
+    cv2.imshow('mask',mask)
+    cv2.imshow('res',res)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cv2.destroyAllWindows()
