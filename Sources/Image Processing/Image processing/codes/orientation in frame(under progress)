@@ -1,0 +1,82 @@
+import cv2
+import numpy as np
+import math
+
+#video capture
+cap = cv2.VideoCapture(0)
+
+while(1):
+
+    # Take each frame
+
+    ret, frame = cap.read()
+    
+    # Convert BGR to HSV
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    blur1 = cv2.bilateralFilter(frame,9,75,75)
+    frame = blur1
+
+    # define range of green color in HSV
+    sensitivity = 25;
+    lower_green = np.array([60-sensitivity,100,50])
+    upper_green = np.array([60+sensitivity,255,255])
+
+    # Threshold the HSV image to get only green colors
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+
+    # Bitwise-AND mask and original image
+    res = cv2.bitwise_and(frame,frame, mask= mask)
+
+    
+    #contours
+    im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnt = contours[-1]
+    cv2.drawContours(res, cnt, -1, (0,255,0), 3 )
+
+
+    #area condition
+    cnt = contours[-1]
+    max_area = cv2.contourArea(cnt)
+
+    for cont in contours:
+        if cv2.contourArea(cont) > 5:
+            cnt = cont
+            max_area = cv2.contourArea(cont)
+
+    x,y,w,h = cv2.boundingRect(cnt)
+    img = cv2.rectangle(frame,(x,y),(x+w,y+h),(255,255,0),2)
+    img11 = cv2.rectangle(res,(x,y),(x+w,y+h),(255,255,0),2)
+
+    # Write some Text
+
+    font                   = cv2.FONT_HERSHEY_SIMPLEX
+    bottomLeftCornerOfText = (100,100)
+    fontScale              = 1
+    fontColor              = (255,255,0)
+    lineType               = 2
+
+    cv2.putText(res,str(x), 
+        bottomLeftCornerOfText, 
+        font, 
+        fontScale,
+        fontColor,
+        lineType)
+    
+    bottomLeftCornerOfText = (100,150)
+    
+    cv2.putText(res,str(y), 
+        bottomLeftCornerOfText, 
+        font, 
+        fontScale,
+        fontColor,
+        lineType)
+
+    cv2.imshow('frame',frame)
+    cv2.imshow('mask',mask)
+    cv2.imshow('res',res)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cv2.destroyAllWindows()
+
+
