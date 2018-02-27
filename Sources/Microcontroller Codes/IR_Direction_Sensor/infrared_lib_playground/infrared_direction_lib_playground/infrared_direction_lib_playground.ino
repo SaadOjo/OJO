@@ -12,6 +12,7 @@ void setup()
 
 void loop()
 {
+  mySensor.update();
   //direction = mySensor.getDirection();
   //Serial.println(String("The direction is:") + direction);
   //Serial.println(direction); 
