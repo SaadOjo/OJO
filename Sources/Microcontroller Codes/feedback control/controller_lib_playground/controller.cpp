@@ -16,13 +16,17 @@ controller::controller(sensor &sensor, robotMotion &motion):_mySensor(&sensor), 
 {
   _maxSpeed = maxSpeed;
 }
+ bool controller::setMinSpeed(unsigned char minSpeed)
+{
+  _minSpeed = minSpeed;
+}
 void controller::followRobot(int referenceDistance)
 {
   maintainDistance(referenceDistance);
 }
 void controller::maintainDistance(int referenceDistance)
 {
-  
+  _mySensor -> update(); //New standard added. Other rudamentary sensor libs should conform to this standard
   //_relativeDistance = getAverageDistance();
   _relativeDistance = _mySensor -> getDistance();
   _relativeDirection = _mySensor -> getDirection();
