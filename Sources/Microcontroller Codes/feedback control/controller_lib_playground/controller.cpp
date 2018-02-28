@@ -29,14 +29,15 @@ void controller::maintainDistance(int referenceDistance)
   _mySensor -> update(); //New standard added. Other rudamentary sensor libs should conform to this standard
   //_relativeDistance = getAverageDistance();
   _relativeDistance = _mySensor -> getDistance();
+  _relativeDistance = 100; //Just to force the robot to keep moving (TEST)
   _relativeDirection = _mySensor -> getDirection();
 
  // TEST CODE
-  if(_relativeDirection<0)
+  if(_relativeDirection<10)
   {
     _relativeDirection = -50;
   }
-  else if(_relativeDirection>0)
+  else if(_relativeDirection>10)
   {
     _relativeDirection = 50;
   }
@@ -63,7 +64,15 @@ void controller::maintainDistance(int referenceDistance)
   _propotionalControl = posSaturate(_propotionalControl,255);
   _propotionalControl = map(_propotionalControl,0,255,0,100);
   _propotionalControl = posSaturate(_propotionalControl,_maxSpeed);
+  
   if(_propotionalControl<_minSpeed)
+  {
+    _propotionalControl = 0;
+  }
+
+  //Check if front robot is there or not
+
+  if(!(_mySensor -> isVisible()))
   {
     _propotionalControl = 0;
   }
