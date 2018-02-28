@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 
-#define VISIBLE_THRESHOLD 0.1
+#define VISIBLE_THRESHOLD 0.3
 
 class infraredDirection
 {

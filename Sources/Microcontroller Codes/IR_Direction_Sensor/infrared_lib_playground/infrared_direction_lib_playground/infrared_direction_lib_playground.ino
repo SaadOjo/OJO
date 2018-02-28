@@ -13,17 +13,28 @@ void setup()
 void loop()
 {
   mySensor.update();
-  //direction = mySensor.getDirection();
-  //Serial.println(String("The direction is:") + direction);
+  direction = mySensor.getDirection();
+  Serial.print(String("The direction is:") + direction);
   //Serial.println(direction); 
   
-  
+  /*
   leftVoltage = mySensor.getLeftVoltage();
   rightVoltage = mySensor.getRightVoltage();
   Serial.print("left Voltage:");
   Serial.print(leftVoltage,3);
   Serial.print(", rightVoltage:");
-  Serial.println(rightVoltage,3);
+  Serial.print(rightVoltage,3);
+  */
+  
+  if(mySensor.isVisible())
+  {
+    Serial.println(" Visibility: TRUE");
+  }
+  else
+  {
+    Serial.println(" Visibility: FALSE");
+  }
+  
   
   delay(100);  
 }
