@@ -35,11 +35,11 @@ void controller::maintainDistance(int referenceDistance)
  // TEST CODE
   if(_relativeDirection<10)
   {
-    _relativeDirection = -50;
+    _relativeDirection = -70;
   }
   else if(_relativeDirection>10)
   {
-    _relativeDirection = 50;
+    _relativeDirection = 70;
   }
   else
   {
