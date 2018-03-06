@@ -6,8 +6,9 @@ controller myController(mySensor, myMotion);
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   myController.setMaxSpeed(30);
+  myController.setMinSpeed(30);
 }
 
 void loop()

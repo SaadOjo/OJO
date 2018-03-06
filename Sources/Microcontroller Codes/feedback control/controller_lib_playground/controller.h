@@ -21,7 +21,8 @@ class controller
   public:
   controller(sensor &sensor, robotMotion &motion); //Sensor library will contain two sensors. It will take the best available data and send it to the controller
   void followRobot(int referenceDistance); //This code will run in the main loop
-  bool setMaxSpeed(unsigned char maxSpeed); 
+  bool setMaxSpeed(unsigned char maxSpeed);
+  bool setMinSpeed(unsigned char minSpeed);  
 
   private:
   
@@ -31,7 +32,7 @@ class controller
   int _relativeDirection;
   int _propotionalControl;
   unsigned char _maxSpeed = 100;
-  unsigned char _minSpeed = 30;
+  unsigned char _minSpeed = 0;
   float _K_p = 2;
   int _controllerBias;
   int _relativeDistanceArray[AVERAGE_SAMPLES];

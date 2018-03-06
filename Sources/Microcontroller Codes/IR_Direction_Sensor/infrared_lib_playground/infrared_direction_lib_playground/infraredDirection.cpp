@@ -14,10 +14,33 @@ infraredDirection::infraredDirection(int pinLeft, int pinRight)
 bool infraredDirection::init(){
 //Analog declaration
 }
+bool infraredDirection::update(){
+//Analog declaration
+_leftVoltage =  getLeftVoltage();
+_rightVoltage = getRightVoltage();
+_maxVoltage = max(_leftVoltage, _rightVoltage);
+
+}
+bool infraredDirection::isVisible()
+{
+  bool visibility = false;
+  if(_maxVoltage > VISIBLE_THRESHOLD)
+  {
+    visibility = true;
+  }
+  return visibility;
+}
+
+int infraredDirection::getDistance()
+{
+  int distance = 0;
+  float voltageAverage = (_rightVoltage + _leftVoltage)/2;
+  return distance;
+}
 
 float infraredDirection::getDirection()
 {
-  _direction = (getRightVoltage() - getLeftVoltage())*20; //don't need saturation (no scaling required)
+  _direction = (_rightVoltage - _leftVoltage)*20; //don't need saturation (no scaling required)
 
   return _direction;
 }

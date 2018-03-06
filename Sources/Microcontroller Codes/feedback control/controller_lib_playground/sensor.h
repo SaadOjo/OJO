@@ -15,6 +15,8 @@ class sensor
   public:
     sensor();
     bool init();
+    bool update();
+    unsigned char isVisible();
     float getDistance();
     float getDirection();
     

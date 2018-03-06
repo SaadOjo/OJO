@@ -4,18 +4,41 @@
 
 sensor mySensor;
 float distance;
+float direction;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   mySensor.init();
 }
 
 void loop()
 {
+  mySensor.update();
   distance = mySensor.getDistance();
+  direction = mySensor.getDirection();
   //Serial.println(String("The distance is:") + distance);
-  Serial.println(distance);
+  Serial.print(String("Distance:") + distance);
+  Serial.print(String(" ,Direction:") + direction);
+  Serial.print(" ");
+  switch(mySensor.isVisible())
+  {
+    case 0: 
+      Serial.print("No Sensors Visible");
+      break;
+    case 1: 
+      Serial.print("All Sensors Visible");
+      break;
+    case 2: 
+      Serial.print("Only Primary Sensor Visible");
+      break;
+    case 3: 
+      Serial.print("Only Secondary Sensor Visible");
+      break;
+    
+  }
+  Serial.println("");
+
   delay(100);
 }
 

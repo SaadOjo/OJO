@@ -7,11 +7,16 @@
 
 #include <Arduino.h>
 
+#define VISIBLE_THRESHOLD 0.3
+
 class infraredDirection
 {
   public:
     infraredDirection(int leftPin, int rightPin);
     bool init();
+    bool update();
+    bool isVisible();
+    int getDistance();
     float getDirection();
     float getRightVoltage();
     float getLeftVoltage();
@@ -19,6 +24,7 @@ class infraredDirection
     float _direction;
     float _leftVoltage;
     float _rightVoltage;
+    float _maxVoltage;
     int _leftCount;
     int _rightCount;
     int _pinLeft;
