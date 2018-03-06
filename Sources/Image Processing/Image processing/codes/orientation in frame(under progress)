@@ -5,6 +5,7 @@ import math
 #video capture
 cap = cv2.VideoCapture(0)
 
+
 while(1):
 
     # Take each frame
@@ -30,22 +31,29 @@ while(1):
     
     #contours
     im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cnt = contours[-1]
-    cv2.drawContours(res, cnt, -1, (0,255,0), 3 )
-
+    #cnt = contours[-1]
+    
 
     #area condition
-    cnt = contours[-1]
-    max_area = cv2.contourArea(cnt)
+    for z in range(0,len(contours)):
 
-    for cont in contours:
-        if cv2.contourArea(cont) > 5:
-            cnt = cont
-            max_area = cv2.contourArea(cont)
+        cnt = contours[z] 
 
-    x,y,w,h = cv2.boundingRect(cnt)
-    img = cv2.rectangle(frame,(x,y),(x+w,y+h),(255,255,0),2)
-    img11 = cv2.rectangle(res,(x,y),(x+w,y+h),(255,255,0),2)
+        max_area = cv2.contourArea(cnt)
+
+        for cont in contours:
+            if cv2.contourArea(cont) > max_area:
+               cnt = cont
+               max_area = cv2.contourArea(cont)
+
+               cv2.drawContours(res, cnt, -1, (0,255,0), 3 )
+
+
+
+
+        x,y,w,h = cv2.boundingRect(cnt)
+        img = cv2.rectangle(frame,(x,y),(x+w,y+h),(255,255,0),2)
+        img11 = cv2.rectangle(res,(x,y),(x+w,y+h),(255,255,0),2)
 
     # Write some Text
 

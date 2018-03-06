@@ -9,8 +9,36 @@ void setup()
 {
   Serial.begin(9600);
   myMotion.init();
+  
   myMotion.setSpeed(40);
   myMotion.setDirection(0);
+  myMotion.run();
+  delay(1000);
+
+  myMotion.setSpeed(100);
+  myMotion.setDirection(0);
+  myMotion.run();
+  delay(1000);
+
+  myMotion.setSpeed(40);
+  myMotion.setDirection(0);
+  myMotion.run();
+  delay(1000);
+
+  myMotion.setSpeed(40);
+  myMotion.setDirection(-100);
+  myMotion.run();
+  delay(1000);
+
+  myMotion.setSpeed(40);
+  myMotion.setDirection(+100);
+  myMotion.run();
+  delay(1000);
+
+    myMotion.setSpeed(0);
+  myMotion.setDirection(+100);
+  myMotion.run();
+  
 }
 
 void loop()
@@ -30,8 +58,8 @@ void loop()
 
   
   
-myMotion.run();
-  //Serial.println("calisyor");
+//myMotion.run();
+  //Serial.println("calisiyor");
   //delay(1000);
   /*
   for(int i = 0;i<256;i++)
