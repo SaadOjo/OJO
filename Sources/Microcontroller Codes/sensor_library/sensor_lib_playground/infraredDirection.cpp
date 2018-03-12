@@ -24,6 +24,7 @@ _maxVoltage = max(_leftVoltage, _rightVoltage);
 bool infraredDirection::isVisible()
 {
   bool visibility = false;
+  Serial.println(String("max voltage:") + _maxVoltage);
   if(_maxVoltage > VISIBLE_THRESHOLD)
   {
     visibility = true;
