@@ -36,7 +36,9 @@ unsigned char sensor::isVisible()
 
 float sensor::getDistance()
 {
-  return _mySensor.getDistance();
+  float distance = _mySensor.getDistance();
+    distance = _myDirectionSensor.getDistance();
+  return distance;
   //Take direction from the other sensor as well
 }
 float sensor::getDirection()

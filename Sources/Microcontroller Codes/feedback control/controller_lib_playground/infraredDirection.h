@@ -16,7 +16,7 @@ class infraredDirection
     bool init();
     bool update();
     bool isVisible();
-    int getDistance();
+    float getDistance();
     float getDirection();
     float getRightVoltage();
     float getLeftVoltage();

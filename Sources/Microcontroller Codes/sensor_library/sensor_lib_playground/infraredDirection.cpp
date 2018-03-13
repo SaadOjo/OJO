@@ -32,10 +32,11 @@ bool infraredDirection::isVisible()
   return visibility;
 }
 
-int infraredDirection::getDistance()
+float infraredDirection::getDistance()
 {
-  int distance = 0;
+  float distance = 0;
   float voltageAverage = (_rightVoltage + _leftVoltage)/2;
+  distance = 34.48*1/sqrt(voltageAverage);
   return distance;
 }
 
