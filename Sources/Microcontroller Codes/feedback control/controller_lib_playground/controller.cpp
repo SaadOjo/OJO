@@ -126,17 +126,18 @@ bool controller::findMarker()
     _mySensor -> update();
 
   //Do Stuff here
-  _myMotion->setSpeed(50);
+  _myMotion->setSpeed(100);
   if(_lastDirectionSign)
   { 
-    _myMotion->setDirection(100);
+    _myMotion->setDirection(80);
     Serial.println("Right");
   }
   else
   {
-    _myMotion->setDirection(-100);
+    _myMotion->setDirection(-80);
     Serial.println("Left");
   }
+  _myMotion->run();
   
   if(_mySensor -> isVisible())
   {

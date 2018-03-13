@@ -9,7 +9,7 @@ bool robotVisibilityState = true;
 void setup()
 {
   Serial.begin(115200);
-  myController.setMaxSpeed(60);
+  myController.setMaxSpeed(80);
   myController.setMinSpeed(30);
 }
 
