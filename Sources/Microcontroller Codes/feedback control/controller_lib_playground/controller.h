@@ -40,7 +40,7 @@ class controller
   int _propotionalControl;
   unsigned char _maxSpeed = 100;
   unsigned char _minSpeed = 0;
-  float _K_p = 2;
+  float _K_p = 5;
   int _controllerBias;
 
   

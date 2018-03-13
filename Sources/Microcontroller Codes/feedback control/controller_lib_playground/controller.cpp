@@ -31,7 +31,8 @@ bool controller::maintainDistance(int referenceDistance)
   _mySensor -> update(); //New standard added. Other rudamentary sensor libs should conform to this standard
   //_relativeDistance = getAverageDistance();
   _relativeDistance = _mySensor -> getDistance();
-  _relativeDistance = 100; //Just to force the robot to keep moving (TEST)
+  //Serial.println(String("Distance from new sensor: ") + _relativeDistance);
+  //_relativeDistance = 100; //Just to force the robot to keep moving (TEST)
   _relativeDirection = _mySensor -> getDirection();
 
  // TEST CODE
