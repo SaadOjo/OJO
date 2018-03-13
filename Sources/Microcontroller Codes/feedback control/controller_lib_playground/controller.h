@@ -20,13 +20,20 @@ class controller
   
   public:
   controller(sensor &sensor, robotMotion &motion); //Sensor library will contain two sensors. It will take the best available data and send it to the controller
-  void followRobot(int referenceDistance); //This code will run in the main loop
+  bool followRobot(int referenceDistance); //This code will run in the main loop
   bool setMaxSpeed(unsigned char maxSpeed);
   bool setMinSpeed(unsigned char minSpeed);  
+    bool findMarker();
 
   private:
+
+
+  //Find Marker Function Status bits
+  bool _findMarkerFirstLoop = false;
+  bool _lastDirectionSign = false;
+  unsigned int _findMarkerStartTime;
   
-  void maintainDistance(int referenceDistance);
+  bool maintainDistance(int referenceDistance);
   int getAverageDistance(); 
   int _relativeDistance;
   int _relativeDirection;
@@ -35,6 +42,8 @@ class controller
   unsigned char _minSpeed = 0;
   float _K_p = 2;
   int _controllerBias;
+
+  
   int _relativeDistanceArray[AVERAGE_SAMPLES];
   unsigned short int _ringCounter = 0;
   sensor *_mySensor;

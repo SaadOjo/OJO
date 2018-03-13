@@ -20,12 +20,14 @@ controller::controller(sensor &sensor, robotMotion &motion):_mySensor(&sensor), 
 {
   _minSpeed = minSpeed;
 }
-void controller::followRobot(int referenceDistance)
+bool controller::followRobot(int referenceDistance)
 {
-  maintainDistance(referenceDistance);
+  return maintainDistance(referenceDistance);
 }
-void controller::maintainDistance(int referenceDistance)
+bool controller::maintainDistance(int referenceDistance)
 {
+  bool Status = true;
+  
   _mySensor -> update(); //New standard added. Other rudamentary sensor libs should conform to this standard
   //_relativeDistance = getAverageDistance();
   _relativeDistance = _mySensor -> getDistance();
@@ -33,11 +35,11 @@ void controller::maintainDistance(int referenceDistance)
   _relativeDirection = _mySensor -> getDirection();
 
  // TEST CODE
-  if(_relativeDirection<10)
+  if(_relativeDirection<-1)
   {
     _relativeDirection = -70;
   }
-  else if(_relativeDirection>10)
+  else if(_relativeDirection>1)
   {
     _relativeDirection = 70;
   }
@@ -75,15 +77,18 @@ void controller::maintainDistance(int referenceDistance)
   if(!(_mySensor -> isVisible()))
   {
     _propotionalControl = 0;
+    _findMarkerFirstLoop = true;
+    Status = false;
   }
   
-
   Serial.print(String("The relative distance is: ") + _relativeDistance);
   Serial.println(String(" SPD:") + _propotionalControl);
   Serial.println(String(" DIR:") + _relativeDirection);
   _myMotion->setSpeed(_propotionalControl); //Have to scale
   _myMotion->setDirection(_relativeDirection); //Have to scale
   _myMotion->run();
+
+  return Status;
 }
 int controller::getAverageDistance()
 {
@@ -97,6 +102,48 @@ int controller::getAverageDistance()
   }
   _ringCounter++;
   return averageDistance/AVERAGE_SAMPLES;
+  
+}
+bool controller::findMarker()
+{
+  bool Status = false;
+
+  if(_findMarkerFirstLoop)
+  {   _findMarkerFirstLoop = false;
+      _findMarkerStartTime = millis();
+  
+     if(_mySensor -> getDirection() > 0)
+    {
+      _lastDirectionSign = 1;
+    }
+    else
+    {
+      _lastDirectionSign = 0;
+    }
+    
+  }
+
+    _mySensor -> update();
+
+  //Do Stuff here
+  _myMotion->setSpeed(50);
+  if(_lastDirectionSign)
+  { 
+    _myMotion->setDirection(100);
+    Serial.println("Right");
+  }
+  else
+  {
+    _myMotion->setDirection(-100);
+    Serial.println("Left");
+  }
+  
+  if(_mySensor -> isVisible())
+  {
+    Status = true;
+  }
+
+  return Status;
   
 }
 
