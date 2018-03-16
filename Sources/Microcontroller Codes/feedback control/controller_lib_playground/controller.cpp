@@ -109,7 +109,7 @@ bool controller::findMarker()
 {
   bool Status = false;
   bool turnDirection = false;
-  bool turnModifier = false;
+  
   
 
   if(_maneuverFirstLoop)
@@ -142,13 +142,19 @@ bool controller::findMarker()
   {
     turnDirection = LEFT;
   }
-  if(millis() - _maneuverStartTime > FIND_ROBOT_SWITCH_TIME)
+  unsigned char eventSecond = ((millis() - _maneuverStartTime)/1000) % FIND_ROBOT_SWITCH_TIME;
+  if(eventSecond)
   {
-    turnModifier = true;
-    Serial.println("modifierCalled!");
+    _first = true;
+  }
+  if(!eventSecond && _first)
+  {
+    _turnModifier = !_turnModifier;
+    Serial.println(String("turn modifier: ") + _turnModifier);
+    _first = false;
   }
   
-  turnDirection =  turnModifier^_lastDirectionSign;
+  turnDirection =  _turnModifier^_lastDirectionSign;
 
   if(turnDirection)
   {
