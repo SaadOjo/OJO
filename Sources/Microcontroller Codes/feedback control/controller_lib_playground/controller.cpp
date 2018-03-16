@@ -78,7 +78,7 @@ bool controller::maintainDistance(int referenceDistance)
   if(!(_mySensor -> isVisible()))
   {
     _propotionalControl = 0;
-    _findMarkerFirstLoop = true;
+    _maneuverFirstLoop = true;
     Status = false;
   }
   
@@ -108,10 +108,15 @@ int controller::getAverageDistance()
 bool controller::findMarker()
 {
   bool Status = false;
+  bool turnDirection = false;
+  bool turnModifier = false;
+  
 
-  if(_findMarkerFirstLoop)
-  {   _findMarkerFirstLoop = false;
-      _findMarkerStartTime = millis();
+  if(_maneuverFirstLoop)
+  {   _maneuverFirstLoop = false;
+      _maneuverStartTime = millis();
+
+      Serial.println("First Loop, Timer Started");
   
      if(_mySensor -> getDirection() > 0)
     {
@@ -128,24 +133,42 @@ bool controller::findMarker()
 
   //Do Stuff here
   _myMotion->setSpeed(100);
+  
   if(_lastDirectionSign)
   { 
-    _myMotion->setDirection(80);
-    Serial.println("Right");
+    turnDirection = RIGHT;
   }
   else
+  {
+    turnDirection = LEFT;
+  }
+  if(millis() - _maneuverStartTime > FIND_ROBOT_SWITCH_TIME)
+  {
+    turnModifier = true;
+    Serial.println("modifierCalled!");
+  }
+  
+  turnDirection =  turnModifier^_lastDirectionSign;
+
+  if(turnDirection)
   {
     _myMotion->setDirection(-80);
     Serial.println("Left");
   }
+  else
+  {
+    _myMotion->setDirection(80);
+    Serial.println("Right");
+  }
+  
   _myMotion->run();
   
   if(_mySensor -> isVisible())
   {
     Status = true;
+    _maneuverFirstLoop = true; 
   }
 
   return Status;
-  
 }
 

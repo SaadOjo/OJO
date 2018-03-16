@@ -9,6 +9,12 @@
 #ifndef controller_h
 #define controller_h
 
+#define LEFT 0
+#define RIGHT 1
+
+//Maneuvers Parameters
+#define FIND_ROBOT_SWITCH_TIME 5000 
+
 #define AVERAGE_SAMPLES 10
 
 #include "sensor.h"
@@ -23,15 +29,17 @@ class controller
   bool followRobot(int referenceDistance); //This code will run in the main loop
   bool setMaxSpeed(unsigned char maxSpeed);
   bool setMinSpeed(unsigned char minSpeed);  
-    bool findMarker();
+  bool findMarker();
 
   private:
 
 
   //Find Marker Function Status bits
-  bool _findMarkerFirstLoop = false;
-  bool _lastDirectionSign = false;
-  unsigned int _findMarkerStartTime;
+  bool _maneuverFirstLoop = true; //on exit from a manever set this flag so that the other functions can reset their timers
+  bool _lastDirectionSign = false;  
+  unsigned int _maneuverStartTime;
+  
+  
   
   bool maintainDistance(int referenceDistance);
   int getAverageDistance(); 
