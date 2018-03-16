@@ -109,56 +109,58 @@ bool controller::findMarker()
 {
   bool Status = false;
   bool turnDirection = false;
-  bool turnModifier = false;
-  
 
   if(_maneuverFirstLoop)
   {   _maneuverFirstLoop = false;
       _maneuverStartTime = millis();
-
+      _turnModifier = false;
       Serial.println("First Loop, Timer Started");
-  
+      Serial.println(String("Turn Modifier: ") + _turnModifier);
+      
      if(_mySensor -> getDirection() > 0)
     {
-      _lastDirectionSign = 1;
+      _lastDirectionSign = RIGHT;
     }
     else
     {
-      _lastDirectionSign = 0;
+      _lastDirectionSign = LEFT;
     }
     
   }
-
     _mySensor -> update();
 
   //Do Stuff here
   _myMotion->setSpeed(100);
   
-  if(_lastDirectionSign)
-  { 
-    turnDirection = RIGHT;
-  }
-  else
+  unsigned char eventSecond = ((millis() - _maneuverStartTime)/1000) % FIND_ROBOT_SWITCH_TIME;
+  Serial.println(eventSecond);
+  
+  if(eventSecond == 0)
   {
-    turnDirection = LEFT;
-  }
-  if(millis() - _maneuverStartTime > FIND_ROBOT_SWITCH_TIME)
-  {
-    turnModifier = true;
-    Serial.println("modifierCalled!");
+    _first = true;
   }
   
-  turnDirection =  turnModifier^_lastDirectionSign;
+  if((eventSecond == (FIND_ROBOT_SWITCH_TIME - 1)) && _first)
+  {
+    _turnModifier = 1 - _turnModifier;
+    Serial.println("Modifer Modified ");
+    _first = false;
+  }
+
+  Serial.println(String("Turn Modifier: ") + _turnModifier);
+  turnDirection =  _turnModifier ^ _lastDirectionSign;
+  Serial.println(String("turnModifier: ") +  _turnModifier);
+
 
   if(turnDirection)
   {
-    _myMotion->setDirection(-80);
-    Serial.println("Left");
+    _myMotion->setDirection(80);
+    Serial.println("Right");
   }
   else
   {
-    _myMotion->setDirection(80);
-    Serial.println("Right");
+    _myMotion->setDirection(-80);
+    Serial.println("Left");
   }
   
   _myMotion->run();
