@@ -13,7 +13,7 @@
 #define RIGHT 1
 
 //Maneuvers Parameters
-#define FIND_ROBOT_SWITCH_TIME 5 //seconds 
+#define FIND_ROBOT_SWITCH_TIME 3 //seconds 
 
 #define AVERAGE_SAMPLES 10
 
@@ -33,10 +33,9 @@ class controller
 
   private:
 
-
   //Common maneuver variables
   bool _maneuverFirstLoop = true; //on exit from a manever set this flag so that the other functions can reset their timers
-  unsigned int _maneuverStartTime;
+  unsigned long int _maneuverStartTime;
 
   //Find Marker Function Status bits
   bool _lastDirectionSign = false; 
