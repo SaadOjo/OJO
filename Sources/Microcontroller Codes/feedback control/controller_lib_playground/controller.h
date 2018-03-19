@@ -15,6 +15,11 @@
 //Maneuvers Parameters
 #define FIND_ROBOT_SWITCH_TIME 3 //seconds 
 
+// Leaving
+
+#define LATERAL_LEAVE_TIME  800 //(ms)
+#define LATERAL_LEAVE_TURN_TIME  200 //(ms)
+
 #define AVERAGE_SAMPLES 10
 
 #include "sensor.h"
@@ -30,6 +35,7 @@ class controller
   bool setMaxSpeed(unsigned char maxSpeed);
   bool setMinSpeed(unsigned char minSpeed);  
   bool findMarker();
+  bool lateralExit();
 
   private:
 
@@ -41,7 +47,11 @@ class controller
   bool _lastDirectionSign = false; 
   bool _first = true;
   bool _turnModifier = false;
-  
+
+
+  //lateralExit Variables
+  bool _leaveDirection = false;
+  unsigned char _lastSpeed = 50;
   
   
   bool maintainDistance(int referenceDistance);

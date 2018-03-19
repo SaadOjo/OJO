@@ -86,6 +86,7 @@ bool controller::maintainDistance(int referenceDistance)
   Serial.println(String(" SPD:") + _propotionalControl);
   Serial.println(String(" DIR:") + _relativeDirection);
   _myMotion->setSpeed(_propotionalControl); //Have to scale
+  _lastSpeed = _propotionalControl;
   _myMotion->setDirection(_relativeDirection); //Have to scale
   _myMotion->run();
 
@@ -173,4 +174,83 @@ bool controller::findMarker()
 
   return Status;
 }
+
+bool controller::lateralExit()
+{
+
+  bool Status = false;
+  bool leaveDirection = false;
+  unsigned long int time = millis();
+
+  if(_maneuverFirstLoop)
+  {   _maneuverFirstLoop = false;
+      _maneuverStartTime = millis();
+      
+     if(_mySensor -> getDirection() > 0)
+    {
+      _lastDirectionSign = RIGHT;
+    }
+    else
+    {
+      _lastDirectionSign = LEFT;
+    }
+    //Set test parameters
+    _lastDirectionSign = LEFT;  
+    _leaveDirection = !_lastDirectionSign;
+
+    
+  }
+  
+    //_mySensor -> update();
+
+  //Do Stuff here
+
+  if((time - _maneuverStartTime)> LATERAL_LEAVE_TURN_TIME)
+  {
+    if((time - _maneuverStartTime)> (LATERAL_LEAVE_TIME - LATERAL_LEAVE_TURN_TIME))
+    {
+      if(!_leaveDirection)//Return Back
+      {
+        _myMotion->setDirection(80);
+        Serial.println("Right");
+      }
+      else
+      {
+        _myMotion->setDirection(-80);
+        Serial.println("Left");
+      }
+    }
+    else
+    {
+      _myMotion->setDirection(0); 
+      Serial.println("Straightening!");
+    }
+
+  }
+  else
+  {
+    if(_leaveDirection)
+    {
+      _myMotion->setDirection(80);
+      Serial.println("Right");
+    }
+    else
+    {
+      _myMotion->setDirection(-80);
+      Serial.println("Left");
+    }
+  }
+
+  _myMotion->setSpeed(_lastSpeed);
+  _myMotion->run();
+
+  if((time - _maneuverStartTime)> LATERAL_LEAVE_TIME)
+  {
+    Status = true;
+    _maneuverFirstLoop = true; 
+  }
+
+  return Status;
+}
+
 
