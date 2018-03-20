@@ -14,6 +14,8 @@ bool robotVisibilityState = true;
 unsigned char leaveState = 0;
 bool followingState = true;
 
+bool testFirst = true;
+
 void setup()
 {
   Serial.begin(115200);
@@ -26,9 +28,17 @@ void loop()
 
 if(millis() > ROBOT_TEST_FOLLOW_TIME)
 {
-  followingState = false;
-}
+  if(testFirst)
+  {
+    followingState = false;
+    myController.forceFirstLoop();
+    testFirst = false;
 
+    Serial.println("Test event happened!");
+  }
+  
+}
+  
   switch(followingState)
   {
     case false:
@@ -39,19 +49,21 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
       following();
       break;
   }
-     
-  delay(100);
+  
+delay(100);
+
 }
+
 
 void following(void)
 {
-    switch(robotVisibilityState)
+   switch(robotVisibilityState)
   {
     case false:
       Serial.println("A working!");
       if(!myController.followRobot(15))
       {
-        robotVisibilityState = false;
+        robotVisibilityState = true;
       }
       break;
 
@@ -59,7 +71,7 @@ void following(void)
       Serial.println("B working!");
       if(myController.findMarker())
       {
-        robotVisibilityState = true; 
+        robotVisibilityState = false; 
       }
       break;
   }

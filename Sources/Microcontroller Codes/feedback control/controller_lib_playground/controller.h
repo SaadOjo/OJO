@@ -36,6 +36,7 @@ class controller
   bool setMinSpeed(unsigned char minSpeed);  
   bool findMarker();
   bool lateralExit();
+  bool forceFirstLoop();
 
   private:
 

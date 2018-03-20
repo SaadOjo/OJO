@@ -24,6 +24,10 @@ bool controller::followRobot(int referenceDistance)
 {
   return maintainDistance(referenceDistance);
 }
+bool controller::forceFirstLoop()
+{
+  _maneuverFirstLoop = true;
+}
 bool controller::maintainDistance(int referenceDistance)
 {
   bool Status = true;
