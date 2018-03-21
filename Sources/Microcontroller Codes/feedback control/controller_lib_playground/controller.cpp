@@ -28,6 +28,12 @@ bool controller::forceFirstLoop()
 {
   _maneuverFirstLoop = true;
 }
+bool controller::forceMotors(unsigned char speed, unsigned char direction)
+{
+  _myMotion->setSpeed(speed); 
+  _myMotion->setDirection(direction); 
+  _myMotion->run(); 
+}
 bool controller::maintainDistance(int referenceDistance)
 {
   bool Status = true;
@@ -185,7 +191,6 @@ bool controller::lateralExit()
   bool leaveDirection = false;
   unsigned long int processTime = _maneuverTime - _maneuverStartTime;
   _maneuverTime = millis();
-  Serial.println(processTime);
   
   if(_maneuverFirstLoop)
   {   _maneuverFirstLoop = false;

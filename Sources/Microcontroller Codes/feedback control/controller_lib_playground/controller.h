@@ -37,6 +37,7 @@ class controller
   bool findMarker();
   bool lateralExit();
   bool forceFirstLoop();
+  bool forceMotors(unsigned char speed, unsigned char direction);
 
   private:
 

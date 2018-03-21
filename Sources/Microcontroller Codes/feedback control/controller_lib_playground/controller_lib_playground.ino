@@ -25,9 +25,14 @@ void setup()
 
 void loop()
 {
-
-  leaving();
-
+  if(millis() < 3000)
+  {
+    myController.forceMotors(50, 0);
+  }
+  else
+  {
+    leaving();
+  }
 /*
 if(millis() > ROBOT_TEST_FOLLOW_TIME)
 {
