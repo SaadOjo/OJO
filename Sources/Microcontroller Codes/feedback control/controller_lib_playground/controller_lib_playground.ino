@@ -26,6 +26,9 @@ void setup()
 void loop()
 {
 
+  leaving();
+
+/*
 if(millis() > ROBOT_TEST_FOLLOW_TIME)
 {
   if(testFirst)
@@ -38,7 +41,7 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
   }
   
 }
-  
+ 
   switch(followingState)
   {
     case false:
@@ -49,7 +52,7 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
       following();
       break;
   }
-  
+ */ 
 delay(100);
 
 }
@@ -90,6 +93,10 @@ void leaving(void)
 
     case 1:
       Serial.println("doing nothing!");
+
+      //Test Code
+      followingState = true;
+      
       break;
   }
 }

@@ -17,8 +17,8 @@
 
 // Leaving
 
-#define LATERAL_LEAVE_TIME  800 //(ms)
-#define LATERAL_LEAVE_TURN_TIME  200 //(ms)
+#define LATERAL_EXIT_TIME  1000 //(ms)
+#define LATERAL_LEAVE_TURN_TIME  500 //(ms)
 
 #define AVERAGE_SAMPLES 10
 
@@ -43,6 +43,7 @@ class controller
   //Common maneuver variables
   bool _maneuverFirstLoop = true; //on exit from a manever set this flag so that the other functions can reset their timers
   unsigned long int _maneuverStartTime;
+  unsigned long int _maneuverTime;
 
   //Find Marker Function Status bits
   bool _lastDirectionSign = false; 
