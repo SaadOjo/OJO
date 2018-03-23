@@ -36,8 +36,10 @@ class controller
   bool setMinSpeed(unsigned char minSpeed);  
   bool findMarker();
   bool lateralExit();
+  bool moveBack();
   bool forceFirstLoop();
   bool forceMotors(unsigned char speed, unsigned char direction);
+   
 
   private:
 

@@ -267,4 +267,35 @@ bool controller::lateralExit()
   
 }
 
+bool controller::moveBack()
+{
+  bool Status = false;
+  unsigned long int processTime = _maneuverTime - _maneuverStartTime;
+  bool markerFound = false;
+  _maneuverTime = millis();
+  
+  if(_maneuverFirstLoop)
+  {   _maneuverFirstLoop = false;
+      _maneuverStartTime = _maneuverTime;
+
+    
+  }
+    _mySensor -> update();
+    markerFound =  _mySensor -> getLastOneFlagStatus(); // not created yet
+  //Do Stuff here
+
+    if()
+  {
+    _myMotion->setDirection(0);
+    Status = true;
+    _maneuverFirstLoop = true; 
+  }
+
+
+  _myMotion->run();
+  
+  return Status;
+  
+}
+
 

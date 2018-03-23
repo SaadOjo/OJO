@@ -9,6 +9,8 @@ controller myController(mySensor, myMotion);
 /*
  Notes: 
  1) The follow last speed is taken from the propotional control. This will fail to work when the robot is accelerating
+
+ !!!! Uncompilable there is unwritten function !!!
 */
 bool robotVisibilityState = true;
 unsigned char leaveState = 0;
