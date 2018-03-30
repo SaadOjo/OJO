@@ -4,13 +4,14 @@
  */
 #include "sensor.h" 
 
-sensor::sensor():_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(2,3)
+sensor::sensor():_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8),_myLeavingCommandDetector(2)
 {
  
 }
 
 bool sensor::init(){
 //Analog declaration
+_myLeavingCommandDetector.init();
 }
 bool sensor::update()
 {
@@ -49,4 +50,11 @@ float sensor::getDirection()
 unsigned char sensor::getLastOneFlagStatus()
 {
   return _mySolarFlag.getSolarLastOneFlag();
+  //this library does not satisfy the update function standard. Make it compliant.
+}
+
+
+bool sensor::leaveLineCommandStatus()
+{
+  return _myLeavingCommandDetector.detectPulse();
 }

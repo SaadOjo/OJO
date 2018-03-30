@@ -18,6 +18,7 @@ void loop()
   distance = mySensor.getDistance();
   direction = mySensor.getDirection();
   //Serial.println(String("The distance is:") + distance);
+  /*
   Serial.print(String("Distance:") + distance);
   Serial.print(String(" ,Direction:") + direction);
   Serial.print(" ");
@@ -51,8 +52,13 @@ void loop()
       Serial.print("Only right");
       break;   
   }
-  Serial.println("");
-
+  Serial.println(""); */
+  if(mySensor.leaveLineCommandStatus())
+  {
+    
+    Serial.println("Leave Command is detected!");
+  }
+  
   delay(100);
 }
 

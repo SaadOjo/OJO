@@ -10,6 +10,8 @@
 #include "Ultrasonic.h"
 #include "infraredDirection.h"
 #include "flags.h"
+#include "remoteDecoder.h"
+
 
 class sensor
 {
@@ -28,6 +30,7 @@ class sensor
     infraredDistance _mySensor;
     infraredDirection _myDirectionSensor;
     flags _mySolarFlag;
+    remoteDecoder _myLeavingCommandDetector;
     
     
 };
