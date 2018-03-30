@@ -19,6 +19,7 @@ class sensor
     bool update();
     unsigned char isVisible();
     unsigned char getLastOneFlagStatus();
+    bool leaveLineCommandStatus();
     float getDistance();
     float getDirection();
     

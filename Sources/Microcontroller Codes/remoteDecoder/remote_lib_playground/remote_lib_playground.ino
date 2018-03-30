@@ -1,6 +1,6 @@
 #include "remoteDecoder.h"
 
-remoteDecoder myDecoder(2);
+remoteDecoder myDecoder(4);
 
 int decoded;
 bool leaveState = false;
