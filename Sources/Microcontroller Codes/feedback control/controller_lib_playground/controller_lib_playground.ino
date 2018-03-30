@@ -17,24 +17,40 @@ unsigned char leaveState = 0;
 bool followingState = true;
 
 bool testFirst = true;
+bool pulse = false;
 
 void setup()
 {
   Serial.begin(115200);
   myController.setMaxSpeed(100);
   myController.setMinSpeed(0);
+  pinMode(2, INPUT_PULLUP);
+  attachInterrupt(0, remoteISR ,FALLING);//PIN 2
 }
 
 void loop()
 {
+  /*
+  if(pulse)
+  {
+    pulse = false;
+    followingState = false;
+
+    Serial.println("Intterrupt");
+  }
+  */
+  
+  
   if(millis() < 3000)
   {
-    myController.forceMotors(50, 0);
+   // myController.forceMotors(50, 0);
   }
   else
   {
-    leaving();
+   // leaving();
+   followingState = false;
   }
+  
 /*
 if(millis() > ROBOT_TEST_FOLLOW_TIME)
 {
@@ -48,7 +64,8 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
   }
   
 }
- 
+*/
+
   switch(followingState)
   {
     case false:
@@ -59,10 +76,12 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
       following();
       break;
   }
- */ 
+  
+
 delay(100);
 
 }
+
 
 
 void following(void)
@@ -110,3 +129,9 @@ void leaving(void)
       break;
   }
 }
+
+void remoteISR() 
+{
+  pulse = true;
+}
+

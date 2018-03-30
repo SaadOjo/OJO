@@ -53,11 +53,7 @@ void loop()
       break;   
   }
   Serial.println(""); */
-  if(mySensor.leaveLineCommandStatus())
-  {
-    
-    Serial.println("Leave Command is detected!");
-  }
+
   
   delay(100);
 }

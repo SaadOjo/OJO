@@ -4,14 +4,13 @@
  */
 #include "sensor.h" 
 
-sensor::sensor():_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8),_myLeavingCommandDetector(2)
+sensor::sensor():_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8)
 {
  
 }
 
 bool sensor::init(){
 //Analog declaration
-_myLeavingCommandDetector.init();
 }
 bool sensor::update()
 {
@@ -54,7 +53,3 @@ unsigned char sensor::getLastOneFlagStatus()
 }
 
 
-bool sensor::leaveLineCommandStatus()
-{
-  return _myLeavingCommandDetector.detectPulse();
-}
