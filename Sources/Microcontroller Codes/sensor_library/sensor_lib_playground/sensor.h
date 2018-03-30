@@ -9,6 +9,7 @@
 #include "infraredDistance.h"
 #include "Ultrasonic.h"
 #include "infraredDirection.h"
+#include "flags.h"
 
 class sensor
 {
@@ -17,6 +18,7 @@ class sensor
     bool init();
     bool update();
     unsigned char isVisible();
+    unsigned char getLastOneFlagStatus();
     float getDistance();
     float getDirection();
     
@@ -24,6 +26,7 @@ class sensor
     float _distance;
     infraredDistance _mySensor;
     infraredDirection _myDirectionSensor;
+    flags _mySolarFlag;
     
     
 };

@@ -277,20 +277,25 @@ bool controller::moveBack()
   if(_maneuverFirstLoop)
   {   _maneuverFirstLoop = false;
       _maneuverStartTime = _maneuverTime;
-
     
   }
     _mySensor -> update();
     markerFound =  _mySensor -> getLastOneFlagStatus(); // not created yet
   //Do Stuff here
 
-    if()
+    if(markerFound)
   {
     _myMotion->setDirection(0);
+    _myMotion->setSpeed(0);
     Status = true;
     _maneuverFirstLoop = true; 
   }
-
+  else
+  {
+    _myMotion->setDirection(0);
+    _myMotion->setSpeed(10); 
+    Serial.println("Going Back.");
+  }
 
   _myMotion->run();
   

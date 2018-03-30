@@ -38,6 +38,20 @@ void loop()
     
   }
   Serial.println("");
+  Serial.print("Flag status: ");
+    switch(mySensor.getLastOneFlagStatus())
+  {
+    case 0: 
+      Serial.print("No flag");
+      break;
+    case 1: 
+      Serial.print("All left");
+      break;
+    case 2: 
+      Serial.print("Only right");
+      break;   
+  }
+  Serial.println("");
 
   delay(100);
 }

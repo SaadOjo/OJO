@@ -22,7 +22,7 @@ void setup()
 {
   Serial.begin(115200);
   myController.setMaxSpeed(100);
-  myController.setMinSpeed(30);
+  myController.setMinSpeed(0);
 }
 
 void loop()
@@ -97,13 +97,16 @@ void leaving(void)
         leaveState = 1;
       }
       break;
-
     case 1:
+      if(myController.moveBack())
+      {
+        leaveState = 2;
+      }
+      break;
+    case 2:
       Serial.println("doing nothing!");
-
       //Test Code
       followingState = true;
-      
       break;
   }
 }
