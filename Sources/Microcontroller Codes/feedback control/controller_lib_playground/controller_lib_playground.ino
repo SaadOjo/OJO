@@ -10,7 +10,9 @@ controller myController(mySensor, myMotion);
  Notes: 
  1) The follow last speed is taken from the propotional control. This will fail to work when the robot is accelerating
 
- 2) Can only handle one leave command
+ 2) Can only handle one leave command (changed not tested)
+
+ 3) Lateral Exit uses test conditions for last direction
 
  !!!! Uncompilable there is unwritten function !!!
 */
@@ -18,14 +20,14 @@ bool robotVisibilityState = true;
 unsigned char leaveState = 0;
 bool followingState = true;
 
-bool testFirst = true;
+bool ignoreLeaveLineCommand = false;
 bool pulse = false;
 
 void setup()
 {
   Serial.begin(115200);
   myController.setMaxSpeed(100);
-  myController.setMinSpeed(0);
+  myController.setMinSpeed(10);
   pinMode(2, INPUT_PULLUP);
   attachInterrupt(0, remoteISR ,FALLING);//PIN 2
 }
@@ -35,13 +37,13 @@ void loop()
 
 if(pulse)
 {
-  if(testFirst)
+  if(!ignoreLeaveLineCommand)
   {
     
     followingState = false;
     myController.forceFirstLoop();
     pulse = false;
-    testFirst = false;
+    ignoreLeaveLineCommand = true;
     Serial.println("Intterrupt"); 
   }
 }
@@ -96,19 +98,19 @@ void following(void)
 {
    switch(robotVisibilityState)
   {
-    case false:
+    case true:
       Serial.println("A working!");
       if(!myController.followRobot(15))
       {
-        robotVisibilityState = true;
+        robotVisibilityState = false;
       }
       break;
 
-    case true:
+    case false:
       Serial.println("B working!");
       if(myController.findMarker())
       {
-        robotVisibilityState = false; 
+        robotVisibilityState = true; 
       }
       break;
   }
@@ -131,9 +133,15 @@ void leaving(void)
       }
       break;
     case 2:
+      if(myController.rejoin())
+      {
+        leaveState = 3;
+      }
+    case 3:
       Serial.println("doing nothing!");
       //Test Code
-      //followingState = true; //Un comment this
+      ignoreLeaveLineCommand = true;
+      followingState = true; //Un comment this
       break;
   }
 }

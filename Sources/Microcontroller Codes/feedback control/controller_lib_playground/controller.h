@@ -20,6 +20,9 @@
 #define LATERAL_EXIT_TIME  1000 //(ms)
 #define LATERAL_LEAVE_TURN_TIME  500 //(ms)
 
+#define REJOIN_ENTRY_TIME  1000 //(ms)
+#define REJOIN_LEAVE_TURN_TIME  500 //(ms)
+
 #define AVERAGE_SAMPLES 10
 
 #include "sensor.h"
@@ -37,6 +40,7 @@ class controller
   bool findMarker();
   bool lateralExit();
   bool moveBack();
+  bool rejoin();
   bool forceFirstLoop();
   bool forceMotors(unsigned char speed, unsigned char direction);
    
