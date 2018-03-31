@@ -10,6 +10,8 @@ controller myController(mySensor, myMotion);
  Notes: 
  1) The follow last speed is taken from the propotional control. This will fail to work when the robot is accelerating
 
+ 2) Can only handle one leave command
+
  !!!! Uncompilable there is unwritten function !!!
 */
 bool robotVisibilityState = true;
@@ -30,16 +32,21 @@ void setup()
 
 void loop()
 {
-  /*
-  if(pulse)
-  {
-    pulse = false;
-    followingState = false;
 
-    Serial.println("Intterrupt");
+if(pulse)
+{
+  if(testFirst)
+  {
+    
+    followingState = false;
+    myController.forceFirstLoop();
+    pulse = false;
+    testFirst = false;
+    Serial.println("Intterrupt"); 
   }
-  */
-  
+}
+
+  /*
   
   if(millis() < 3000)
   {
@@ -51,6 +58,7 @@ void loop()
    followingState = false;
   }
   
+*/
 /*
 if(millis() > ROBOT_TEST_FOLLOW_TIME)
 {
@@ -125,7 +133,7 @@ void leaving(void)
     case 2:
       Serial.println("doing nothing!");
       //Test Code
-      followingState = true;
+      //followingState = true; //Un comment this
       break;
   }
 }
