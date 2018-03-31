@@ -137,11 +137,14 @@ void leaving(void)
       {
         leaveState = 3;
       }
+      break;
     case 3:
       Serial.println("doing nothing!");
       //Test Code
-      ignoreLeaveLineCommand = true;
+      ignoreLeaveLineCommand = false;
       followingState = true; //Un comment this
+      pulse = false;//because int after the first make pulse true
+      leaveState = 0;
       break;
   }
 }

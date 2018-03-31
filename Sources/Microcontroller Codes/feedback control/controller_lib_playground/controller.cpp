@@ -316,11 +316,6 @@ bool controller::rejoin()
       _maneuverStartTime = _maneuverTime;
   }
 
-//Do Stuff
-
-
-
-
  //Do Stuff here
 
   if((_maneuverTime - _maneuverStartTime)> REJOIN_LEAVE_TURN_TIME)
@@ -366,6 +361,7 @@ bool controller::rejoin()
   if((_maneuverTime - _maneuverStartTime) > (REJOIN_ENTRY_TIME + 2*REJOIN_LEAVE_TURN_TIME))
   {
     _myMotion->setDirection(0);
+    Serial.println("Waiting for visibility marker!");
   }
 
 
@@ -375,6 +371,7 @@ bool controller::rejoin()
     Status = true;
     _maneuverFirstLoop = true; 
   }
+  
 
   _myMotion->run();
   
