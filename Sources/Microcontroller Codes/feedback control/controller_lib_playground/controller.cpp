@@ -24,6 +24,16 @@ bool controller::followRobot(int referenceDistance)
 {
   return maintainDistance(referenceDistance);
 }
+bool controller::forceFirstLoop()
+{
+  _maneuverFirstLoop = true;
+}
+bool controller::forceMotors(unsigned char speed, unsigned char direction)
+{
+  _myMotion->setSpeed(speed); 
+  _myMotion->setDirection(direction); 
+  _myMotion->run(); 
+}
 bool controller::maintainDistance(int referenceDistance)
 {
   bool Status = true;
@@ -86,6 +96,7 @@ bool controller::maintainDistance(int referenceDistance)
   Serial.println(String(" SPD:") + _propotionalControl);
   Serial.println(String(" DIR:") + _relativeDirection);
   _myMotion->setSpeed(_propotionalControl); //Have to scale
+  _lastSpeed = _propotionalControl;
   _myMotion->setDirection(_relativeDirection); //Have to scale
   _myMotion->run();
 
@@ -173,4 +184,199 @@ bool controller::findMarker()
 
   return Status;
 }
+
+bool controller::lateralExit()
+{
+  bool Status = false;
+  bool leaveDirection = false;
+  unsigned long int processTime = _maneuverTime - _maneuverStartTime;
+  _maneuverTime = millis();
+  
+  if(_maneuverFirstLoop)
+  {   _maneuverFirstLoop = false;
+      _maneuverStartTime = _maneuverTime;
+
+      
+     if(_mySensor -> getDirection() > 0)
+    {
+      _lastDirectionSign = RIGHT;
+    }
+    else
+    {
+      _lastDirectionSign = LEFT;
+    }
+    //Set test parameters
+    _lastDirectionSign = LEFT;  
+    _leaveDirection = !_lastDirectionSign;
+    
+  }
+    //_mySensor -> update();
+
+  //Do Stuff here
+
+  if((_maneuverTime - _maneuverStartTime)> LATERAL_LEAVE_TURN_TIME)
+  {
+    if((_maneuverTime - _maneuverStartTime)> (LATERAL_EXIT_TIME + LATERAL_LEAVE_TURN_TIME))
+    {
+      _myMotion->setSpeed(100);
+      if(!_leaveDirection)//Return Back
+      {
+        _myMotion->setDirection(80);
+        Serial.println("Right");
+      }
+      else
+      {
+        _myMotion->setDirection(-80);
+        Serial.println("Left");
+      }
+    }
+    else
+    {
+      _myMotion->setDirection(0);
+      _myMotion->setSpeed(_lastSpeed); 
+      Serial.println("Straightening!");
+    }
+
+  }
+  else
+  {
+    if(_leaveDirection)
+    {
+      _myMotion->setDirection(80);
+      Serial.println("Right");
+    }
+    else
+    {
+      _myMotion->setDirection(-80);
+      Serial.println("Left");
+    }
+    _myMotion->setSpeed(100);
+  }
+  
+
+  if((_maneuverTime - _maneuverStartTime) > (LATERAL_EXIT_TIME + 2*LATERAL_LEAVE_TURN_TIME))
+  {
+    _myMotion->setDirection(0);
+    Status = true;
+    _maneuverFirstLoop = true; 
+  }
+
+  _myMotion->run();
+  
+  return Status;
+  
+}
+
+bool controller::moveBack()
+{
+  bool Status = false;
+  unsigned long int processTime = _maneuverTime - _maneuverStartTime;
+  bool markerFound = false;
+  _maneuverTime = millis();
+  
+  if(_maneuverFirstLoop)
+  {   _maneuverFirstLoop = false;
+      _maneuverStartTime = _maneuverTime;
+    
+  }
+    _mySensor -> update();
+    markerFound =  _mySensor -> getLastOneFlagStatus(); // not created yet
+  //Do Stuff here
+
+    if(markerFound)
+  {
+    _myMotion->setDirection(0);
+    _myMotion->setSpeed(0);
+    Status = true;
+    _maneuverFirstLoop = true; 
+  }
+  else
+  {
+    _myMotion->setDirection(0);
+    _myMotion->setSpeed(10); 
+    Serial.println("Going Back.");
+  }
+
+  _myMotion->run();
+  
+  return Status;
+  
+}
+
+bool controller::rejoin()
+{
+  bool Status = false;
+  unsigned long int processTime = _maneuverTime - _maneuverStartTime;
+  bool markerFound = false;
+  bool rejoinDirection = !_leaveDirection;
+  _maneuverTime = millis();
+  
+  if(_maneuverFirstLoop)
+  {   _maneuverFirstLoop = false;
+      _maneuverStartTime = _maneuverTime;
+  }
+
+ //Do Stuff here
+
+  if((_maneuverTime - _maneuverStartTime)> REJOIN_LEAVE_TURN_TIME)
+  {
+    if((_maneuverTime - _maneuverStartTime)> (REJOIN_ENTRY_TIME + REJOIN_LEAVE_TURN_TIME))
+    {
+      _myMotion->setSpeed(100);
+      if(!rejoinDirection)//Return Back
+      {
+        _myMotion->setDirection(80);
+        Serial.println("Right");
+      }
+      else
+      {
+        _myMotion->setDirection(-80);
+        Serial.println("Left");
+      }
+    }
+    else
+    {
+      _myMotion->setDirection(0);
+      _myMotion->setSpeed(_lastSpeed); 
+      Serial.println("Straightening!");
+    }
+
+  }
+  else
+  {
+    if(rejoinDirection)
+    {
+      _myMotion->setDirection(80);
+      Serial.println("Right");
+    }
+    else
+    {
+      _myMotion->setDirection(-80);
+      Serial.println("Left");
+    }
+    _myMotion->setSpeed(100);
+  }
+  
+
+  if((_maneuverTime - _maneuverStartTime) > (REJOIN_ENTRY_TIME + 2*REJOIN_LEAVE_TURN_TIME))
+  {
+    _myMotion->setDirection(0);
+    Serial.println("Waiting for visibility marker!");
+  }
+
+
+  _mySensor -> update();
+  if(_mySensor -> isVisible())
+  {
+    Status = true;
+    _maneuverFirstLoop = true; 
+  }
+  
+
+  _myMotion->run();
+  
+  return Status;
+  
+}
+
 

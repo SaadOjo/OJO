@@ -4,7 +4,7 @@
  */
 #include "sensor.h" 
 
-sensor::sensor():_mySensor(1),_myDirectionSensor(2,3)
+sensor::sensor():_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8)
 {
  
 }
@@ -15,6 +15,7 @@ bool sensor::init(){
 bool sensor::update()
 {
   _myDirectionSensor.update();
+  _mySolarFlag.update();
   //Update the distance sensor as well
 }
 unsigned char sensor::isVisible()
@@ -45,3 +46,10 @@ float sensor::getDirection()
 {
   return _myDirectionSensor.getDirection();
 }
+unsigned char sensor::getLastOneFlagStatus()
+{
+  return _mySolarFlag.getSolarLastOneFlag();
+  //this library does not satisfy the update function standard. Make it compliant.
+}
+
+

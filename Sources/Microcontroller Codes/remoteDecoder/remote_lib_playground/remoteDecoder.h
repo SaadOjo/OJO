@@ -24,13 +24,21 @@ class remoteDecoder
     unsigned int decode();
 
   private:
-    short int  detectEdge();
+    short int detectEdge();
+    bool _pulse;
     int _pin;
     bool lastEdgeType;
     bool edgeType;
     bool lastLevel = true;
     bool level = true;
+   
     
 };
+
+void remoteISR(){
+
+_pulse = true;
+
+}
 
 #endif

@@ -11,12 +11,21 @@ remoteDecoder::remoteDecoder(int pin)
 
 bool remoteDecoder::init(){
 
-pinMode(_pin,INPUT);
+  pinMode(_pin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(_pin), remoteISR, FALLING);
 
 }
 
 bool remoteDecoder::detectPulse(){
-  
+  bool state = false;
+  if(_pulse)
+  {
+    state = true;
+    _pulse = false;
+ 
+  }
+  return state;
+  /*
 bool edgeDetected = false;
 short int edge = detectEdge();
 
@@ -39,6 +48,7 @@ if((edge==1)||(edge==-1))
 }
 
  return edgeDetected;
+ */
 }
 
 unsigned int remoteDecoder::decode(){
@@ -144,3 +154,4 @@ short int remoteDecoder::detectEdge(){
   lastLevel = level;
   return edge;
 }
+

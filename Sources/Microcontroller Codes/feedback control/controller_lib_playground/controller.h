@@ -15,6 +15,14 @@
 //Maneuvers Parameters
 #define FIND_ROBOT_SWITCH_TIME 3 //seconds 
 
+// Leaving
+
+#define LATERAL_EXIT_TIME  1000 //(ms)
+#define LATERAL_LEAVE_TURN_TIME  500 //(ms)
+
+#define REJOIN_ENTRY_TIME  1000 //(ms)
+#define REJOIN_LEAVE_TURN_TIME  500 //(ms)
+
 #define AVERAGE_SAMPLES 10
 
 #include "sensor.h"
@@ -30,18 +38,29 @@ class controller
   bool setMaxSpeed(unsigned char maxSpeed);
   bool setMinSpeed(unsigned char minSpeed);  
   bool findMarker();
+  bool lateralExit();
+  bool moveBack();
+  bool rejoin();
+  bool forceFirstLoop();
+  bool forceMotors(unsigned char speed, unsigned char direction);
+   
 
   private:
 
   //Common maneuver variables
   bool _maneuverFirstLoop = true; //on exit from a manever set this flag so that the other functions can reset their timers
   unsigned long int _maneuverStartTime;
+  unsigned long int _maneuverTime;
 
   //Find Marker Function Status bits
   bool _lastDirectionSign = false; 
   bool _first = true;
   bool _turnModifier = false;
-  
+
+
+  //lateralExit Variables
+  bool _leaveDirection = false;
+  unsigned char _lastSpeed = 50;
   
   
   bool maintainDistance(int referenceDistance);

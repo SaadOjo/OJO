@@ -18,6 +18,7 @@ void loop()
   distance = mySensor.getDistance();
   direction = mySensor.getDirection();
   //Serial.println(String("The distance is:") + distance);
+  /*
   Serial.print(String("Distance:") + distance);
   Serial.print(String(" ,Direction:") + direction);
   Serial.print(" ");
@@ -38,7 +39,22 @@ void loop()
     
   }
   Serial.println("");
+  Serial.print("Flag status: ");
+    switch(mySensor.getLastOneFlagStatus())
+  {
+    case 0: 
+      Serial.print("No flag");
+      break;
+    case 1: 
+      Serial.print("All left");
+      break;
+    case 2: 
+      Serial.print("Only right");
+      break;   
+  }
+  Serial.println(""); */
 
+  
   delay(100);
 }
 
