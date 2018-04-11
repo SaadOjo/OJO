@@ -40,15 +40,15 @@
  * or only the signal pin (for sensors 3 pins), like:
  * Ultrasonic ultrasonic(13);
  */
-Ultrasonic ultrasonic(12, 13);
+Ultrasonic ultrasonic(12, 13, 10000UL);
 
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
-  Serial.print("Distance in CM: ");
+  //Serial.print("Distance in CM: ");
   // Pass INC as a parameter to get the distance in inches
   Serial.println(ultrasonic.distanceRead());
-  delay(1000);
+  //delay(100);
 }
