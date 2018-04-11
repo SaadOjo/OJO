@@ -1,0 +1,322 @@
+import cv2
+import numpy as np
+import math
+
+#video capture
+cap = cv2.VideoCapture(0)
+
+#calculate angle
+def angle(pt1,pt2,pt0):
+    dx1 = pt1[0][0] - pt0[0][0]
+    dy1 = pt1[0][1] - pt0[0][1]
+    dx2 = pt2[0][0] - pt0[0][0]
+    dy2 = pt2[0][1] - pt0[0][1]
+    return float((dx1*dx2 + dy1*dy2))/math.sqrt(float((dx1*dx1 + dy1*dy1))*(dx2*dx2 + dy2*dy2) + 1e-10)
+
+##################
+#2592*1944 pixels (sensor size)
+#h_sensor=972
+h_sensor=1944
+h_object=0
+h_object=7.5
+D=0
+#41.41 degrees
+VFOV=0.723
+hobj_average=1
+
+while(1):
+
+    # Take each frame
+
+    ret, frame = cap.read()
+    blur1 = cv2.bilateralFilter(frame,15,75,75)
+    frame = blur1
+ 
+
+    # Convert BGR to HSV
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # define range of green color in HSV
+    sensitivity = 25;
+    lower_green = np.array([60-sensitivity,100,50])
+    upper_green = np.array([60+sensitivity,255,255])
+
+    # Threshold the HSV image to get only green colors
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+
+    # Bitwise-AND mask and original image
+    res = cv2.bitwise_and(frame,frame, mask= mask)
+
+    #green has been detected
+
+    #check these contours(maybe detected afterwards, also inner rectangle in rectangle?!!)
+    #im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    #we can draw on specific if we want
+    #cv2.drawContours(res, contours, -1, (0,255,0), 3)
+    
+    #cv2.circle(res,(320,240), 10, (0,0,255), -1)
+
+    
+       #Capture frame-by-frame
+    
+    if ret==True:
+        #grayscale
+        gray = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
+        #Canny
+        canny = cv2.Canny(res,100,200)
+
+        #contours
+        canny2, contours, hierarchy = cv2.findContours(canny,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        #cnt=contours[-1]
+        #M = cv2.moments(cnt)
+        #cx = int(M['m10']/M['m00'])
+        #cy = int(M['m01']/M['m00'])
+        #cv2.circle(res,(cx,cy), 10, (0,0,255), -1)
+        #cv2.drawContours(res, contours, -1, (255,255,0), 3)
+        #cv2.circle(res,(320,240), 10, (0,0,255), -1)
+        for i in range(0,len(contours)):
+            #approximate the contour with accuracy proportional to
+            #the contour perimeter
+            approx = cv2.approxPolyDP(contours[i],cv2.arcLength(contours[i],True)*0.02,True)
+
+            #Skip small or non-convex objects
+            if(abs(cv2.contourArea(contours[i]))<100 or not(cv2.isContourConvex(approx))):
+                continue
+
+        
+            if(len(approx)>=4 and len(approx)<=6):
+            #if(len(approx)>=4 ):
+                #nb vertices of a polygonal curve
+                vtc = len(approx)
+                #get cos of all corners
+                cos = []
+                for j in range(2,vtc+1):
+                   cos.append(angle(approx[j%vtc],approx[j-2],approx[j-1]))
+                #sort ascending cos
+                cos.sort()
+                #get lowest and highest
+                mincos = cos[0]
+                maxcos = cos[-1]
+
+                #Use the degrees obtained above and the number of vertices
+                #to determine the shape of the contour
+                x,y,w,h = cv2.boundingRect(contours[i])
+                
+
+                xm = x+(w/2)
+                ym = y+(h/2)
+                cv2.circle(res,(xm,ym), 10, (255,0,0), -1)
+                
+                # Write some Text
+
+                font                   = cv2.FONT_HERSHEY_SIMPLEX
+                bottomLeftCornerOfText = (100,100)
+                fontScale              = 0.5
+                fontColor              = (255,255,0)
+                lineType               = 1
+
+                cv2.putText(res,str(xm-320), 
+                    bottomLeftCornerOfText, 
+                    font, 
+                    fontScale,
+                    fontColor,
+                    lineType)
+                
+                bottomLeftCornerOfText = (100,150)
+                
+                cv2.putText(res,str(ym-240), 
+                    bottomLeftCornerOfText, 
+                    font, 
+                    fontScale,
+                    fontColor,
+                    lineType)
+                if(vtc==4):
+                    cnt = contours[i]
+                    cv2.rectangle(res,(x,y),(x+w,y+h),(0,255,0),2)
+                    perimeter = cv2.arcLength(cnt,True)
+                    epsilon = 0.05*cv2.arcLength(cnt,True)
+                    approx = cv2.approxPolyDP(cnt,epsilon,True)
+                    img = cv2.drawContours(frame, [approx], -1, (0,0,255), 3)
+                    bottomLeftCornerOfText = (50,200)
+                    # Write some Text
+
+                    cv2.putText(res,str(approx), 
+                    bottomLeftCornerOfText, 
+                    font, 
+                    fontScale,
+                    fontColor,
+                    lineType)
+                    
+                    #cnt=contours[i]
+                    #rect = cv2.minAreaRect(cnt)
+                    #box = cv2.boxPoints(approx)
+                    #box = np.int0(box)
+                    #cv2.drawContours(res,[box],0,(0,0,255),2)
+                    #ccc=approx[0]
+                    #print ccc[0][0]
+                    #print ccc[0][1]
+                    #print (str(approx [0][0][0]))
+                    #cv2.putText(frame,str(approx[0]),(500,20), font, 0.5,(255,255,255),1,cv2.LINE_AA)
+                    #cv2.putText(frame,str(approx[1]),(500,40), font, 0.5,(255,255,255),1,cv2.LINE_AA)
+                    #cv2.putText(frame,str(approx[2]),(500,60), font, 0.5,(255,255,255),1,cv2.LINE_AA)
+                    #cv2.putText(frame,str(approx[3]),(500,80), font, 0.5,(255,255,255),1,cv2.LINE_AA)
+
+                    cv2.circle(res,(320,240), 10, (0,0,255), -1)
+                    
+                     #A
+                    x1= approx[0][0][0]
+                    y1= approx[0][0][1]
+                    
+                    #cv2.circle(res,(x1,y1), 5, (0,0,255), -1)
+                    #B
+                    x2= approx[1][0][0]
+                    y2= approx[1][0][1]
+                    #cv2.circle(res,(x2,y2), 5, (0,255,0), -1)
+                    
+                    #C
+                    x3= approx[2][0][0]
+                    y3= approx[2][0][1]
+                    #cv2.circle(res,(x3,y3), 5, (255,0,0), -1)
+                    #D
+                    x4= approx[3][0][0]
+                    y4= approx[3][0][1]
+                    #x4=0
+                    #y4=0
+                    #cv2.circle(res,(x4,y4), 5, (0,255,255), -1)
+
+
+
+
+ 
+
+                    a = [x1, y1]
+                    b = [x2, y2]
+                    c = [x3, y3]
+                    d = [x4, y4]
+
+                    points = [a, b, c, d]
+
+                    left = [a, b]
+                    right = [c, d]
+
+                    lr = 0
+                    rt = 0
+
+                    for i in range(0, 4):
+                        lessThanElements = 0
+                        for j in range(0, 4):
+                            #print(f' a: {points[i][0]}  vs {points[j][0]}')
+                            if points[i][0] <= points[j][0]:
+                               # print('found')
+                                lessThanElements = lessThanElements + 1
+                        #print(lessThanElements)
+                        if lessThanElements >= 3:
+                            left[lr] = points[i]
+                            lr = lr + 1
+                        else:
+                            right[rt] = points[i]
+                            rt = rt + 1
+
+                    if left[0][1] > left[1][1]:
+                        top_left = left[1]
+                        bottom_left = left[0]
+                    else:
+                        top_left = left[0]
+                        bottom_left = left[1]
+
+                    if right[0][1] > right[1][1]:
+                        top_right = right[1]
+                        bottom_right = right[0]
+                    else:
+                        top_right = right[0]
+                        bottom_right = right[1]
+
+                    xx1=top_left[0]
+                    yy1=top_left[1]
+                    xx2=bottom_left[0]
+                    yy2=bottom_left[1]
+                    xx3=bottom_right[0]
+                    yy3=bottom_right[1]
+                    xx4=top_right[0]
+                    yy4=top_right[1]
+
+                    cv2.circle(res,(xx1,yy1), 5, (0,0,255), -1)
+                    cv2.circle(res,(xx2,yy2), 5, (0,255,0), -1)
+                    cv2.circle(res,(xx3,yy3), 5, (255,0,0), -1)
+                    cv2.circle(res,(xx4,yy4), 5, (0,255,255), -1)
+                    #############
+                    hobj_left=yy2-yy1
+                    hobj_right=yy3-yy4
+                    hobj_average=(hobj_left+hobj_right)/2
+                    D=(h_sensor*h_object)/(hobj_average*VFOV)
+                    # Write some Text
+
+                    font                   = cv2.FONT_HERSHEY_SIMPLEX
+                    bottomLeftCornerOfText = (400,400)
+                    fontScale              = 0.5
+                    fontColor              = (255,255,0)
+                    lineType               = 1
+
+                    cv2.putText(res,str(D), 
+                        bottomLeftCornerOfText, 
+                        font, 
+                        fontScale,
+                        fontColor,
+                        lineType)
+
+                    bottomLeftCornerOfText = (300,400)
+                    cv2.putText(res,str(hobj_average), 
+                        bottomLeftCornerOfText, 
+                        font, 
+                        fontScale,
+                        fontColor,
+                        lineType)
+                 
+                        
+
+                    #print x1,y1,x2,y2,x3,y3,x4,y4
+                    #cv2.line(img,(x1,y1),(x2,y2),(255,0,0),5)
+
+
+                    #left and right height of rectangle, top and bottom width of rectangle,
+
+                    #left_height = math.sqrt(((abs(xtl-xbl))**2)+((abs(ytl-ybl))**2))
+                    #right_height = math.sqrt(((abs(xtr-xbr))**2)+((abs(ytr-ybr))**2))
+
+    # Convert BGR to HSV
+    hsv2 = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    blur1 = cv2.bilateralFilter(frame,5,75,75)
+    frame = blur1
+
+    # define range of red color in HSV
+    sensitivity = 0;
+    lower_red= np.array([150-sensitivity,150,50])
+    upper_red = np.array([180+sensitivity,255,255])
+    #lower_green = np.array([178,179,0])
+    #upper_green = np.array([255,255,255])
+    
+    
+    # Threshold the HSV image to get only green colors
+    mask2 = cv2.inRange(hsv2, lower_red, upper_red)
+
+    # Bitwise-AND mask and original image
+    res2 = cv2.bitwise_and(frame,frame, mask= mask2)
+    kernel = np.ones((5,5),np.uint8)
+    opening = cv2.morphologyEx(res, cv2.MORPH_OPEN, kernel)
+    dilation = cv2.dilate(opening,kernel,iterations = 1)                    
+
+
+                    
+                    
+            ###remember to change frame and find centre
+
+    cv2.imshow('frame',frame)
+    #cv2.imshow('blur1',blur1)
+    cv2.imshow('res2',res2)    
+    #cv2.imshow('mask',mask)
+    cv2.imshow('res',res)
+    #cv2.imshow('canny',canny)
+    if cv2.waitKey(10) & 0xFF == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()
