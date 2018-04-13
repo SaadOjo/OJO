@@ -43,6 +43,8 @@ float collisionDetector::getDanger()
   if(backDis<minimum){
     minimum=backDis;
     danger=3;}
+
+    Serial.println(String("Left: ") + leftDis + ",Right: " + rightDis +  "Back: " +backDis);
     
   return danger;
 }
