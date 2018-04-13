@@ -15,11 +15,15 @@ void setup()
 void loop()
 {
   
-myDecoder.update();
-distance = myDecoder.getDistance();
-direction = myDecoder.getDirection();
-orientation = myDecoder.getOrientation();
-leavingFlagStatus = myDecoder.getLeavingFlagStatus();
+if(myDecoder.update())
+{
+  distance = myDecoder.getDistance();
+  direction = myDecoder.getDirection();
+  orientation = myDecoder.getOrientation();
+  leavingFlagStatus = myDecoder.getLeavingFlagStatus();
+
+  Serial.println(String("Distance: ") + distance );
+}
  
 }
 

@@ -61,6 +61,9 @@ bool rpiDecoder::update()
         shortBufferByteNo++;
         shortBuffer[shortBufferByteNo+1] = '\0';
         myNum = atoi(shortBuffer);
+        Serial.print(shortBuffer);
+        Serial.println(myNum);
+
         dataFieldNo++;
         shortBufferByteNo = 0;
 
