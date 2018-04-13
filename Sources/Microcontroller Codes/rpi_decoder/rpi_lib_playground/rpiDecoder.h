@@ -24,7 +24,6 @@ class rpiDecoder
     unsigned char _orientation;
     unsigned char _distance;
     char _direction;
-    char _toNumber(char buff[]);
 };
 
 #endif
