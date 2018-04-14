@@ -40,8 +40,8 @@ bool rpiDecoder::update()
           shortBuffer[shortBufferByteNo+1] = '\0';
           //Serial.println(shortBuffer);
           myNum = atoi(shortBuffer);
-          Serial.println(myNum);
-          Serial.println(dataFieldNo);
+          //Serial.println(myNum);
+          //Serial.println(dataFieldNo);
           //Clear Buffer
           for (int j=0;j<BUFFER_SIZE;j++)
           {

@@ -10,6 +10,7 @@ bool leavingFlagStatus;
 void setup()
 {
   Serial.begin(9600);
+  pinMode(2,OUTPUT);
 }
 
 void loop()
@@ -23,6 +24,7 @@ void loop()
     leavingFlagStatus = myDecoder.getLeavingFlagStatus();
   
     Serial.println(String("Distance: ") + distance + " ,Direction: " + direction + " ,Orientation: " + orientation + " ,leavingFlagStatus: " + leavingFlagStatus);
+    digitalWrite(2,leavingFlagStatus);
   }
  
 }
