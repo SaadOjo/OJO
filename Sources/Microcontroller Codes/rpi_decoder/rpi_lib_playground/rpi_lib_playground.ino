@@ -2,9 +2,9 @@
 
 rpiDecoder myDecoder;
 
-char direction;
-unsigned char distance;
-unsigned char orientation;
+int direction;
+int distance;
+int orientation;
 bool leavingFlagStatus;
 
 void setup()
@@ -15,15 +15,15 @@ void setup()
 void loop()
 {
   
-if(myDecoder.update())
-{
-  distance = myDecoder.getDistance();
-  direction = myDecoder.getDirection();
-  orientation = myDecoder.getOrientation();
-  leavingFlagStatus = myDecoder.getLeavingFlagStatus();
-
-  Serial.println(String("Distance: ") + distance );
-}
+  if(myDecoder.update())
+  {
+    distance = myDecoder.getDistance();
+    direction = myDecoder.getDirection();
+    orientation = myDecoder.getOrientation();
+    leavingFlagStatus = myDecoder.getLeavingFlagStatus();
+  
+    Serial.println(String("Distance: ") + distance + " ,Direction: " + direction + " ,Orientation: " + orientation + " ,leavingFlagStatus: " + leavingFlagStatus);
+  }
  
 }
 

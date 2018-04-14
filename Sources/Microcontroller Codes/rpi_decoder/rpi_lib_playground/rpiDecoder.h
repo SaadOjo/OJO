@@ -17,7 +17,7 @@ class rpiDecoder
     bool getLeavingFlagStatus();
     unsigned char getDistance();
     char getDirection();
-    unsigned char getOrientation();
+    char getOrientation();
 
   private:
     unsigned int shortBufferByteNo;

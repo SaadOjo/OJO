@@ -35,16 +35,13 @@ bool rpiDecoder::update()
         {
         if(myChar == ',' || myChar == '&')
         { 
-          if(myChar == '&')
-          {
-            retBool = true;
-          }
 
           //Move Code Here
           shortBuffer[shortBufferByteNo+1] = '\0';
           //Serial.println(shortBuffer);
           myNum = atoi(shortBuffer);
           Serial.println(myNum);
+          Serial.println(dataFieldNo);
           //Clear Buffer
           for (int j=0;j<BUFFER_SIZE;j++)
           {
@@ -68,8 +65,15 @@ bool rpiDecoder::update()
               _leavingFlagState = myNum;
               break;
           }
+
           dataFieldNo++;
           shortBufferByteNo = 0; 
+
+          if(myChar == '&')
+          {
+            retBool = true;
+            dataFieldNo = 0;
+          }
         }
         else 
         {
@@ -92,7 +96,7 @@ unsigned char rpiDecoder::getDistance()
   return _distance;
 }
 
-unsigned char rpiDecoder::getOrientation()
+char rpiDecoder::getOrientation()
 {
   return _orientation;
 }
