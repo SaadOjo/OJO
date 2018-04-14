@@ -12,85 +12,74 @@ rpiDecoder::rpiDecoder()
 bool rpiDecoder::update()
 {
 
-  //Parse here
-
-    /*
-   Data Format
-   Distance, Direction,Orientation,Flag
-   $100,-100,-100,0&
-   */
-  bool  retBool = false; 
-  bool dataStarted = false;
-  unsigned char dataFieldNo = 0;
-  char buffer[BUFFER_SIZE];
-  char shortBuffer[4];
-  char shortBufferByteNo;
-  char myNum;
-  int i = 0;
-
-  //Check if buffer is empty
-  if (Serial.available() > 0) 
-  {
-    if(i<BUFFER_SIZE)
+    //Parse here
+  
+      /*
+     Data Format
+     Distance, Direction,Orientation,Flag
+     $100,-100,-100,0&
+     */
+    bool  retBool = false; 
+    char myChar;
+    int myNum;
+  
+    //Check if buffer is empty
+    if (Serial.available() > 0) 
     {
-      buffer[i] = Serial.read();
-      Serial.println(buffer[i],DEC);
-      i++;
-    }
-  }
-
-  for(int i = 0;i<BUFFER_SIZE;i++)
-  {
-    if(buffer[i] == '$')
-    {
-      dataStarted = true;
-    }
-    else
-    {
-      if(buffer[i] == ',' || buffer[i] == '&')
-      { 
-        if(buffer[i] == '&')
+        myChar = Serial.read();
+        if(myChar == '$')
         {
-          retBool = true;
+          dataStarted = true;//cond?
         }
         else
         {
+        if(myChar == ',' || myChar == '&')
+        { 
+          if(myChar == '&')
+          {
+            retBool = true;
+          }
+
           //Move Code Here
+          shortBuffer[shortBufferByteNo+1] = '\0';
+          //Serial.println(shortBuffer);
+          myNum = atoi(shortBuffer);
+          Serial.println(myNum);
+          //Clear Buffer
+          for (int j=0;j<BUFFER_SIZE;j++)
+          {
+           *(shortBuffer + j) = 0; 
+          }
+          //Serial.print(shortBuffer);
+          //Serial.println(myNum);
+
+          switch(dataFieldNo)
+          {
+            case 0:
+              _distance = myNum;
+              break;
+            case 1:
+              _direction = myNum;
+              break;
+            case 2:
+              _orientation = myNum;
+              break;
+            case 3:
+              _leavingFlagState = myNum;
+              break;
+          }
+          dataFieldNo++;
+          shortBufferByteNo = 0; 
         }
-        
-        shortBufferByteNo++;
-        shortBuffer[shortBufferByteNo+1] = '\0';
-        myNum = atoi(shortBuffer);
-        Serial.print(shortBuffer);
-        Serial.println(myNum);
-
-        dataFieldNo++;
-        shortBufferByteNo = 0;
-
-        switch(dataFieldNo)
+        else 
         {
-          case 0:
-            _distance = myNum;
-            break;
-            _direction = myNum;
-          case 1:
-            _orientation = myNum;
-            break;
-          case 2:
-            _leavingFlagState = myNum;
-            break;
+          shortBuffer[shortBufferByteNo] = myChar;
+          //Serial.println(shortBufferByteNo);
+          shortBufferByteNo++;
         }
       }
-      else
-      {
-        shortBuffer[shortBufferByteNo] = buffer[i];
-        shortBufferByteNo++;
-      }
-    } 
-  }
-
+    }
   return retBool; 
-   
 }
 
 char rpiDecoder::getDirection()

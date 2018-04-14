@@ -5,7 +5,7 @@
 #ifndef RPI_DECODER_H
 #define RPI_DECODER_H
 
-#define BUFFER_SIZE 16
+#define BUFFER_SIZE 6
 
 #include <Arduino.h>
 
@@ -20,6 +20,13 @@ class rpiDecoder
     unsigned char getOrientation();
 
   private:
+    unsigned int shortBufferByteNo;
+    char shortBuffer[BUFFER_SIZE];
+    unsigned char dataFieldNo = 0;
+    bool dataStarted = false;
+    int i = 0;
+
+    
     bool _leavingFlagState;
     unsigned char _orientation;
     unsigned char _distance;
