@@ -6,18 +6,12 @@
 
 collisionDetector::collisionDetector(unsigned char frontPin, unsigned char leftEchoPin, 
     unsigned char leftTriggerPin, unsigned char rightEchoPin, unsigned char rightTriggerPin,
-    unsigned char backEchoPin, unsigned char backTriggerPin): _left(_leftTriggerPin, _leftEchoPin),
-                                                              _right(_rightTriggerPin, _rightEchoPin),
-                                                              _back(_backTriggerPin, _backEchoPin)
+    unsigned char backEchoPin, unsigned char backTriggerPin): _left(leftTriggerPin, leftEchoPin),
+                                                              _right(rightTriggerPin, rightEchoPin),
+                                                              _back(backTriggerPin, backEchoPin)
 
 {
-  _frontPin = frontPin;
-  _leftEchoPin = leftEchoPin;
-  _leftTriggerPin = leftTriggerPin;
-  _rightEchoPin = rightEchoPin;
-  _rightTriggerPin = rightTriggerPin;
-  _backEchoPin = backEchoPin;
-  _backTriggerPin = backTriggerPin; 
+  
 }
 
 bool collisionDetector::init(){
@@ -34,6 +28,7 @@ unsigned char collisionDetector::getAvoidAction()
   rightDis = _right.distanceRead();
   backDis = _back.distanceRead();
 
+
   if(leftDis<minimum){
     minimum=leftDis;
     danger=1;}
@@ -44,7 +39,7 @@ unsigned char collisionDetector::getAvoidAction()
     minimum=backDis;
     danger=3;}
 
-    Serial.println(String("Left: ") + leftDis + ",Right: " + rightDis +  "Back: " +backDis);
+    Serial.println(String("Left: ") + leftDis + ",Right: " + rightDis +  " ,Back: " + backDis);
     
   return danger;
 }

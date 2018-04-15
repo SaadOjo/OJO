@@ -12,7 +12,7 @@ void setup()
 void loop()
 {
   danger = mySensor.getAvoidAction();
-  Serial.println(danger);
+  //Serial.println(danger);
   delay(100);
   
 }
