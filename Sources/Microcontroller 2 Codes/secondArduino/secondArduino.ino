@@ -5,6 +5,8 @@ IRrecvPCI myReceiver(2);
 collisionDetector mySensor(4,5,6,7,8,9,10);
 IRdecode myDecoder;   
 
+//Add i2c
+
 unsigned char avoidAction;
 bool shouldSend = false;
 
