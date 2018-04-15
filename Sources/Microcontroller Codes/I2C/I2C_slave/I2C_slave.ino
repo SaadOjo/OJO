@@ -23,9 +23,9 @@ void receiveEvent(int howMany)
 {
   if(Wire.available() != 0)
   {
-   //  for(int i = 0; i<howMany; i++) { 
+     for(int i = 0; i<howMany; i++) { 
         b = Wire.read();
-        Serial.print(b);
+        Serial.print(0b11110000);
 
         switch (b) {
 
@@ -44,6 +44,6 @@ void receiveEvent(int howMany)
    
           
     }  
-//   } 
+   } 
   }
 }
