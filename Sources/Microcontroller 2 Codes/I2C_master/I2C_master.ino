@@ -5,7 +5,7 @@
 void setup() {
   
     Wire.begin();
-    Serial.begin(9600);
+    Serial.begin(115200);
     
 }
 
@@ -18,7 +18,7 @@ void loop() {
     Wire.write(b);                
     Wire.endTransmission();   
     delay(100);
-    
+    /*
     Wire.requestFrom(slaveAddress, 1);
 
     int howMany = Wire.available();
@@ -27,4 +27,5 @@ void loop() {
           b = Wire.read();
           Serial.print(b,BIN);
     }
+    */
 }

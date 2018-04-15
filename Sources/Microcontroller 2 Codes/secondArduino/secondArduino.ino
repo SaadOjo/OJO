@@ -1,6 +1,9 @@
 #include "IRLibAll.h"
 #include "collisionDetector.h"
+#include <Wire.h>
 
+
+#define slaveAddress 0x80  
 IRrecvPCI myReceiver(2);
 collisionDetector mySensor(4,5,6,7,8,9,10);
 IRdecode myDecoder;   
@@ -15,6 +18,7 @@ unsigned char remoteInfo,avoidInfo,sendByte;
  
 void setup() {
   Serial.begin(115200);
+  Wire.begin();
   myReceiver.enableIRIn(); // Start the receiver
 }
  
@@ -77,6 +81,11 @@ void loop() {
     //Send
     sendByte = remoteInfo | avoidInfo;
     Serial.println(sendByte,BIN);
+    
+    Wire.beginTransmission(slaveAddress);   
+    Wire.write(sendByte);                
+    Wire.endTransmission(); 
+    
     avoidInfo = 0;
     remoteInfo = 0;
   }
