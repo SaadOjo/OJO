@@ -16,7 +16,7 @@ class collisionDetector
     unsigned char leftTriggerPin, unsigned char rightEchoPin, unsigned char rightTriggerPin,
     unsigned char backEchoPin, unsigned char backTriggerPin);
     bool init();
-    float getDanger();
+    unsigned char getAvoidAction();
   private:
     unsigned char _frontPin, _leftEchoPin, _leftTriggerPin;
     unsigned char _rightEchoPin, _rightTriggerPin, _backEchoPin, _backTriggerPin;

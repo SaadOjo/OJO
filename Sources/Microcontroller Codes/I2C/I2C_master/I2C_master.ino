@@ -25,6 +25,6 @@ void loop() {
     for(int i = 0; i<howMany; i++) {
     
           b = Wire.read();
-          Serial.print(b);
+          Serial.print(b,BIN);
     }
 }

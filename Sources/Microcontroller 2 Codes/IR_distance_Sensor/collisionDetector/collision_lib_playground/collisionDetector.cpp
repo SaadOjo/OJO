@@ -26,7 +26,7 @@ bool collisionDetector::init(){
 //Analog declaration
 }
 
-float collisionDetector::getDanger()
+unsigned char collisionDetector::getAvoidAction()
 {
   unsigned char danger=0;
   unsigned char leftDis, rightDis, backDis, minimum=DANGER_DISTANCE;

@@ -11,8 +11,7 @@ void setup()
 
 void loop()
 {
-  danger = mySensor.getDanger();
-  //Serial.println(String("The distance is:") + distance);
+  danger = mySensor.getAvoidAction();
   Serial.println(danger);
   delay(100);
   
