@@ -30,10 +30,11 @@ bool rpiDecoder::update()
         if(myChar == '$')
         {
           dataStarted = true;//cond?
+          Serial.println();
         }
-        else
+        else if(dataStarted)
         {
-        if(myChar == ',' || myChar == '&')
+        if((myChar == ',' || myChar == '&'))
         { 
 
           //Move Code Here
@@ -72,6 +73,7 @@ bool rpiDecoder::update()
           if(myChar == '&')
           {
             retBool = true;
+            dataStarted = false;
             dataFieldNo = 0;
           }
         }
