@@ -10,6 +10,7 @@ void setup()
 {
   Serial.begin(115200);
   mySensor.init();
+  pinMode(2,OUTPUT);
 }
 
 void loop()
@@ -17,6 +18,11 @@ void loop()
   mySensor.update();
   distance = mySensor.getDistance();
   direction = mySensor.getDirection();
+  if(mySensor.getLeavingFlagStatus())
+  {
+  Serial.println(mySensor.getLeavingFlagStatus());
+  }
+
   //Serial.println(String("The distance is:") + distance);
   /*
   Serial.print(String("Distance:") + distance);
@@ -54,7 +60,7 @@ void loop()
   }
   Serial.println(""); */
 
-  
-  delay(100);
+  digitalWrite(2,mySensor.getLeavingFlagStatus());
+ // delay(100);
 }
 

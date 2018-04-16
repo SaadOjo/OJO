@@ -28,14 +28,18 @@ void setup()
   Serial.begin(115200);
   myController.setMaxSpeed(100);
   myController.setMinSpeed(10);
-  pinMode(2, INPUT_PULLUP);
-  attachInterrupt(0, remoteISR ,FALLING);//PIN 2
+  pinMode(2, OUTPUT);
+  //attachInterrupt(0, remoteISR ,FALLING);//PIN 2
 }
 
 void loop()
 {
+  mySensor.update();
+  Serial.println(mySensor.getLeavingFlagStatus());
+  digitalWrite(2,mySensor.getLeavingFlagStatus());
+  //updating sensor can have unexpected consequences
 
-if(pulse)
+if(pulse) //change to take from serial
 {
   if(!ignoreLeaveLineCommand)
   {
@@ -47,6 +51,7 @@ if(pulse)
     Serial.println("Intterrupt"); 
   }
 }
+
 
   /*
   
@@ -87,8 +92,7 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
       break;
   }
   
-
-delay(100);
+delay(10);
 
 }
 
@@ -148,9 +152,9 @@ void leaving(void)
       break;
   }
 }
-
+/*
 void remoteISR() 
 {
   pulse = true;
 }
-
+*/

@@ -4,7 +4,7 @@
  */
 #include "sensor.h" 
 
-sensor::sensor():_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8)
+sensor::sensor():_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8),_myRpiDecoder()
 {
  
 }
@@ -16,6 +16,7 @@ bool sensor::update()
 {
   _myDirectionSensor.update();
   _mySolarFlag.update();
+  _myRpiDecoder.update();
   //Update the distance sensor as well
 }
 unsigned char sensor::isVisible()
@@ -50,6 +51,20 @@ unsigned char sensor::getLastOneFlagStatus()
 {
   return _mySolarFlag.getSolarLastOneFlag();
   //this library does not satisfy the update function standard. Make it compliant.
+}
+
+char sensor::getOrientation()
+{
+  char orientation;
+  orientation = _myRpiDecoder.getOrientation();
+  return orientation;
+}
+
+bool sensor::getLeavingFlagStatus()
+{ 
+  bool leavingFlagStatus;
+  leavingFlagStatus = _myRpiDecoder.getLeavingFlagStatus();
+  return leavingFlagStatus;
 }
 
 
