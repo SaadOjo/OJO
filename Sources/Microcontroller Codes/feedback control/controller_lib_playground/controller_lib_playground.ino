@@ -1,7 +1,7 @@
 #include "controller.h"
 #include "sensor.h"
 robotMotion myMotion(5,6);
-sensor mySensor; //pass pins from here
+sensor mySensor(1); //Argument is debug info
 controller myController(mySensor, myMotion);
 
 // TEST DEFINITIONS
@@ -22,6 +22,9 @@ bool followingState = true;
 
 bool ignoreLeaveLineCommand = false;
 bool pulse = false;
+
+unsigned long int oldTime;
+unsigned long int  myTime;
 
 void setup()
 {
@@ -91,7 +94,10 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
       following();
       break;
   }
-  
+
+  myTime = millis();
+  Serial.println(String("Loop Tme: ") + (myTime - oldTime));
+  oldTime = myTime;
 delay(100);
 
 }

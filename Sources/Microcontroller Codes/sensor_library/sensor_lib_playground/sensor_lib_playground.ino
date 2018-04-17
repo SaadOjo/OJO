@@ -2,7 +2,7 @@
 #include "Ultrasonic.h"
 #include "sensor.h"
 
-sensor mySensor;
+sensor mySensor(1);
 float distance;
 float direction;
 
@@ -18,6 +18,9 @@ void loop()
   mySensor.update();
   distance = mySensor.getDistance();
   direction = mySensor.getDirection();
+
+  Serial.println(String("dist: ") + distance + " ,direction: " + direction );
+  /*
   if(mySensor.getLeavingFlagStatus())
   {
   Serial.println(mySensor.getLeavingFlagStatus());
@@ -61,6 +64,7 @@ void loop()
   Serial.println(""); */
 
   digitalWrite(2,mySensor.getLeavingFlagStatus());
+  
   delay(100);
 }
 
