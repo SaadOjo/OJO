@@ -24,7 +24,7 @@ bool rpiDecoder::update()
     int myNum;
   
     //Check if buffer is empty
-    if (Serial.available() > 0) 
+    while (Serial.available() > 0) 
     {
         myChar = Serial.read();
         if(myChar == '$')

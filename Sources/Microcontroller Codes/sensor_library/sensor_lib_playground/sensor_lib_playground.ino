@@ -61,6 +61,6 @@ void loop()
   Serial.println(""); */
 
   digitalWrite(2,mySensor.getLeavingFlagStatus());
- // delay(100);
+  delay(100);
 }
 

@@ -25,6 +25,8 @@ void loop()
   
     Serial.println(String("Distance: ") + distance + " ,Direction: " + direction + " ,Orientation: " + orientation + " ,leavingFlagStatus: " + leavingFlagStatus);
     digitalWrite(2,leavingFlagStatus);
+
+    delay(100);
   }
  
 }

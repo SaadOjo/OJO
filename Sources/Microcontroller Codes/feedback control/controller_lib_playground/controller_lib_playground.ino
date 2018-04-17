@@ -92,7 +92,7 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
       break;
   }
   
-delay(10);
+delay(100);
 
 }
 
