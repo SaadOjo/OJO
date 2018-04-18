@@ -15,11 +15,6 @@ void loop()
   delay(100);
 }
 
-void requestEvent() 
-{
-  Wire.write(b);
-}
-
 void receiveEvent(int howMany)
 {
   if(Wire.available() != 0)

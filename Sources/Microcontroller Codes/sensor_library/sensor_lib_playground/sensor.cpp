@@ -34,7 +34,7 @@ unsigned char sensor::isVisible()
       break;
 
     case 1: //Primary (Camera ect)
-        visibility;
+        visibility = 1;
       break;
 
     case 2: //Secondary

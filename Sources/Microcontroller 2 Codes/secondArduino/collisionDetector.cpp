@@ -15,43 +15,102 @@ collisionDetector::collisionDetector(unsigned char frontPin, unsigned char leftE
 }
 
 bool collisionDetector::init(){
-    
+
+}
+
+bool collisionDetector::update()
+{
+  _leftDist = _left.distanceRead();
+  _rightDist = _right.distanceRead();
+  _backDist = _back.distanceRead();
+  _frontDist = 255;
+
+  if(!_leftDist)
+  {
+    _leftDist = 255;
+  }
   
-//Analog declaration
+  if(!_rightDist)
+  {
+    _rightDist = 255;
+  }
+  
+  if(!_backDist)
+  {
+    _backDist = 255;
+  }
+
+  if(!_frontDist)
+  {
+    _frontDist = 255;
+  }
+
 }
 
 unsigned char collisionDetector::getAvoidAction()
 {
-  unsigned char danger=0;
-  unsigned char leftDis, rightDis, backDis, minimum=DANGER_DISTANCE;
-  leftDis = _left.distanceRead();
-  if(!leftDis)
+  unsigned char avoidAction=0;
+  unsigned char minimum=DANGER_DISTANCE;
+  
+  if(_leftDist<minimum)
   {
-    leftDis = 255;
+    minimum=_leftDist;
+    avoidAction = 1;
   }
-  rightDis = _right.distanceRead();
-  if(!rightDis)
+  if(_rightDist<minimum)
   {
-    rightDis = 255;
+    minimum=_rightDist;
+    avoidAction = 2;
   }
-  backDis = _back.distanceRead();
-  if(!backDis)
+  if(_backDist<minimum)
   {
-    backDis = 255;
+    minimum=_backDist;
+    avoidAction = 3;
+  }
+  if(_frontDist<minimum)
+  {
+    minimum=_frontDist;
+    avoidAction = 4;
   }
 
-
-  if(leftDis<minimum){
-    minimum=leftDis;
-    danger=1;}
-  if(rightDis<minimum){
-    minimum=rightDis;
-    danger=2;}
-  if(backDis<minimum){
-    minimum=backDis;
-    danger=3;}
-
-    //Serial.println(String("Left: ") + leftDis + ",Right: " + rightDis +  " ,Back: " + backDis);
+    //Serial.println(String("Left: ") + _leftDis + ",Right: " + _rightDis +  " ,Back: " + _backDis);
     
-  return danger;
+  return avoidAction;
+}
+
+bool collisionDetector::robotIsLast()
+{
+  bool robotInFront, robotInBack;
+
+  bool robotIsLast;
+  
+  if(_frontDist < LAST_DETERMINE_DISTANCE)
+  {
+    robotInFront = true;
+  }
+  else
+  {
+    robotInFront = false;
+  }
+  
+  if(_backDist < LAST_DETERMINE_DISTANCE)
+  {
+    robotInBack = true;
+  }
+  else
+  {
+    robotInBack = false;
+  }
+
+  if(robotInFront &&!robotInBack)
+  {
+      robotIsLast = true;
+  }
+  else
+  {
+      robotIsLast = false;
+  }
+
+  return robotIsLast;
+  
 }

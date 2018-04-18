@@ -1,3 +1,4 @@
+
 /*
  Controller library for EE493 Convoy Design Project.
  Uses external PID controller libraries
@@ -46,6 +47,7 @@ bool controller::maintainDistance(int referenceDistance)
   _relativeDirection = _mySensor -> getDirection();
 
  // TEST CODE
+ /*
   if(_relativeDirection<-1)
   {
     _relativeDirection = -70;
@@ -58,6 +60,7 @@ bool controller::maintainDistance(int referenceDistance)
   {
     _relativeDirection = 0;
   }
+  */
   
   _propotionalControl = _K_p *  (_relativeDistance - referenceDistance);
 

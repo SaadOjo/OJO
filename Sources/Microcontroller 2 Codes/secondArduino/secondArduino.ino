@@ -2,20 +2,18 @@
 #include "collisionDetector.h"
 #include <Wire.h>
 
-
 #define slaveAddress 0x80  
 IRrecvPCI myReceiver(2);
 collisionDetector mySensor(4,5,6,7,8,9,10);
 IRdecode myDecoder;   
 
-//Add i2c
+//Add i2c (added)
 
 unsigned char avoidAction;
 bool shouldSend = false;
 
-unsigned char remoteInfo,avoidInfo,sendByte;
+unsigned char isLastInfo,remoteInfo,avoidInfo,sendByte;
 
- 
 void setup() {
   Serial.begin(115200);
   Wire.begin();
@@ -25,6 +23,15 @@ void setup() {
 void loop() {
   //Continue looping until you get a complete signal received
   avoidAction = mySensor.getAvoidAction();
+  if(mySensor.robotIsLast())
+  {
+    shouldSend = true;
+    isLastInfo = 0b10000000;
+  }
+  else
+  {
+    isLastInfo = 0b00000000;
+  }
 
   if(avoidAction)
   {
@@ -79,7 +86,7 @@ void loop() {
   {
     shouldSend = false;
     //Send
-    sendByte = remoteInfo | avoidInfo;
+    sendByte = isLastInfo | remoteInfo | avoidInfo;
     Serial.println(sendByte,BIN);
     
     Wire.beginTransmission(slaveAddress);   
@@ -88,6 +95,7 @@ void loop() {
     
     avoidInfo = 0;
     remoteInfo = 0;
+    isLastInfo = 0;
   }
   delay(100);
 }

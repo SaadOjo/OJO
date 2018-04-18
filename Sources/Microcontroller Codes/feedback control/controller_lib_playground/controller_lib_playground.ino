@@ -30,9 +30,9 @@ void setup()
 {
   Serial.begin(115200);
   myController.setMaxSpeed(100);
-  myController.setMinSpeed(10);
+  myController.setMinSpeed(30);
   pinMode(2, OUTPUT);
-  //attachInterrupt(0, remoteISR ,FALLING);//PIN 2
+
 }
 
 void loop()
