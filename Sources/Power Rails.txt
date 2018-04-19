@@ -1,0 +1,4 @@
+Front:	Arduino
+
+Back:	5 pins for Battery -> up
+	4 pins for Arduino -> down	

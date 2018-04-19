@@ -4,3 +4,4 @@ IR DIS: 1 analog
 IR Remote: 1 digital
 Laser: 2 analog ??
 Solar panel: 2 digital
+POWER LED: 1
