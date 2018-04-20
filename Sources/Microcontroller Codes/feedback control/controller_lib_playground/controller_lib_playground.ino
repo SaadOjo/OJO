@@ -1,6 +1,6 @@
 #include "controller.h"
 #include "sensor.h"
-robotMotion myMotion(5,6);
+robotMotion myMotion(6,5);
 sensor mySensor(1); //Argument is debug info
 controller myController(mySensor, myMotion);
 

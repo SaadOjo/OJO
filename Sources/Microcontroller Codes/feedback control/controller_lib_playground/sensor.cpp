@@ -4,7 +4,7 @@
  */
 #include "sensor.h" 
 
-sensor::sensor(unsigned char debugInfo):_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8),_myRpiDecoder()
+sensor::sensor(unsigned char debugInfo):_myDirectionSensor(6,7),_mySolarFlag(2,3),_myRpiDecoder()
 {
  _debugInfo = debugInfo;
 }

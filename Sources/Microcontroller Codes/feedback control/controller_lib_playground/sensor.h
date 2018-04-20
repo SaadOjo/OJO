@@ -30,7 +30,6 @@ class sensor
   private:
     unsigned char _debugInfo;             //0 both 1 primary only 2 secondary only
     float _distance;
-    infraredDistance _mySensor;
     infraredDirection _myDirectionSensor;
     flags _mySolarFlag;
     rpiDecoder _myRpiDecoder;
