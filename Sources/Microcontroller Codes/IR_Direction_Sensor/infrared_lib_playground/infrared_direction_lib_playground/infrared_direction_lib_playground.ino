@@ -1,6 +1,6 @@
 #include "infraredDirection.h"
 
-infraredDirection mySensor(2,3);
+infraredDirection mySensor(7,6);
 float direction;
 float leftVoltage;
 float rightVoltage;

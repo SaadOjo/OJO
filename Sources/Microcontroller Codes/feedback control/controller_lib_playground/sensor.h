@@ -6,7 +6,6 @@
 #define SENSOR_H
 
 #include <Arduino.h>
-#include "infraredDistance.h"
 #include "Ultrasonic.h"
 #include "infraredDirection.h"
 #include "flags.h"
