@@ -7,17 +7,15 @@ void setup()
 {
   Serial.begin(115200);
   myFlagsTransmitter.init();
+
+  myFlagsTransmitter.setLeaveSignal(LOW);
+  myFlagsTransmitter.setLastSignal(HIGH);
 }
 
 void loop()
 {
-  myFlagsTransmitter.setLeaveSignal(HIGH);
-  myFlagsTransmitter.setLastSignal(HIGH);
-  delay(100);
-  myFlagsTransmitter.setLeaveSignal(LOW);
-  myFlagsTransmitter.setLastSignal(HIGH);
-  delay(100);
-  myFlagsTransmitter.clearFlags();
-  delay(1000);
+
+  myFlagsTransmitter.transmit();
+
 }
 

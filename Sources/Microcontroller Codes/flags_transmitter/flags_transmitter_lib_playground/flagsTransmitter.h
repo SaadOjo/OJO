@@ -6,7 +6,7 @@
 #define FLAGS_TRANSMITTER_H
 
 #include <Arduino.h>
-
+#include "infraredTransmitter.h"
 class flagsTransmitter
 {
   public:
@@ -18,8 +18,8 @@ class flagsTransmitter
     void clearFlags();
    
   private:
-
     unsigned char _laser_pin, _sevenSegment_pin;
+    infraredTransmitter _myTransmitter;
 };
 
 #endif
