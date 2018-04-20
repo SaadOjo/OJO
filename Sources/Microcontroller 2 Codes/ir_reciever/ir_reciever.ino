@@ -1,22 +1,9 @@
-#include "collisionDetector.h"
-#include <Wire.h>
-
-#define slaveAddress 0x80  
-collisionDetector mySensor(4,5,6,7,8,9,10);
-
-//Add i2c (added)
-
 char text[5];
 boolean nec_ok = 0;
 byte  i, nec_state = 0, command, inv_command;
 unsigned int address;
 unsigned long nec_code;
-
-unsigned char avoidAction;
-bool shouldSend = false;
-
-unsigned char isLastInfo,remoteInfo,avoidInfo,sendByte;
-
+ 
 void setup() {
   Serial.begin(115200);
   TCCR1A = 0;
@@ -24,8 +11,8 @@ void setup() {
   TCNT1  = 0;                                    // Set Timer1 preload value to 0 (reset)
   TIMSK1 = 1;                                    // enable Timer1 overflow interrupt
   attachInterrupt(0, remote_read, CHANGE);       // Enable external interrupt (INT0)
-  Wire.begin();
 }
+ 
 void remote_read() {
 unsigned int timer_value;
   if(nec_state != 0){
@@ -89,87 +76,17 @@ ISR(TIMER1_OVF_vect) {                           // Timer1 interrupt service rou
 }
  
 void loop() {
-  
-  //Continue looping until you get a complete signal received
-  avoidAction = mySensor.getAvoidAction();
-  if(mySensor.robotIsLast())
-  {
-    shouldSend = true;
-    isLastInfo = 0b10000000;
-  }
-  else
-  {
-    isLastInfo = 0b00000000;
-  }
+  if(nec_ok){                                    // If the mcu receives NEC message with successful
+    nec_ok = 0;                                  // Reset decoding process
+    nec_state = 0;
+    TCCR1B = 0;                                  // Disable Timer1 module
+    address = nec_code >> 16;
+    command = nec_code >> 8;
+    inv_command = nec_code;
 
-  if(avoidAction)
-  {
-    Serial.println((String("AA:") + avoidAction));
-    shouldSend = true;
-    switch(avoidAction)
-    {
-      case 1:
-        avoidInfo = 0b00000001;
-        break;
-  
-      case 2:
-        avoidInfo = 0b00000010;
-        break;
-  
-      case 3:
-        avoidInfo = 0b00000011;
-        break;
-    }
+    Serial.println(text);                             // Display address in hex format
+    Serial.println(String("command") + command); 
+    Serial.println(String("command") + inv_command); 
+    attachInterrupt(0, remote_read, CHANGE);     // Enable external interrupt (INT0)
   }
-
-if(nec_ok)
-{                                    // If the mcu receives NEC message with successful
-  nec_ok = 0;                                  // Reset decoding process
-  nec_state = 0;
-  TCCR1B = 0;                                  // Disable Timer1 module
-  address = nec_code >> 16;
-  command = nec_code >> 8;
-  inv_command = nec_code;
-
-  switch(command) 
-  {
-    case 72:
-      Serial.println("LEAVE");
-      shouldSend = true;
-      remoteInfo = 0b00010000;
-      break;
-    case 88:
-      Serial.println("RES1");
-      shouldSend = true;
-      remoteInfo = 0b00100000; 
-      break;
-    case 120:  //Volume Up
-      Serial.println("RES2");
-      shouldSend = true;
-      remoteInfo = 0b00110000;
-      break; 
-  }
-  attachInterrupt(0, remote_read, CHANGE);     // Enable external interrupt (INT0)
-}
-
-  //First 4 bits for Remote Last 4 for Collision
-  if(shouldSend)
-  {
-    shouldSend = false;
-    //Send
-    sendByte = isLastInfo | remoteInfo | avoidInfo;
-
-    sendByte = 0b00100010;
-    
-    Serial.println(sendByte,BIN);
-    
-    Wire.beginTransmission(slaveAddress);   
-    Wire.write(sendByte);                
-    Wire.endTransmission(); 
-    
-    avoidInfo = 0;
-    remoteInfo = 0;
-    isLastInfo = 0;
-  }
-  delay(100);
 }
