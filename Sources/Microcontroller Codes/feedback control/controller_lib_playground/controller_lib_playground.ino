@@ -14,6 +14,8 @@ controller myController(mySensor, myMotion);
 
  3) Lateral Exit uses test conditions for last direction
 
+ 4) Have to check next robot leaving case
+
  !!!! Uncompilable there is unwritten function !!!
 */
 bool robotVisibilityState = true;
@@ -109,15 +111,15 @@ void following(void)
    switch(robotVisibilityState)
   {
     case true:
-      Serial.println("A working!");
-      if(!myController.followRobot(15))
+      Serial.println("Following Robot!");
+      if(!myController.followRobot(15)) //does not follow when the robot sees that the robot in front is leaving
       {
         robotVisibilityState = false;
       }
       break;
 
     case false:
-      Serial.println("B working!");
+      Serial.println("Finding Robot!");
       if(myController.findMarker())
       {
         robotVisibilityState = true; 

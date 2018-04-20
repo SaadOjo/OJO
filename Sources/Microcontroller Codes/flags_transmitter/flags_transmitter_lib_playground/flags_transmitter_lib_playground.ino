@@ -1,6 +1,6 @@
 #include "flagsTransmitter.h"
 
-flagsTransmitter myFlagsTransmitter(2, 3);
+flagsTransmitter myFlagsTransmitter(4, 7);
 
 
 void setup()
@@ -9,15 +9,15 @@ void setup()
   myFlagsTransmitter.init();
 
   myFlagsTransmitter.setLeaveSignal(LOW);
-  myFlagsTransmitter.setLastSignal(LOW);
-  myFlagsTransmitter.clearFlags();
+  myFlagsTransmitter.setLastSignal(HIGH);
+  //myFlagsTransmitter.clearFlags();
 
 }
 
 void loop()
 {
 
- // myFlagsTransmitter.transmit();
+  myFlagsTransmitter.transmit();
 
 }
 

@@ -23,7 +23,32 @@ controller::controller(sensor &sensor, robotMotion &motion):_mySensor(&sensor), 
 }
 bool controller::followRobot(int referenceDistance)
 {
-  return maintainDistance(referenceDistance);
+  bool status;
+  bool robotInFrontLeaving = false;
+
+  if(leavingRobotObservedFirstTime && robotInFrontLeaving)
+  {
+    Serial.println("Observation: Front robot is leaving.");
+    leavingRobotObservedFirstTime = false;
+    maintainVelocityBool = true;
+    maintainVelocityStartTime = millis();
+  }
+
+  if(maintainVelocityBool)
+  {
+    _maintainVelocity();
+    
+    if((millis() - maintainVelocityStartTime) > MAINTAIN_VELOCITY_TIME)
+    {
+      maintainVelocityBool = false;
+    }
+    status = true;
+  }
+  else
+  {
+    status = maintainDistance(referenceDistance);
+  }
+  return status;
 }
 bool controller::forceFirstLoop()
 {
@@ -379,6 +404,16 @@ bool controller::rejoin()
   _myMotion->run();
   
   return Status;
+  
+}
+
+void controller::_maintainVelocity()
+{
+  Serial.println("Maintaining Velocity.");
+  _myMotion->setDirection(_relativeDirection); //Set to what it was before
+  _myMotion->setSpeed(_lastSpeed); 
+  _myMotion->run(); //Should be the last direction not sure
+  
   
 }
 

@@ -23,6 +23,8 @@
 #define REJOIN_ENTRY_TIME  1000 //(ms)
 #define REJOIN_LEAVE_TURN_TIME  500 //(ms)
 
+#define MAINTAIN_VELOCITY_TIME 3000 //(ms)
+
 #define AVERAGE_SAMPLES 10
 
 #include "sensor.h"
@@ -61,10 +63,16 @@ class controller
   //lateralExit Variables
   bool _leaveDirection = false;
   unsigned char _lastSpeed = 50;
+
+  //maintain velocity 
+  bool maintainVelocityBool = false;
+  bool leavingRobotObservedFirstTime = true;
+  unsigned long int maintainVelocityStartTime;
   
   
   bool maintainDistance(int referenceDistance);
   int getAverageDistance(); 
+  void _maintainVelocity();
   int _relativeDistance;
   int _relativeDirection;
   int _propotionalControl;
