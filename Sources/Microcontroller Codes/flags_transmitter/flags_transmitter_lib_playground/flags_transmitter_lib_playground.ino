@@ -9,7 +9,9 @@ void setup()
   myFlagsTransmitter.init();
 
   myFlagsTransmitter.setLeaveSignal(LOW);
-  myFlagsTransmitter.setLastSignal(HIGH);
+  myFlagsTransmitter.setLastSignal(LOW);
+  myFlagsTransmitter.clearFlags();
+
 }
 
 void loop()
