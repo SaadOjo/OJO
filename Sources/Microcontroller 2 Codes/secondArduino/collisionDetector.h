@@ -7,6 +7,7 @@
 
 #include <Arduino.h>
 #include "Ultrasonic.h"
+#include "infraredDistance.h"
 #define DANGER_DISTANCE 10
 #define LAST_DETERMINE_DISTANCE 40
 
@@ -25,6 +26,7 @@ class collisionDetector
     unsigned char _frontPin, _leftEchoPin, _leftTriggerPin;
     unsigned char _rightEchoPin, _rightTriggerPin, _backEchoPin, _backTriggerPin;
     Ultrasonic _left, _right, _back;
+    infraredDistance _front;
 };
 
 #endif

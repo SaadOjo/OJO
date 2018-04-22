@@ -2,7 +2,7 @@
 #include <Wire.h>
 
 #define slaveAddress 0x80  
-collisionDetector mySensor(4,5,6,7,8,9,10);
+collisionDetector mySensor(7,5,4,7,6,9,8); //echo blue trigger yellow left right back
 
 //Add i2c (added)
 
@@ -91,6 +91,7 @@ ISR(TIMER1_OVF_vect) {                           // Timer1 interrupt service rou
 void loop() {
   
   //Continue looping until you get a complete signal received
+  mySensor.update();
   avoidAction = mySensor.getAvoidAction();
   if(mySensor.robotIsLast())
   {

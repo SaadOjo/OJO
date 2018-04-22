@@ -8,7 +8,7 @@ collisionDetector::collisionDetector(unsigned char frontPin, unsigned char leftE
     unsigned char leftTriggerPin, unsigned char rightEchoPin, unsigned char rightTriggerPin,
     unsigned char backEchoPin, unsigned char backTriggerPin): _left(leftTriggerPin, leftEchoPin),
                                                               _right(rightTriggerPin, rightEchoPin),
-                                                              _back(backTriggerPin, backEchoPin)
+                                                              _back(backTriggerPin, backEchoPin),_front(frontPin)
 
 {
   
@@ -23,7 +23,7 @@ bool collisionDetector::update()
   _leftDist = _left.distanceRead();
   _rightDist = _right.distanceRead();
   _backDist = _back.distanceRead();
-  _frontDist = 255;
+  _frontDist = _front.getDistance();
 
   if(!_leftDist)
   {
@@ -73,7 +73,7 @@ unsigned char collisionDetector::getAvoidAction()
     avoidAction = 4;
   }
 
-    //Serial.println(String("Left: ") + _leftDis + ",Right: " + _rightDis +  " ,Back: " + _backDis);
+    Serial.println(String("Left: ") + _leftDist + ",Right: " + _rightDist +  " ,Back: " + _backDist + ",Front: " + _frontDist);
     
   return avoidAction;
 }
