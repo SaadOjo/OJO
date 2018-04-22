@@ -417,4 +417,35 @@ void controller::_maintainVelocity()
   
 }
 
+void controller::avoidCollision(unsigned char avoidInfo)
+{
+
+  switch(avoidInfo)
+  {
+    case 1: //Go right
+      _myMotion->setDirection(90); //Set to what it was before
+      _myMotion->setSpeed(80); 
+      _myMotion->run(); //Should be the last direction not sure
+
+      Serial.println("Avoid: Right Maneuver!");
+      break;
+
+    case 2: //Go Left
+      _myMotion->setDirection(-90); //Set to what it was before
+      _myMotion->setSpeed(80); 
+      _myMotion->run(); //Should be the last direction not sure
+      Serial.println("Avoid: Left Maneuver!");
+
+      break;
+    case 3: //Go Forward
+      _myMotion->setDirection(0); //Set to what it was before
+      _myMotion->setSpeed(90); 
+      _myMotion->run(); //Should be the last direction not sure
+      Serial.println("Avoid: Forward Maneuver!");
+
+      break;
+  }
+}
+
+
 

@@ -123,6 +123,15 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
 }
 */
 
+if(avoidInfo)
+{
+  Serial.println(String("Avoid Info") + avoidInfo);
+  Serial.println("Collision Avoidance");
+  myController.avoidCollision(avoidInfo);
+  
+}
+else
+{
   switch(followingState)
   {
     case false:
@@ -133,6 +142,9 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
       following();
       break;
   }
+}
+
+
 
   myTime = millis();
   Serial.println(String("Loop Tme: ") + (myTime - oldTime));
@@ -237,6 +249,10 @@ void receiveEvent(int howMany)
         }
         switch (avoidInfoByte) 
         {
+          case 0b0:
+            avoidInfo = 0;
+            break;
+            
           case 0b1:
             avoidInfo = 1;
             break;

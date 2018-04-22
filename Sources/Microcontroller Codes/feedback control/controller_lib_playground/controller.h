@@ -38,7 +38,8 @@ class controller
   controller(sensor &sensor, robotMotion &motion); //Sensor library will contain two sensors. It will take the best available data and send it to the controller
   bool followRobot(int referenceDistance); //This code will run in the main loop
   bool setMaxSpeed(unsigned char maxSpeed);
-  bool setMinSpeed(unsigned char minSpeed);  
+  bool setMinSpeed(unsigned char minSpeed);
+  void avoidCollision(unsigned char avoidInfo);  
   bool findMarker();
   bool lateralExit();
   bool moveBack();
