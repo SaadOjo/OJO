@@ -1,6 +1,19 @@
+#include <Wire.h>
 #include "controller.h"
 #include "sensor.h"
+#include "flagsTransmitter.h"
+
+#define SLAVE_ADDR 0x80
+
+//i2c variables
+unsigned char remoteInfo,avoidInfo;
+bool isLastRobot;
+bool dataAvailable = false;
+
+
 robotMotion myMotion(6,5);
+flagsTransmitter myFlagsTransmitter(4, 7);
+
 sensor mySensor(1); //Argument is debug info
 controller myController(mySensor, myMotion);
 
@@ -16,6 +29,8 @@ controller myController(mySensor, myMotion);
 
  4) Have to check next robot leaving case
 
+ 5) succeptable to miss i2c recieve
+
  !!!! Uncompilable there is unwritten function !!!
 */
 bool robotVisibilityState = true;
@@ -23,7 +38,6 @@ unsigned char leaveState = 0;
 bool followingState = true;
 
 bool ignoreLeaveLineCommand = false;
-bool pulse = false;
 
 unsigned long int oldTime;
 unsigned long int  myTime;
@@ -31,29 +45,52 @@ unsigned long int  myTime;
 void setup()
 {
   Serial.begin(115200);
+  Wire.begin(SLAVE_ADDR);
+  Wire.onReceive(receiveEvent);
+  
   myController.setMaxSpeed(100);
   myController.setMinSpeed(30);
-  pinMode(2, OUTPUT);
+  
+  myFlagsTransmitter.init();
+  myFlagsTransmitter.setLeaveSignal(HIGH);
+  myFlagsTransmitter.setLastSignal(HIGH);
+  //myFlagsTransmitter.clearFlags();
 
 }
 
 void loop()
 {
-  mySensor.update();
-  Serial.println(mySensor.getLeavingFlagStatus());
-  digitalWrite(2,mySensor.getLeavingFlagStatus());
+ // mySensor.update();
+ // Serial.println(mySensor.getLeavingFlagStatus());
+ //digitalWrite(2,mySensor.getLeavingFlagStatus());
   //updating sensor can have unexpected consequences
+  
+  //Testing code to display 12c communication
+  /*
+  if(dataAvailable)
+  {
+  dataAvailable = false;
+  Serial.println(String("Remote Info: ") + remoteInfo + " Avoid Info: " + avoidInfo + " is Last: " + isLastRobot);
+  //remoteInfo = 0;
+  //avoidInfo = 0;
+  //isLastRobot = false;
+  } 
+  */
 
-if(pulse) //change to take from serial
+
+
+  myFlagsTransmitter.setLastSignal(isLastRobot);
+
+if(remoteInfo == 1) //change to take from serial
 {
   if(!ignoreLeaveLineCommand)
   {
     
     followingState = false;
     myController.forceFirstLoop();
-    pulse = false;
+    remoteInfo = 0;
     ignoreLeaveLineCommand = true;
-    Serial.println("Intterrupt"); 
+    Serial.println("Leave command received"); 
   }
 }
 
@@ -155,14 +192,63 @@ void leaving(void)
       //Test Code
       ignoreLeaveLineCommand = false;
       followingState = true; //Un comment this
-      pulse = false;//because int after the first make pulse true
       leaveState = 0;
       break;
   }
 }
-/*
-void remoteISR() 
+void receiveEvent(int howMany)
 {
-  pulse = true;
+  byte b;
+  byte lastRobotByte,remoteInfoByte,avoidInfoByte;
+  if(Wire.available() != 0)
+  {
+    dataAvailable = true;
+    
+     for(int i = 0; i<howMany; i++) 
+     { 
+        b = Wire.read();
+        Serial.println(b,HEX);
+        lastRobotByte = b >> 7;
+        remoteInfoByte = (b & 0b01111111) >> 4;
+        avoidInfoByte = b & 0b00001111;
+
+        if(lastRobotByte) //Kinda Redundant
+        {
+          isLastRobot = true;
+        }
+        else
+        {
+          isLastRobot = false;
+        }
+
+        switch (remoteInfoByte)//Intentionally Redundant
+        {
+          case 0b1:
+            remoteInfo = 1;
+            break;
+          case 0b10:
+            remoteInfo = 2;
+          //go left
+            break;
+          case 0b11:
+            remoteInfo = 3;
+          //go right
+            break;
+        }
+        switch (avoidInfoByte) 
+        {
+          case 0b1:
+            avoidInfo = 1;
+            break;
+          case 0b10:
+            avoidInfo = 2;
+          //go left
+            break;
+          case 0b11:
+            avoidInfo = 3;
+          //go right
+            break;
+        }
+    } 
+  }
 }
-*/

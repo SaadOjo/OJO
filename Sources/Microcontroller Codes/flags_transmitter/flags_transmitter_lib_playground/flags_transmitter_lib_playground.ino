@@ -8,7 +8,7 @@ void setup()
   Serial.begin(115200);
   myFlagsTransmitter.init();
 
-  myFlagsTransmitter.setLeaveSignal(LOW);
+  myFlagsTransmitter.setLeaveSignal(HIGH);
   myFlagsTransmitter.setLastSignal(HIGH);
   //myFlagsTransmitter.clearFlags();
 
