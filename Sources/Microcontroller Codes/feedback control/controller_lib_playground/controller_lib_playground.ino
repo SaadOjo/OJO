@@ -52,7 +52,6 @@ void setup()
   myController.setMinSpeed(30);
   
   myFlagsTransmitter.init();
-  myFlagsTransmitter.setLeaveSignal(HIGH);
   myFlagsTransmitter.setLastSignal(HIGH);
   //myFlagsTransmitter.clearFlags();
 
@@ -80,6 +79,12 @@ void loop()
 
 
   myFlagsTransmitter.setLastSignal(isLastRobot);
+  
+  if(isLastRobot)
+  {
+    myFlagsTransmitter.transmit();
+  }
+  
 
 if(remoteInfo == 1) //change to take from serial
 {
@@ -122,6 +127,7 @@ if(millis() > ROBOT_TEST_FOLLOW_TIME)
   
 }
 */
+avoidInfo = 0; //Ignoring avoid info
 
 if(avoidInfo)
 {
@@ -156,7 +162,12 @@ delay(100);
 
 
 void following(void)
-{
+{   
+  if(!isLastRobot)
+  {
+    myFlagsTransmitter.clearFlags();
+  }
+
    switch(robotVisibilityState)
   {
     case true:
@@ -178,7 +189,9 @@ void following(void)
 }
 
 void leaving(void)
-{
+{   myFlagsTransmitter.setLeaveSignal(HIGH);
+    myFlagsTransmitter.setLastSignal(LOW);
+    myFlagsTransmitter.transmit();
     switch(leaveState)
   {
     case 0:
