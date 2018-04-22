@@ -12,6 +12,9 @@ byte  i, nec_state = 0, command, inv_command;
 unsigned int address;
 unsigned long nec_code;
 
+bool avoidResetSent = false;
+bool lastResetSent = false;
+
 unsigned char avoidAction;
 bool shouldSend = false;
 
@@ -95,18 +98,27 @@ void loop() {
   avoidAction = mySensor.getAvoidAction();
   if(mySensor.robotIsLast())
   {
+    lastResetSent = false; 
     shouldSend = true;
     isLastInfo = 0b10000000;
   }
   else
   {
     isLastInfo = 0b00000000;
+    //Serial.println(String("Reset Sent State: ") + resetSent);
+    if(!lastResetSent)
+    {
+      Serial.println("robot is last. Reset");
+      shouldSend = true;
+      lastResetSent = true;
+    }
   }
 
   if(avoidAction)
   {
     Serial.println((String("AA:") + avoidAction));
     shouldSend = true;
+    avoidResetSent = false;
     switch(avoidAction)
     {
       case 1:
@@ -120,6 +132,15 @@ void loop() {
       case 3:
         avoidInfo = 0b00000011;
         break;
+    }
+  }
+  else
+  {
+    avoidInfo = 0b00000000;
+    if(!avoidResetSent)
+    {
+      shouldSend = true;
+      avoidResetSent = true;
     }
   }
 
