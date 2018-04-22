@@ -158,9 +158,9 @@ if(nec_ok)
   {
     shouldSend = false;
     //Send
-    sendByte = isLastInfo | remoteInfo | avoidInfo;
+    sendByte = isLastInfo | (remoteInfo | avoidInfo);
 
-    sendByte = 0b00100010;
+    //sendByte = 0b00100010; (testing)
     
     Serial.println(sendByte,BIN);
     
