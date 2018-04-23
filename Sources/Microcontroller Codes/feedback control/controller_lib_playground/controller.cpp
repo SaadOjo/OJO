@@ -234,7 +234,7 @@ bool controller::lateralExit()
       _lastDirectionSign = LEFT;
     }
     //Set test parameters
-    _lastDirectionSign = LEFT;  
+    _lastDirectionSign = RIGHT;  
     _leaveDirection = !_lastDirectionSign;
     
   }
