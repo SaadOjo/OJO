@@ -348,7 +348,7 @@ bool controller::rejoin()
 
   if((_maneuverTime - _maneuverStartTime)> REJOIN_LEAVE_TURN_TIME)
   {
-    if((_maneuverTime - _maneuverStartTime)> (REJOIN_ENTRY_TIME + REJOIN_LEAVE_TURN_TIME))
+    if((_maneuverTime - _maneuverStartTime)> (REJOIN_ENTRY_TIME + REJOIN_LEAVE_TURN_TIME)) //straigtning
     {
       _myMotion->setSpeed(100);
       if(!rejoinDirection)//Return Back
@@ -364,13 +364,13 @@ bool controller::rejoin()
     }
     else
     {
-      _myMotion->setDirection(0);
+      _myMotion->setDirection(0); //Straightning
       _myMotion->setSpeed(_lastSpeed); 
-      Serial.println("Straightening!");
+      Serial.println("moving straight!");
     }
 
   }
-  else
+  else //Entering maneuver
   {
     if(rejoinDirection)
     {
@@ -390,16 +390,14 @@ bool controller::rejoin()
   {
     _myMotion->setDirection(0);
     Serial.println("Waiting for visibility marker!");
-  }
 
-
-  _mySensor -> update();
-  if(_mySensor -> isVisible())
-  {
-    Status = true;
-    _maneuverFirstLoop = true; 
+    _mySensor -> update();
+    if(_mySensor -> isVisible())
+    {
+      Status = true;
+      _maneuverFirstLoop = true; 
+    }
   }
-  
 
   _myMotion->run();
   

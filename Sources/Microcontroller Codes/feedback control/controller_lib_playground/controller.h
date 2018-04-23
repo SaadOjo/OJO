@@ -20,6 +20,7 @@
 #define LATERAL_EXIT_TIME  1000 //(ms)
 #define LATERAL_LEAVE_TURN_TIME  500 //(ms)
 
+#define REJOIN_WAIT_TIME  1000
 #define REJOIN_ENTRY_TIME  1000 //(ms)
 #define REJOIN_LEAVE_TURN_TIME  500 //(ms)
 
