@@ -330,6 +330,89 @@ bool controller::moveBack()
   return Status;
   
 }
+/*
+bool controller::rejoin()
+{
+  bool Status = false;
+  unsigned long int processTime = _maneuverTime - _maneuverStartTime;
+  bool markerFound = false;
+  bool rejoinDirection = !_leaveDirection;
+  _maneuverTime = millis();
+  
+  if(_maneuverFirstLoop)
+  {   _maneuverFirstLoop = false;
+      _maneuverStartTime = _maneuverTime;
+  }
+  
+
+ //Do Stuff here
+
+  if(processTime > REJOIN_WAIT_TIME) // wait turn straight turn straight
+  {
+    if(processTime > REJOIN_LEAVE_TURN_TIME + REJOIN_WAIT_TIME)
+    {
+      if(processTime > REJOIN_ENTRY_TIME + REJOIN_LEAVE_TURN_TIME + REJOIN_WAIT_TIME)
+      {
+        _myMotion->setDirection(0); //Straightning
+        _myMotion->setSpeed(_lastSpeed); 
+        Serial.println("moving straight!");
+      }
+      else // Rejoin Entry
+      {
+        _myMotion->setSpeed(100);
+        if(!rejoinDirection)//Return Back
+        {
+          _myMotion->setDirection(80);
+          Serial.println("Right");
+        }
+        else
+        {
+          _myMotion->setDirection(-80);
+          Serial.println("Left");
+        }
+      }
+    }
+    else //REJOIN LEAVE
+    {
+      if(rejoinDirection)
+      {
+        _myMotion->setDirection(80);
+        Serial.println("Right");
+      }
+      else
+      {
+        _myMotion->setDirection(-80);
+        Serial.println("Left");
+      }
+      _myMotion->setSpeed(100);
+    }
+  }
+  else //Wait
+  {
+    _myMotion->setSpeed(0);
+    Serial.println("Wait to renter");
+
+  }
+
+  if((_maneuverTime - _maneuverStartTime) > (REJOIN_ENTRY_TIME + 2*REJOIN_LEAVE_TURN_TIME + REJOIN_WAIT_TIME))
+  {
+    _myMotion->setDirection(0);
+    Serial.println("Waiting for visibility marker!");
+
+    _mySensor -> update();
+    if(_mySensor -> isVisible())
+    {
+      Status = true;
+      _maneuverFirstLoop = true; 
+    }
+  }
+
+  _myMotion->run();
+  
+  return Status;
+  
+}
+ */
 
 bool controller::rejoin()
 {
@@ -345,6 +428,7 @@ bool controller::rejoin()
   }
 
  //Do Stuff here
+ 
 
   if((_maneuverTime - _maneuverStartTime)> REJOIN_LEAVE_TURN_TIME)
   {
