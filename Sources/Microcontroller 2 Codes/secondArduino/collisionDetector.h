@@ -8,8 +8,9 @@
 #include <Arduino.h>
 #include "Ultrasonic.h"
 #include "infraredDistance.h"
+#include "average.h"
 #define DANGER_DISTANCE 10
-#define LAST_DETERMINE_DISTANCE 40
+#define LAST_DETERMINE_DISTANCE 30
 
 class collisionDetector
 {
@@ -27,6 +28,8 @@ class collisionDetector
     unsigned char _rightEchoPin, _rightTriggerPin, _backEchoPin, _backTriggerPin;
     Ultrasonic _left, _right, _back;
     infraredDistance _front;
+    average _leftAverage,_backAverage,_rightAverage,_frontAverage;
 };
+
 
 #endif

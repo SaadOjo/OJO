@@ -1,0 +1,5 @@
+Notes: 
+
+1) After seeing the last one signal, we cannot directly go to following state because the last robot does not broadcast constant IR light.
+It broadcasts the last one signal which is alternating IR light but even in that case we might be able to follow the last robot when the light is ON,
+ but we should not immediately go to the searching state if we lose IR. We should wait instead for a while.

@@ -8,7 +8,8 @@ collisionDetector::collisionDetector(unsigned char frontPin, unsigned char leftE
     unsigned char leftTriggerPin, unsigned char rightEchoPin, unsigned char rightTriggerPin,
     unsigned char backEchoPin, unsigned char backTriggerPin): _left(leftTriggerPin, leftEchoPin),
                                                               _right(rightTriggerPin, rightEchoPin),
-                                                              _back(backTriggerPin, backEchoPin),_front(frontPin)
+                                                              _back(backTriggerPin, backEchoPin),_front(frontPin),
+                                                              _leftAverage(5),_rightAverage(5),_frontAverage(5),_backAverage(5)
 
 {
   
@@ -20,10 +21,15 @@ bool collisionDetector::init(){
 
 bool collisionDetector::update()
 {
-  _leftDist = _left.distanceRead();
-  _rightDist = _right.distanceRead();
-  _backDist = _back.distanceRead();
-  _frontDist = _front.getDistance();
+   _leftAverage.addData(_left.distanceRead());
+   _rightAverage.addData(_right.distanceRead());
+   _backAverage.addData(_back.distanceRead());
+   _frontAverage.addData(_front.getDistance());
+
+   _leftDist = _leftAverage.getAverage();
+  _rightDist = _rightAverage.getAverage();
+  _backDist  = _backAverage.getAverage();
+  _frontDist = _frontAverage.getAverage();
 
   if(!_leftDist)
   {
