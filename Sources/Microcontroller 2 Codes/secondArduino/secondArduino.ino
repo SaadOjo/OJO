@@ -18,6 +18,7 @@ bool lastResetSent = false;
 unsigned char avoidAction;
 bool shouldSend = false;
 
+unsigned char isLastInfoOld,avoidInfoOld,sendByteOld;
 unsigned char isLastInfo,remoteInfo,avoidInfo,sendByte;
 
 void setup() {
@@ -98,27 +99,17 @@ void loop() {
   avoidAction = mySensor.getAvoidAction();
   if(mySensor.robotIsLast())
   {
-    lastResetSent = false; 
-    shouldSend = true;
+
     isLastInfo = 0b10000000;
   }
   else
   {
     isLastInfo = 0b00000000;
-    //Serial.println(String("Reset Sent State: ") + resetSent);
-    if(!lastResetSent)
-    {
-      Serial.println("robot is last. Reset");
-      shouldSend = true;
-      lastResetSent = true;
-    }
   }
 
   if(avoidAction)
   {
     Serial.println((String("AA:") + avoidAction));
-    shouldSend = true;
-    avoidResetSent = false;
     switch(avoidAction)
     {
       case 1:
@@ -137,11 +128,7 @@ void loop() {
   else
   {
     avoidInfo = 0b00000000;
-    if(!avoidResetSent)
-    {
-      shouldSend = true;
-      avoidResetSent = true;
-    }
+
   }
 
 if(nec_ok)
@@ -174,6 +161,16 @@ if(nec_ok)
   attachInterrupt(0, remote_read, CHANGE);     // Enable external interrupt (INT0)
 }
 
+if(avoidInfoOld != avoidInfo)
+{
+  shouldSend = true;
+} 
+
+if(isLastInfoOld != isLastInfo)
+{
+  shouldSend = true;
+} 
+
   //First 4 bits for Remote Last 4 for Collision
   if(shouldSend)
   {
@@ -189,9 +186,8 @@ if(nec_ok)
     Wire.write(sendByte);                
     Wire.endTransmission(); 
     
-    avoidInfo = 0;
-    remoteInfo = 0;
-    isLastInfo = 0;
   }
+    avoidInfoOld = avoidInfo;
+    isLastInfoOld = isLastInfo;
   delay(100);
 }
