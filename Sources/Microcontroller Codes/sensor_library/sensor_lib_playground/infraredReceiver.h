@@ -26,6 +26,7 @@ ____Signal Identifier__|__Signal Description____|__Signal Parameters__|
 #define TIME_TOLERANCE 30
 #define TYPE_A_TIME 100
 #define TYPE_B_TIME 200
+#define SIGNAL_HOLD_TIME 500
 
 #include <Arduino.h>
 
@@ -33,12 +34,16 @@ class infraredReceiver
 {
   public:
     infraredReceiver(int pin);
-    bool init();
-    unsigned char detect();
+    void update();
+    unsigned char getSignalIdentity();
   private:
     bool _pinLastState;
     unsigned char _signalIdentity;
+    unsigned char _signalIdentityOld;
+    unsigned char _averagedSignalIdentity;
+    unsigned char _holdedSignalIdentity;
     unsigned long  _fallingEdgeTime;
+    unsigned long  _lastSignalDetermineTime;
     unsigned char _pin;
 };
 
