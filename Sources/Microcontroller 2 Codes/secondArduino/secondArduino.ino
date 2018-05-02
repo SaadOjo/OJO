@@ -185,9 +185,10 @@ if(isLastInfoOld != isLastInfo)
     Wire.beginTransmission(slaveAddress);   
     Wire.write(sendByte);                
     Wire.endTransmission(); 
+    remoteInfo = 0;
     
   }
     avoidInfoOld = avoidInfo;
     isLastInfoOld = isLastInfo;
-  delay(100);
+  delay(50);
 }
