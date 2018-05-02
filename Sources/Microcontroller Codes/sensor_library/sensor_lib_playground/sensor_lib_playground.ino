@@ -1,7 +1,7 @@
 #include "infraredDistance.h"
 #include "sensor.h"
 
-sensor mySensor(1);
+sensor mySensor(2);
 float distance;
 float direction;
 
