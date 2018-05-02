@@ -17,6 +17,12 @@ void average::addData(int data)
 { 
   *(_array + _pointer) = data;
   _pointer = _circularIncrement(_pointer);
+
+  if(noOfData<_averages)
+  {
+    noOfData++;
+  }
+  
   
 }
 
@@ -38,16 +44,25 @@ unsigned char average::_circularIncrement(unsigned char num)
 
 int average::_arrayAverage()
 {
-  int localAverage = 0;
+  float localAverage = 0;
   unsigned char localPointer = _circularIncrement(_pointer);
   
   for(int i = 0; i<_averages ;i++)
   {
     //Serial.println(localAverage);
-    localAverage += *(_array + localPointer);
+    localAverage += *(_array + localPointer)*filter[localPointer];
     localPointer = _circularIncrement(localPointer);
   }
 
-  return localAverage/_averages;
+  if(noOfData<_averages)
+  {
+    return 255;
+  }
+  else
+  {
+    return int(localAverage);
+  }
+
+
 }
 
