@@ -53,8 +53,15 @@ float infraredDirection::getDirection()
     _direction = 70;
   }
   else
-  {
-    _direction = 0;
+  { 
+    if(_direction > 0)
+    {
+      _direction = 1;
+    }
+    else
+    {
+      _direction = -1;
+    }
   }
   
   

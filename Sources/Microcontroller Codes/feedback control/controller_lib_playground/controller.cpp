@@ -164,7 +164,8 @@ bool controller::findMarker()
     {
       _lastDirectionSign = LEFT;
     }
-    
+    Serial.println(String("Last Direction: ") + _lastDirectionSign);
+
   }
     _mySensor -> update();
 
@@ -234,7 +235,7 @@ bool controller::lateralExit()
       _lastDirectionSign = LEFT;
     }
     //Set test parameters
-    _lastDirectionSign = RIGHT;  
+    //_lastDirectionSign = RIGHT;  
     _leaveDirection = !_lastDirectionSign;
     
   }

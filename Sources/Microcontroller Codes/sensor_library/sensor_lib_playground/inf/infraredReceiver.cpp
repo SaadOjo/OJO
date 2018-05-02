@@ -42,7 +42,7 @@ void infraredReceiver::update()
     if(_pinState)//Rising Edge
     {
       unsigned long offTime = eventTime - _fallingEdgeTime;
-      Serial.println(offTime);
+      //Serial.println(offTime);
       if((offTime > TYPE_A_TIME - TIME_TOLERANCE)&&(offTime < TYPE_A_TIME + TIME_TOLERANCE))
       {
         _signalIdentity = 1;
