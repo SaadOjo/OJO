@@ -11,10 +11,18 @@ average::average(unsigned char averages)
   {
     _averages = MAX_ARRAY_SIZE;
   }
+
+  _alpha = 2.0f/((_averages)*(_averages + 1));
+
+  for (int i = 0; i< _averages; i++)
+  {
+    filter[i] = _alpha*(i + 1);
+  }
 }
 
 void average::addData(int data)
 { 
+  
   *(_array + _pointer) = data;
   _pointer = _circularIncrement(_pointer);
 

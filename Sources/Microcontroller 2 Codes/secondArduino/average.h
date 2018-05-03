@@ -22,8 +22,8 @@ class average
     int _array[MAX_ARRAY_SIZE];
     int _arrayAverage();
     unsigned char _circularIncrement(unsigned char num);
-    //float filter[5] = {0.0341, 0.0670, 0.1316, 0.2588, 0.5087};
-    float filter[5] = {0.0667,    0.1333,    0.2000,    0.2667,    0.3333};
+    float _alpha;
+    float filter[MAX_ARRAY_SIZE];// = {0.0667,    0.1333,    0.2000,    0.2667,    0.3333};
 
     
 

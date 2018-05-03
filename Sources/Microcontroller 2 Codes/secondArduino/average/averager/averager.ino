@@ -1,6 +1,6 @@
 #include "average.h"
 
-average myAverage(5);
+average myAverage(10);
 
 void setup() {
 Serial.begin(115200);
@@ -9,6 +9,15 @@ Serial.println(String("Average: ") + avg);
 
 myAverage.addData(10);
 myAverage.addData(9);
+myAverage.addData(10);
+myAverage.addData(9);
+myAverage.addData(10);
+myAverage.addData(9);
+myAverage.addData(10);
+myAverage.addData(9);
+myAverage.addData(10);
+myAverage.addData(9);
+
 avg = myAverage.getAverage();
 Serial.println(String("Average 2: ") + avg);
 
