@@ -47,6 +47,7 @@ bool controller::followRobot(int referenceDistance)
   else
   {
     status = maintainDistance(referenceDistance);
+    leavingRobotObservedFirstTime = true;
   }
   return status;
 }
