@@ -24,7 +24,7 @@ controller::controller(sensor &sensor, robotMotion &motion):_mySensor(&sensor), 
 bool controller::followRobot(int referenceDistance)
 {
   bool status;
-  bool robotInFrontLeaving = false;
+  bool robotInFrontLeaving = _mySensor -> getLeavingFlagStatus();
 
   if(leavingRobotObservedFirstTime && robotInFrontLeaving)
   {

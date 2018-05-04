@@ -16,8 +16,9 @@ bool infraredDirection::init(){
 }
 bool infraredDirection::update(){
 //Analog declaration
-_leftVoltage =  getLeftVoltage();
 _rightVoltage = getRightVoltage();
+_leftVoltage =  getLeftVoltage();
+
 _maxVoltage = max(_leftVoltage, _rightVoltage);
 
 }
@@ -43,7 +44,22 @@ float infraredDirection::getDistance()
 float infraredDirection::getDirection()
 {
   _direction = (_rightVoltage - _leftVoltage)*20; //don't need saturation (no scaling required)
-
+  
+  if(_direction>0)
+  {
+    _addData(1);
+  }
+  else
+  {
+    _addData(-1);
+  }
+  
+  
+  if(_detectSignChange())
+  {
+    _direction = 70;
+  }
+/*
   if(_direction<-5)
   {
     _direction = -70;
@@ -56,7 +72,7 @@ float infraredDirection::getDirection()
   {
     _direction = 0;
   }
-  
+  */
   
 
   return _direction;
@@ -74,6 +90,70 @@ float infraredDirection::getRightVoltage() //don't store for values (for optimis
   _rightCount = analogRead(_pinRight);
   _rightVoltage = (float)_rightCount*_referenceVoltage/1024;
   return _rightVoltage;
+}
+
+void infraredDirection::_addData(int data)
+{ 
+  
+  *(_array + _pointer) = data;
+  _pointer = _circularIncrement(_pointer);
+
+  if(noOfData<DATA_CONSIDERED)
+  {
+    noOfData++;
+  }
+    
+}
+
+unsigned char infraredDirection::_circularIncrement(unsigned char num)
+{
+  num++;
+  if(num >= DATA_CONSIDERED)
+  {
+    num = 0;
+  }
+  return num;
+}
+
+bool infraredDirection::_detectSignChange()
+{
+  unsigned char pos = 0;
+  unsigned char neg = 0;
+  unsigned char localPointer = _circularIncrement(_pointer);
+  bool retVal = false;
+  
+  for(int i = 0; i<DATA_CONSIDERED ;i++)
+  {
+     if(*(_array + localPointer)>0)
+     {
+      pos++;
+     }
+     if(*(_array + localPointer)<0)
+     {
+      neg++;
+     }
+
+   Serial.println(String("Value: ") + *(_array + localPointer) );
+   Serial.println(String("LP: ") + localPointer );
+
+    
+    localPointer = _circularIncrement(localPointer);
+  }
+
+  Serial.println(String("Neg: ") + neg + " ,Pos:" + pos);
+  if(pos>0 && neg>0)
+  {
+    retVal = true;
+  }
+  
+  if(noOfData<DATA_CONSIDERED)
+  {
+    return 0;
+  }
+  else
+  {
+    return retVal;
+  }
 }
 
 

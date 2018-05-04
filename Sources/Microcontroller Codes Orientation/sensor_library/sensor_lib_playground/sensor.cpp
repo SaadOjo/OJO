@@ -4,15 +4,13 @@
  */
 #include "sensor.h" 
 
-sensor::sensor(unsigned char debugInfo):_mySensor(1),_myDirectionSensor(2,3),_mySolarFlag(7,8),_myRpiDecoder(),_myInfraredReceiver(9)
+sensor::sensor(unsigned char debugInfo):_myDirectionSensor(7,6),_mySolarFlag(2,3),_myRpiDecoder(),_myInfraredReceiver(8)
 {
  _debugInfo = debugInfo;
 }
 
 bool sensor::init(){
 //Analog declaration
-  _myInfraredReceiver.init();
-
 }
 bool sensor::update()
 {
@@ -96,7 +94,7 @@ char sensor::getDirection()
 }
 unsigned char sensor::getLastOneFlagStatus()
 {
-  unsigned char getSolarLastOneFlag;
+  unsigned char getSolarLastOneFlag = 0;
 
   switch (_debugInfo)
   {
@@ -109,10 +107,10 @@ unsigned char sensor::getLastOneFlagStatus()
 
     case 2: //Secondary
     //get from IR
-    if( _myInfraredReceiver.flag() == 1) //Not Sure
-    {
-      getSolarLastOneFlag = 1;
-    }
+      if(_myInfraredReceiver.getSignalIdentity() == 1)
+      {
+        getSolarLastOneFlag = 1;
+      }
       break;
   }
   return getSolarLastOneFlag;
@@ -128,7 +126,7 @@ char sensor::getOrientation()
 
 bool sensor::getLeavingFlagStatus()
 { 
-  bool leavingFlagStatus;
+  bool leavingFlagStatus = 0;
   
   switch (_debugInfo)
   {
@@ -140,8 +138,7 @@ bool sensor::getLeavingFlagStatus()
       break;
 
     case 2: //Secondary
-        //get from IR
-      if( _myInfraredReceiver.flag() == 2) //Not Sure
+      if(_myInfraredReceiver.getSignalIdentity() == 2)
       {
         leavingFlagStatus = 1;
       }

@@ -44,18 +44,31 @@ float infraredDirection::getDirection()
 {
   _direction = (_rightVoltage - _leftVoltage)*20; //don't need saturation (no scaling required)
 
-  if(_direction<-5)
+  if(_direction<0)
   {
-    _direction = -70;
-  }
-  else if(_direction>5)
-  {
-    _direction = 70;
+    if(_direction<-5)
+    {
+      _direction = -70;
+    }
+    else
+    {
+      _direction = -2;
+    }
+    
   }
   else
   {
-    _direction = 0;
+    if(_direction > 5)
+    {
+    _direction = 70;
+    }
+    else
+    {
+      _direction = 2;
+    }
   }
+
+
   
   
 

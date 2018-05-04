@@ -24,7 +24,7 @@ controller::controller(sensor &sensor, robotMotion &motion):_mySensor(&sensor), 
 bool controller::followRobot(int referenceDistance)
 {
   bool status;
-  bool robotInFrontLeaving = false;
+  bool robotInFrontLeaving = _mySensor -> getLeavingFlagStatus();
 
   if(leavingRobotObservedFirstTime && robotInFrontLeaving)
   {
@@ -63,6 +63,8 @@ bool controller::forceMotors(unsigned char speed, unsigned char direction)
 bool controller::maintainDistance(int referenceDistance)
 {
   bool Status = true;
+  bool inwards;
+  char newDirection;
   
   _mySensor -> update(); //New standard added. Other rudamentary sensor libs should conform to this standard
   //_relativeDistance = getAverageDistance();
@@ -70,6 +72,17 @@ bool controller::maintainDistance(int referenceDistance)
   //Serial.println(String("Distance from new sensor: ") + _relativeDistance);
   //_relativeDistance = 100; //Just to force the robot to keep moving (TEST)
   _relativeDirection = _mySensor -> getDirection();
+
+  if(_relativeDirection < ORIENTATION_SWITCH_DISTANCE)
+  {
+    inwards = true;
+  }
+  else
+  {
+    inwards = false;
+  }
+  _relativeOrientation = _mySensor -> getOrientation();
+
 
  // TEST CODE
  /*
@@ -90,6 +103,7 @@ bool controller::maintainDistance(int referenceDistance)
   _propotionalControl = _K_p *  (_relativeDistance - referenceDistance);
 
   _propotionalControl += _controllerBias; //Add bias term for steady state
+ 
  /*
   //Condition Output
   if(_propotionalControl>255)
@@ -125,7 +139,17 @@ bool controller::maintainDistance(int referenceDistance)
   Serial.println(String(" DIR:") + _relativeDirection);
   _myMotion->setSpeed(_propotionalControl); //Have to scale
   _lastSpeed = _propotionalControl;
-  _myMotion->setDirection(_relativeDirection); //Have to scale
+  if(inwards)
+  {
+    newDirection = (_relativeDirection*K_DIR + _relativeOrientation*K_ORN);
+  }
+  else
+  {
+    newDirection = (_relativeDirection*K_DIR - _relativeOrientation*K_ORN);
+  }
+    Serial.println(String("NEW DIR:") + newDirection);
+
+  _myMotion->setDirection(newDirection); //Have to scale
   _myMotion->run();
 
   return Status;
@@ -164,7 +188,8 @@ bool controller::findMarker()
     {
       _lastDirectionSign = LEFT;
     }
-    
+    Serial.println(String("Last Direction: ") + _lastDirectionSign);
+
   }
     _mySensor -> update();
 
@@ -234,7 +259,7 @@ bool controller::lateralExit()
       _lastDirectionSign = LEFT;
     }
     //Set test parameters
-    _lastDirectionSign = RIGHT;  
+    //_lastDirectionSign = RIGHT;  
     _leaveDirection = !_lastDirectionSign;
     
   }

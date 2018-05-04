@@ -1,9 +1,12 @@
 #include "infraredDistance.h"
 #include "sensor.h"
 
-sensor mySensor(1);
+sensor mySensor(2);
 float distance;
 float direction;
+
+bool leave;
+bool last;
 
 void setup()
 {
@@ -18,7 +21,14 @@ void loop()
   distance = mySensor.getDistance();
   direction = mySensor.getDirection();
 
-  Serial.println(String("dist: ") + distance + " ,direction: " + direction );
+  //Serial.println(String("dist: ") + distance + " ,direction: " + direction );
+
+  leave = mySensor.getLeavingFlagStatus();
+  last =  mySensor.getLastOneFlagStatus();
+
+  Serial.println(String("Leave: ") + leave + " ,last: " + last);
+
+ 
   /*
   if(mySensor.getLeavingFlagStatus())
   {
@@ -64,6 +74,6 @@ void loop()
 
   digitalWrite(2,mySensor.getLeavingFlagStatus());
   
-  delay(100);
+  delay(20); //changed for ir reciever
 }
 

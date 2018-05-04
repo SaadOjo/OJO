@@ -9,6 +9,8 @@
 #include "infraredDirection.h"
 #include "flags.h"
 #include "rpiDecoder.h"
+#include "infraredReceiver.h"
+
 
 
 
@@ -31,6 +33,7 @@ class sensor
     infraredDirection _myDirectionSensor;
     flags _mySolarFlag;
     rpiDecoder _myRpiDecoder;
+    infraredReceiver _myInfraredReceiver;
     
     
 };

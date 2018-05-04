@@ -87,7 +87,7 @@ bool infraredTransmitter::togglePwm()
   }
   else
   {
-    analogWrite(_pin, 127);
+    analogWrite(_pin, 200);
     _pinState = true;
   }
 }

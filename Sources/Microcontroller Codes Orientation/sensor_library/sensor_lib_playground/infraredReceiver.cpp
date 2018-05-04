@@ -28,19 +28,21 @@ infraredReceiver::infraredReceiver(int pin)
  
 }
 
-bool infraredReceiver::init(){
-}
-
-unsigned char infraredReceiver::detect()
+void infraredReceiver::update()
 {
-  bool _pinState = digitalRead(_pin);
+  unsigned long timeNow = millis();
+  
+   _pinState = digitalRead(_pin);
+    //Serial.println(_pinState);
+  
   if(_pinState!=_pinLastState)
   {
-    unsigned long eventTime = millis();
+    unsigned long eventTime = timeNow;
+    
     if(_pinState)//Rising Edge
     {
       unsigned long offTime = eventTime - _fallingEdgeTime;
-
+      //Serial.println(offTime);
       if((offTime > TYPE_A_TIME - TIME_TOLERANCE)&&(offTime < TYPE_A_TIME + TIME_TOLERANCE))
       {
         _signalIdentity = 1;
@@ -49,10 +51,19 @@ unsigned char infraredReceiver::detect()
       {
         _signalIdentity = 2;
       }
+
+      if(_lastSignalIdentity == _signalIdentity)
+      {
+        _processedSignalIdentity = _signalIdentity;
+        _lastSignalDetermineTime = timeNow;
+      }
+      _lastSignalIdentity = _signalIdentity;
+      
     }
     else
     {
       _fallingEdgeTime = eventTime;
+
     }
   }
   else
@@ -60,7 +71,24 @@ unsigned char infraredReceiver::detect()
     _signalIdentity = 0;
   }
 
-  _pinLastState = _pinState;
-  return _signalIdentity;
+  if( (timeNow - _lastSignalDetermineTime )  > SIGNAL_HOLD_TIME)
+  {
+    _processedSignalIdentity = 0;
+  }
+
+
+    _pinLastState = _pinState;  
+}
+
+unsigned char infraredReceiver::getSignalIdentity()
+{
+
+  return _processedSignalIdentity;
+}
+
+void infraredReceiver::forcePin(bool level)
+{
+
+ _pinState = level;
 }
 

@@ -8,6 +8,7 @@
 #include <Arduino.h>
 
 #define VISIBLE_THRESHOLD 0.3
+#define DATA_CONSIDERED 3
 
 class infraredDirection
 {
@@ -29,7 +30,13 @@ class infraredDirection
     int _rightCount;
     int _pinLeft;
     int _pinRight;
+    void _addData(int data);
+    bool _detectSignChange();
+    unsigned char noOfData;
+    unsigned char _circularIncrement(unsigned char num);
     float _referenceVoltage = 5;
+    int _array[DATA_CONSIDERED] = {1, -1 ,3};
+    int _pointer;
 };
 
 #endif

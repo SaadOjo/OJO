@@ -24,6 +24,11 @@
 #define REJOIN_ENTRY_TIME  1000 //(ms)
 #define REJOIN_LEAVE_TURN_TIME  500 //(ms)
 
+#define ORIENTATION_SWITCH_DISTANCE  30
+#define K_DIR 1
+#define K_ORN 1
+
+
 #define MAINTAIN_VELOCITY_TIME 3000 //(ms)
 
 #define AVERAGE_SAMPLES 10
@@ -77,6 +82,7 @@ class controller
   void _maintainVelocity();
   int _relativeDistance;
   int _relativeDirection;
+  int _relativeOrientation;
   int _propotionalControl;
   unsigned char _maxSpeed = 100;
   unsigned char _minSpeed = 0;
