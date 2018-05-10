@@ -81,6 +81,10 @@ class controller
   unsigned char _maxSpeed = 100;
   unsigned char _minSpeed = 0;
   float _K_p = 10;
+  float _K_i = 1;
+  float _integralTerm = 0;
+  unsigned long integralTimeOld;
+  #define WINDUP 30
   int _controllerBias;
 
   

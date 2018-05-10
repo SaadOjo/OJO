@@ -33,7 +33,7 @@ void infraredReceiver::update()
   unsigned long timeNow = millis();
   
    _pinState = digitalRead(_pin);
-  //Serial.println(_pinState);
+    //Serial.println(_pinState);
   
   if(_pinState!=_pinLastState)
   {

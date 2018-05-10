@@ -87,8 +87,29 @@ bool controller::maintainDistance(int referenceDistance)
     _relativeDirection = 0;
   }
   */
+  unsigned long myTime = millis();
   
-  _propotionalControl = _K_p *  (_relativeDistance - referenceDistance);
+  int error = (_relativeDistance - referenceDistance);
+  Serial.println(String("Error: ") + error);
+  
+  _integralTerm += float(error)*(myTime - integralTimeOld)/1000.0f;
+
+  if(error<0)
+  {
+    _integralTerm = 0;
+  }
+  if(_integralTerm > WINDUP)
+  {
+    _integralTerm = WINDUP;
+  }
+  else if(_integralTerm < 0)
+  {
+     _integralTerm = 0;
+  }
+
+  Serial.println(String("Integral Term: ") + _integralTerm);
+  integralTimeOld = myTime;
+  _propotionalControl = _K_p *  error + _K_i*_integralTerm;
 
   _propotionalControl += _controllerBias; //Add bias term for steady state
  /*

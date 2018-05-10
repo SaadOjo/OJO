@@ -107,7 +107,9 @@ unsigned char sensor::getLastOneFlagStatus()
 
     case 2: //Secondary
     //get from IR
-      if(_myInfraredReceiver.getSignalIdentity() == 1)
+      unsigned char haha = _myInfraredReceiver.getSignalIdentity();
+      Serial.println(String("Last Flag: ") + haha);
+      if(haha == 1)
       {
         getSolarLastOneFlag = 1;
       } 

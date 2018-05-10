@@ -14,7 +14,7 @@ bool dataAvailable = false;
 robotMotion myMotion(6,5);
 flagsTransmitter myFlagsTransmitter(4, 7);
 
-sensor mySensor(1); //Argument is debug info
+sensor mySensor(2); //Argument is debug info
 controller myController(mySensor, myMotion);
 
 // TEST DEFINITIONS
@@ -149,7 +149,7 @@ void following(void)
   {
     case true:
       Serial.println("Following Robot!");
-      if(!myController.followRobot(17)) //does not follow when the robot sees that the robot in front is leaving
+      if(!myController.followRobot(20)) //does not follow when the robot sees that the robot in front is leaving
       {
         robotVisibilityState = false;
       }
