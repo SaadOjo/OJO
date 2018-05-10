@@ -430,22 +430,26 @@ bool controller::rejoin()
   }
 
  //Do Stuff here
- 
-
-  if((_maneuverTime - _maneuverStartTime)> REJOIN_LEAVE_TURN_TIME)
+  if((_maneuverTime - _maneuverStartTime)< REJOIN_WAIT_TIME)
   {
-    if((_maneuverTime - _maneuverStartTime)> (REJOIN_ENTRY_TIME + REJOIN_LEAVE_TURN_TIME)) //straigtning
+    _myMotion->setSpeed(0);
+    Serial.println("Waiting to wait!");
+  }
+
+  if((_maneuverTime - _maneuverStartTime)> REJOIN_LEAVE_TURN_TIME + REJOIN_WAIT_TIME)
+  {
+    if((_maneuverTime - _maneuverStartTime)> (REJOIN_ENTRY_TIME + REJOIN_LEAVE_TURN_TIME + REJOIN_WAIT_TIME)) //straigtning
     {
-      _myMotion->setSpeed(20);
+      _myMotion->setSpeed(100);
       if(!rejoinDirection)//Return Back
       {
         _myMotion->setDirection(80);
-        Serial.println("Right");
+        Serial.println("Right1");
       }
       else
       {
         _myMotion->setDirection(-80);
-        Serial.println("Left");
+        Serial.println("Left1");
       }
     }
     else
@@ -456,23 +460,23 @@ bool controller::rejoin()
     }
 
   }
-  else //Entering maneuver
+  else if((_maneuverTime - _maneuverStartTime)> REJOIN_WAIT_TIME) //Entering maneuver
   {
     if(rejoinDirection)
     {
       _myMotion->setDirection(80);
-      Serial.println("Right");
+      Serial.println("Right2");
     }
     else
     {
       _myMotion->setDirection(-80);
-      Serial.println("Left");
+      Serial.println("Left2");
     }
     _myMotion->setSpeed(100);
   }
   
 
-  if((_maneuverTime - _maneuverStartTime) > (REJOIN_ENTRY_TIME + 2*REJOIN_LEAVE_TURN_TIME))
+  if((_maneuverTime - _maneuverStartTime) > (REJOIN_ENTRY_TIME + 2*REJOIN_LEAVE_TURN_TIME + REJOIN_WAIT_TIME))
   {
     _myMotion->setDirection(0);
     Serial.println("Waiting for visibility marker!");
