@@ -236,7 +236,7 @@ bool controller::lateralExit()
       _lastDirectionSign = LEFT;
     }
     //Set test parameters
-    //_lastDirectionSign = RIGHT;  
+    _lastDirectionSign = LEFT;  
     _leaveDirection = !_lastDirectionSign;
     
   }
@@ -436,7 +436,7 @@ bool controller::rejoin()
   {
     if((_maneuverTime - _maneuverStartTime)> (REJOIN_ENTRY_TIME + REJOIN_LEAVE_TURN_TIME)) //straigtning
     {
-      _myMotion->setSpeed(100);
+      _myMotion->setSpeed(20);
       if(!rejoinDirection)//Return Back
       {
         _myMotion->setDirection(80);

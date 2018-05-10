@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 
-#define MAX_ARRAY_SIZE 10
+#define MAX_ARRAY_SIZE 5
 
 class average
 {
@@ -23,7 +23,7 @@ class average
     int _arrayAverage();
     unsigned char _circularIncrement(unsigned char num);
     float _alpha;
-    float filter[MAX_ARRAY_SIZE];// = {0.0667,    0.1333,    0.2000,    0.2667,    0.3333};
+    float filter[5] = {0.0667,    0.1333,    0.2000,    0.2667,    0.3333};
 
     
 

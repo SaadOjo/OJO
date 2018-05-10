@@ -36,7 +36,7 @@ controller myController(mySensor, myMotion);
 bool robotVisibilityState = true;
 unsigned char leaveState = 0;
 bool followingState = true;
-
+bool laserAllowed = true;
 bool ignoreLeaveLineCommand = false;
 
 unsigned long int oldTime;
@@ -49,86 +49,20 @@ void setup()
   Wire.onReceive(receiveEvent);
   
   myController.setMaxSpeed(100);
-  myController.setMinSpeed(30);
+  myController.setMinSpeed(0);
   
   myFlagsTransmitter.init();
-  myFlagsTransmitter.setLastSignal(HIGH);
-  //myFlagsTransmitter.clearFlags();
+  myFlagsTransmitter.clearFlags();
 
 }
 
 void loop()
 {
- // mySensor.update();
- // Serial.println(mySensor.getLeavingFlagStatus());
- //digitalWrite(2,mySensor.getLeavingFlagStatus());
-  //updating sensor can have unexpected consequences
   
-  //Testing code to display 12c communication
-  /*
-  if(dataAvailable)
-  {
-  dataAvailable = false;
-  Serial.println(String("Remote Info: ") + remoteInfo + " Avoid Info: " + avoidInfo + " is Last: " + isLastRobot);
-  //remoteInfo = 0;
-  //avoidInfo = 0;
-  //isLastRobot = false;
-  } 
-  */
+handleRemote();
 
 
-
-  myFlagsTransmitter.setLastSignal(isLastRobot);
-  
-  if(isLastRobot)
-  {
-    myFlagsTransmitter.transmit();
-  }
-  
-
-if(remoteInfo == 1) //change to take from serial
-{
-  if(!ignoreLeaveLineCommand)
-  {
-    
-    followingState = false;
-    myController.forceFirstLoop();
-    remoteInfo = 0;
-    ignoreLeaveLineCommand = true;
-    Serial.println("Leave command received"); 
-  }
-}
-
-
-  /*
-  
-  if(millis() < 3000)
-  {
-   // myController.forceMotors(50, 0);
-  }
-  else
-  {
-   // leaving();
-   followingState = false;
-  }
-  
-*/
-/*
-if(millis() > ROBOT_TEST_FOLLOW_TIME)
-{
-  if(testFirst)
-  {
-    followingState = false;
-    myController.forceFirstLoop();
-    testFirst = false;
-
-    Serial.println("Test event happened!");
-  }
-  
-}
-*/
 avoidInfo = 0; //Ignoring avoid info
-
 if(avoidInfo)
 {
   Serial.println(String("Avoid Info") + avoidInfo);
@@ -142,37 +76,80 @@ else
   {
     case false:
       leaving();
+      myFlagsTransmitter.setLastSignal(LOW);
+      myFlagsTransmitter.setLeaveSignal(HIGH);
+      myFlagsTransmitter.transmit();
       break;
 
     case true:
+      if(laserAllowed)
+      {
+        if(isLastRobot)
+        {
+          myFlagsTransmitter.setLastSignal(HIGH);
+          myFlagsTransmitter.setLeaveSignal(LOW);
+          myFlagsTransmitter.transmit();
+        }
+        else
+        {
+           myFlagsTransmitter.clearFlags();
+        }
+      }
+      else
+      {
+        myFlagsTransmitter.clearFlags();
+      }
       following();
       break;
   }
 }
 
 
-
   myTime = millis();
   Serial.println(String("Loop Tme: ") + (myTime - oldTime));
   oldTime = myTime;
-delay(100);
+  delay(20);
 
 }
 
-
+void handleRemote(void)
+{
+  switch(remoteInfo)
+  {
+    case 1:
+      if(!ignoreLeaveLineCommand)
+      {
+        
+        followingState = false;
+        myController.forceFirstLoop();
+        ignoreLeaveLineCommand = true;
+        Serial.println("Leave command received"); 
+      }
+      break;
+    case 2:
+      laserAllowed = !laserAllowed;
+      Serial.println("Laser protection toggled"); 
+      
+      break;
+    case 3:
+      break;
+    
+  }
+  if(remoteInfo)
+  {
+    remoteInfo = 0;
+  }
+  
+}
 
 void following(void)
 {   
-  if(!isLastRobot)
-  {
-    myFlagsTransmitter.clearFlags();
-  }
-
+ 
    switch(robotVisibilityState)
   {
     case true:
       Serial.println("Following Robot!");
-      if(!myController.followRobot(15)) //does not follow when the robot sees that the robot in front is leaving
+      if(!myController.followRobot(17)) //does not follow when the robot sees that the robot in front is leaving
       {
         robotVisibilityState = false;
       }
@@ -189,9 +166,7 @@ void following(void)
 }
 
 void leaving(void)
-{   myFlagsTransmitter.setLeaveSignal(HIGH);
-    myFlagsTransmitter.setLastSignal(LOW);
-    myFlagsTransmitter.transmit();
+{   
     switch(leaveState)
   {
     case 0:
@@ -281,3 +256,31 @@ void receiveEvent(int howMany)
     } 
   }
 }
+
+  /*
+  
+  if(millis() < 3000)
+  {
+   // myController.forceMotors(50, 0);
+  }
+  else
+  {
+   // leaving();
+   followingState = false;
+  }
+  
+*/
+/*
+if(millis() > ROBOT_TEST_FOLLOW_TIME)
+{
+  if(testFirst)
+  {
+    followingState = false;
+    myController.forceFirstLoop();
+    testFirst = false;
+
+    Serial.println("Test event happened!");
+  }
+  
+}
+*/

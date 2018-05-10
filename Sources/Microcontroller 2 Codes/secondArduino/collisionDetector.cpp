@@ -20,7 +20,7 @@ bool collisionDetector::init(){
 }
 
 bool collisionDetector::update()
-{
+{   
    _leftAverage.addData(_left.distanceRead());
    _rightAverage.addData(_right.distanceRead());
    _backAverage.addData(_back.distanceRead());
@@ -57,6 +57,7 @@ unsigned char collisionDetector::getAvoidAction()
 {
   unsigned char avoidAction=0;
   unsigned char minimum=DANGER_DISTANCE;
+
   
   if(_leftDist<minimum)
   {

@@ -101,16 +101,16 @@ unsigned char sensor::getLastOneFlagStatus()
     case 0: //Both Sensors
       break;
 
-    case 1: //Primary (Camera ect)
+    case 2: //Primary (Camera ect)
       getSolarLastOneFlag = _mySolarFlag.getSolarLastOneFlag();
       break;
 
-    case 2: //Secondary
+    case 1: //Secondary
     //get from IR
       if(_myInfraredReceiver.getSignalIdentity() == 1)
       {
         getSolarLastOneFlag = 1;
-      }
+      } 
       break;
   }
   return getSolarLastOneFlag;

@@ -18,7 +18,6 @@ class robotMotion
     bool runRight(unsigned short int speed); 
     bool runLeft(unsigned short int speed); 
     bool init();
-
   private:
     int _motor_left;
     int _motor_right; 

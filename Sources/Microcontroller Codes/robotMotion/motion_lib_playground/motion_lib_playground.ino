@@ -2,6 +2,7 @@
 
 robotMotion myMotion(6,5); // (LEFT, RIGHT)
 
+
 #define IN_BUFFER_SIZE 256
 char inputArray[IN_BUFFER_SIZE];
 char inChar;

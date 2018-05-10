@@ -23,7 +23,7 @@ class collisionDetector
     bool init();
     unsigned char getAvoidAction();
   private:
-    unsigned char _leftDist, _rightDist, _frontDist, _backDist;
+    int _leftDist, _rightDist, _frontDist, _backDist;
     unsigned char _frontPin, _leftEchoPin, _leftTriggerPin;
     unsigned char _rightEchoPin, _rightTriggerPin, _backEchoPin, _backTriggerPin;
     Ultrasonic _left, _right, _back;
