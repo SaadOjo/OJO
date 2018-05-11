@@ -12,6 +12,11 @@
 #define LEFT 0
 #define RIGHT 1
 
+#define ORIENTATION_SWITCH_DISTANCE  30
+
+#define K_DIR 1
+#define K_ORN 1
+
 //Maneuvers Parameters
 #define FIND_ROBOT_SWITCH_TIME 3 //seconds 
 
@@ -77,10 +82,11 @@ class controller
   void _maintainVelocity();
   int _relativeDistance;
   int _relativeDirection;
+  int _relativeOrientation;
   int _propotionalControl;
   unsigned char _maxSpeed = 100;
   unsigned char _minSpeed = 0;
-  float _K_p = 10;
+  float _K_p = 5;
   float _K_i = 1;
   float _integralTerm = 0;
   unsigned long integralTimeOld;
