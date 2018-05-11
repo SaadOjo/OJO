@@ -85,6 +85,14 @@ bool controller::maintainDistance(int referenceDistance)
   }
   _relativeOrientation = _mySensor -> getOrientation();
 
+  if(_relativeDistance > ORIENTATION_IGNORE_DISTANCE)
+  {
+    _relativeOrientation = 0;
+  }
+
+
+  
+
     if(inwards)
   {
     newDirection = (_relativeDirection*K_DIR + _relativeOrientation*K_ORN);
