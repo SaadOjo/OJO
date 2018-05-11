@@ -149,7 +149,7 @@ void following(void)
   {
     case true:
       Serial.println("Following Robot!");
-      if(!myController.followRobot(20)) //does not follow when the robot sees that the robot in front is leaving
+      if(!myController.followRobot(17)) //does not follow when the robot sees that the robot in front is leaving
       {
         robotVisibilityState = false;
       }
