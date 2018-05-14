@@ -24,8 +24,8 @@ ____Signal Identifier__|__Signal Description____|__Signal Parameters__|
 #define INFRARED_RECEIVER_H
 
 #define TIME_TOLERANCE 30
-#define TYPE_A_TIME 100
-#define TYPE_B_TIME 200
+#define TYPE_A_TIME 130
+#define TYPE_B_TIME 230
 #define SIGNAL_HOLD_TIME 500
 
 #include <Arduino.h>
