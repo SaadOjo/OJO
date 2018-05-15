@@ -1,0 +1,6 @@
+library files are in src folder, to initiate the sensor "Ultrasonic" object must be created with passed parameters trigger and echo pin respectively. To get the distance in cm "distanceRead()" method is used. example program is in examples folder. short declarations for mentioned methods are given below:
+Ultrasonic(uint8_t trigPin, uint8_t echoPin, unsigned long timeOut = 20000UL);
+ 
+ unsigned int distanceRead();
+
+

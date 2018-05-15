@@ -1,0 +1,29 @@
+PRIMARY ARDUINO
+
+	Analog:
+
+		IR Direction: A6, A7		// Check which one is which
+		Solar Reciever: A2, A3		// Check which one is which
+		Motors: A5, A6			// A5 is right, A6 is left
+		I2C: A4, A5			// Not done yet
+
+	Digital:
+
+		Laser: 4
+		Seven Segment: 7
+		IR Transmitter: 9
+		IR Remote Reciever: 8
+
+
+SECONDARY ARDUINO
+
+	Analog:
+
+		IR Distance: A7 or A0		// Not done yet
+		I2C: A4, A5			// Not done yet
+
+	Digital:
+
+		US: ?, ?, ?			// Not done yet
+		IR Remote Reciever: ?		// Not done yet
+		 

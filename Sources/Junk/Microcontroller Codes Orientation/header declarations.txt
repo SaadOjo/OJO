@@ -1,0 +1,20 @@
+**SENSOR**
+	->methods
+	*getDistanceLeft		(Distance from surrounding objects)
+	*getDistanceRight
+	*getDistanceFront
+	*getDistanceBack
+	*getRelativeSpeed
+	*getAbsSpeed
+	*getRelativeAngle		(The relative angle between robot and the next robot)
+	*getBearing			(Get bearing relative to north)
+	*getNextRobotLeavingFlag	;Come up with better naming convention
+	*getNextRobotLastFlag		;Come up with better naming convention
+	*determineIfLastRobot		;Come up with better naming convention
+
+
+Note: Sensor library will use sublibraries to determine all of these parameters and pass the best data to the calling program
+
+ 
+**MOTOR**
+	

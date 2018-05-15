@@ -1,0 +1,97 @@
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture(0)
+
+while(1):
+
+    # Take each frame
+    _, frame = cap.read()
+
+    # Convert BGR to HSV
+    hsv2 = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    blur1 = cv2.bilateralFilter(frame,5,75,75)
+    frame = blur1
+
+    # define range of red color in HSV
+    sensitivity = 0;
+    lower_red= np.array([150-sensitivity,150,50])
+    upper_red = np.array([180+sensitivity,255,255])
+    #lower_green = np.array([178,179,0])
+    #upper_green = np.array([255,255,255])
+    
+    
+    # Threshold the HSV image to get only green colors
+    mask2 = cv2.inRange(hsv2, lower_red, upper_red)
+
+    # Bitwise-AND mask and original image
+    res = cv2.bitwise_and(frame,frame, mask= mask2)
+    #kernel = np.ones((5,5),np.uint8)
+    #opening = cv2.morphologyEx(res, cv2.MORPH_OPEN, kernel)
+    #dilation = cv2.dilate(opening,kernel,iterations = 1)
+
+
+    #region of interest
+    roi = res[240-35:240+35,320-50:320+50]
+    #roi y and x
+    #cv2.imshow('segment no:'+str(i),roi)
+
+    
+    #grayscale
+    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+    #Canny
+    canny = cv2.Canny(roi,100,200)
+    x=0
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    bottomLeftCornerOfText = (400,400)
+    fontScale              = 0.5
+    fontColor              = (255,255,0)
+    lineType               = 1
+    #contours
+    canny2, contours, hierarchy = cv2.findContours(canny,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+    a=len(contours)
+
+    if a==0 :
+        fontColor              = (0,255,0)
+        bottomLeftCornerOfText = (50,100)
+        cv2.putText(res,'keep moving', 
+                        bottomLeftCornerOfText, 
+                        font, 
+                        fontScale,
+                        fontColor,
+                        lineType)
+    else:
+        x=len(contours)
+        fontColor              = (0,0,255)
+        bottomLeftCornerOfText = (50,100)
+        cv2.putText(res,'leave', 
+                        bottomLeftCornerOfText, 
+                        font, 
+                        fontScale,
+                        fontColor,
+                        lineType)
+    #cv2.rectangle(res, (x1, y1), (x2, y2), (255,0,0), 2)
+    cv2.rectangle(res, (320-50, 240-30), (320+50, 240+30), (255,0,0), 2)
+     
+    # Write some Text
+
+    bottomLeftCornerOfText = (400,400)
+
+    cv2.putText(res,str(x), 
+                        bottomLeftCornerOfText, 
+                        font, 
+                        fontScale,
+                        fontColor,
+                        lineType)
+
+    cv2.imshow('roi',roi)
+    #cv2.imshow('frame',frame)
+    #cv2.imshow('blur',blur1)
+    #cv2.imshow('mask2',mask2)
+    cv2.imshow('res',res)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()

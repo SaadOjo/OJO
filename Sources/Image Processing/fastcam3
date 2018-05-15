@@ -1,0 +1,62 @@
+# import the necessary packages
+from __future__ import print_function
+from imutils.video.pivideostream import PiVideoStream
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import imutils
+import time
+import cv2
+import numpy as np
+
+oldMillis = 0
+millis = 0
+frameRate = 0
+
+lower = [0, 50, 0]
+upper = [50, 255, 50]
+
+            
+# define range of green color in HSV
+sensitivity = 20
+lower_green = np.array([60-sensitivity,100,50])
+upper_green = np.array([60+sensitivity,255,255])
+
+
+vs = PiVideoStream().start()
+time.sleep(1.0)
+ 
+# loop over some frames...this time using the threaded stream
+while 1:
+        millis = int(round(time.time() * 1000))
+        frameRate = 1000/(millis - oldMillis)
+        #print(frameRate)
+    
+        oldMillis = millis; 
+        # grab the frame from the threaded video stream and resize it
+        # to have a maximum width of 400 pixels
+        frame = vs.read()
+        
+
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
+        # Threshold the HSV image to get only green colors
+        mask = cv2.inRange(hsv, lower_green, upper_green)
+        output = cv2.bitwise_and(frame, frame, mask = mask)
+	
+	# show the images
+        frame = imutils.resize(frame, width=640)
+        output = imutils.resize(output, width=640) 
+	
+        cv2.imshow("images", np.hstack([frame, output]))
+
+
+        # color detection here
+	
+        # check to see if the frame should be displayed to our screen
+        #cv2.imshow("Frame", frame)
+        key = cv2.waitKey(1) & 0xFF == ord('q') ## Exit on q
+        if key:
+                break
+
+cv2.destroyAllWindows()
+vs.stop()

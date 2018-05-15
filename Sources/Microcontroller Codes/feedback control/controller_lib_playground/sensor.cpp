@@ -4,9 +4,9 @@
  */
 #include "sensor.h" 
 
-sensor::sensor():_mySensor(1),_myDirectionSensor(2,3)
+sensor::sensor(unsigned char debugInfo):_myDirectionSensor(7,6),_mySolarFlag(2,3),_myRpiDecoder(),_myInfraredReceiver(8)
 {
- 
+ _debugInfo = debugInfo;
 }
 
 bool sensor::init(){
@@ -15,6 +15,9 @@ bool sensor::init(){
 bool sensor::update()
 {
   _myDirectionSensor.update();
+  _mySolarFlag.update();
+  _myRpiDecoder.update();
+  _myInfraredReceiver.update();
   //Update the distance sensor as well
 }
 unsigned char sensor::isVisible()
@@ -25,23 +28,126 @@ unsigned char sensor::isVisible()
   //1 : All sensors visible
   //2 : Primary sensor visible only
   //3 : Secondary sensor visible only
-  if(_myDirectionSensor.isVisible())
+
+    switch (_debugInfo)
   {
-    visibility = 1;
+    case 0: //Both Sensors
+      break;
+
+    case 1: //Primary (Camera ect)
+        visibility = 1;
+      break;
+
+    case 2: //Secondary
+      if(_myDirectionSensor.isVisible())
+      {
+        visibility = 1;
+      }
+      break;
   }
+
+
+  //Check visibility using time last transmitted
+
   return visibility;
   //Update the distance sensor as well
 }
 
 
-float sensor::getDistance()
+unsigned char sensor::getDistance()
 {
-  float distance = _mySensor.getDistance();
-    distance = _myDirectionSensor.getDistance();
+  unsigned char distance;
+
+  switch (_debugInfo)
+  {
+    case 0: //Both Sensors
+      break;
+
+    case 1: //Primary (Camera ect)
+        distance = _myRpiDecoder.getDistance();
+      break;
+
+    case 2: //Secondary
+        distance = _myDirectionSensor.getDistance();
+      break;
+  }
+ 
   return distance;
-  //Take direction from the other sensor as well
 }
-float sensor::getDirection()
+char sensor::getDirection()
 {
-  return _myDirectionSensor.getDirection();
+  char direction;
+  switch (_debugInfo)
+  {
+    case 0: //Both Sensors
+      break;
+
+    case 1: //Primary (Camera ect)
+        direction = _myRpiDecoder.getDirection();
+      break;
+
+    case 2: //Secondary
+        direction = _myDirectionSensor.getDirection();
+      break;
+  }
+  return direction;
 }
+unsigned char sensor::getLastOneFlagStatus()
+{
+  unsigned char getSolarLastOneFlag = 0;
+
+  switch (_debugInfo)
+  {
+    case 0: //Both Sensors
+      break;
+
+    case 1: //Primary (Camera ect)
+      getSolarLastOneFlag = _mySolarFlag.getSolarLastOneFlag();
+      break;
+
+    case 2: //Secondary
+    //get from IR
+      unsigned char haha = _myInfraredReceiver.getSignalIdentity();
+      Serial.println(String("Last Flag: ") + haha);
+      if(haha == 1)
+      {
+        getSolarLastOneFlag = 1;
+      } 
+      break;
+  }
+  return getSolarLastOneFlag;
+  //this library does not satisfy the update function standard. Make it compliant.
+}
+
+char sensor::getOrientation()
+{
+  char orientation;
+  orientation = _myRpiDecoder.getOrientation();
+  return orientation;
+}
+
+bool sensor::getLeavingFlagStatus()
+{ 
+  bool leavingFlagStatus = 0;
+  
+  switch (_debugInfo)
+  {
+    case 0: //Both Sensors
+      break;
+
+    case 1: //Primary (Camera ect)
+        leavingFlagStatus = _myRpiDecoder.getLeavingFlagStatus();
+      break;
+
+    case 2: //Secondary
+      if(_myInfraredReceiver.getSignalIdentity() == 2)
+      {
+        leavingFlagStatus = 1;
+      }
+      break;
+  }
+  
+  return leavingFlagStatus;
+}
+
+

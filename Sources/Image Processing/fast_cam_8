@@ -1,0 +1,269 @@
+# import the necessary packages
+from __future__ import print_function
+from imutils.video.pivideostream import PiVideoStream
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import imutils
+import time
+import cv2
+import math
+import numpy as np
+import serial
+
+def returnMaxIndex(array):
+    max = 0
+    index = 0
+    for i in range (0, len(array)):
+        if (array[i] > max):
+            max = array[i]
+            index = i
+    return index          
+
+def getRectangle(contours):
+
+        max_approx = None
+        max_peri = 0
+        for i in range(0,len(contours)):
+            #approximate the contour with accuracy proportional to
+            #the contour perimeter
+            approx = cv2.approxPolyDP(contours[i],cv2.arcLength(contours[i],True)*0.02,True)
+
+            #Skip small or non-convex objects
+            if(abs(cv2.contourArea(contours[i]))<100 or not(cv2.isContourConvex(approx))):
+                continue
+            ##add geometric restriction here
+            
+            #rectangle detection
+ 
+            if(len(approx)==4):
+                status = 1
+                #print(len(approx))
+                
+
+                cnt = contours[i]
+                #cv2.rectangle(res,(x,y),(x+w,y+h),(0,255,0),2)
+                perimeter = cv2.arcLength(cnt,True)
+                
+                if(perimeter>max_peri):
+                    max_approx = approx
+                
+
+                
+                ###add outer contour restriction here
+
+                #bounded rectangle
+
+                #possibly redundant
+                #epsilon = 0.05*cv2.arcLength(cnt,True)
+                #approx = cv2.approxPolyDP(cnt,epsilon,True)
+            
+        return max_approx
+
+def getOrderedCoordinates(approx):
+                        #corners of bounded rectangle
+                    #A
+                    x1= approx[0][0][0]
+                    y1= approx[0][0][1]
+                    
+                    #cv2.circle(res,(x1,y1), 5, (0,0,255), -1)
+                    #B
+                    x2= approx[1][0][0]
+                    y2= approx[1][0][1]
+                    #cv2.circle(res,(x2,y2), 5, (0,255,0), -1)
+                    
+                    #C
+                    x3= approx[2][0][0]
+                    y3= approx[2][0][1]
+                    #cv2.circle(res,(x3,y3), 5, (255,0,0), -1)
+                    #D
+                    x4= approx[3][0][0]
+                    y4= approx[3][0][1]
+
+
+
+                    #corners arrangement
+                    a = [x1, y1]
+                    b = [x2, y2]
+                    c = [x3, y3]
+                    d = [x4, y4]
+
+                    points = [a, b, c, d]
+
+                    left = [a, b]
+                    right = [c, d]
+
+                    lr = 0
+                    rt = 0
+
+                    for i in range(0, 4):
+                        lessThanElements = 0
+                        for j in range(0, 4):
+                            #print(f' a: {points[i][0]}  vs {points[j][0]}')
+                            if points[i][0] <= points[j][0]:
+                               # print('found')
+                                lessThanElements = lessThanElements + 1
+                        #print(lessThanElements)
+                        if lessThanElements >= 3:
+                            left[lr] = points[i]
+                            lr = lr + 1
+                        else:
+                            right[rt] = points[i]
+                            rt = rt + 1
+
+                    if left[0][1] > left[1][1]:
+                        top_left = left[1]
+                        bottom_left = left[0]
+                    else:
+                        top_left = left[0]
+                        bottom_left = left[1]
+
+                    if right[0][1] > right[1][1]:
+                        top_right = right[1]
+                        bottom_right = right[0]
+                    else:
+                        top_right = right[0]
+                        bottom_right = right[1]
+
+                    #corners assignment
+                        
+                    xx1=top_left[0]
+                    yy1=top_left[1]
+                    xx2=bottom_left[0]
+                    yy2=bottom_left[1]
+                    xx3=bottom_right[0]
+                    yy3=bottom_right[1]
+                    xx4=top_right[0]
+                    yy4=top_right[1]
+
+                    return (xx1, yy1, xx2, yy2, xx3, yy3, xx4, yy4)
+                
+def visualiseCorners(xx1, yy1, xx2, yy2, xx3, yy3, xx4, yy4, diameter):
+    cv2.circle(res,(xx1,yy1), diameter, (0,0,255), -1)
+    cv2.circle(res,(xx2,yy2), diameter, (0,255,0), -1)
+    cv2.circle(res,(xx3,yy3), diameter, (255,0,0), -1)
+    cv2.circle(res,(xx4,yy4), diameter, (0,255,255), -1)
+
+def getDistDirOreient(xx1, yy1, xx2, yy2, xx3, yy3, xx4, yy4):
+
+    left_length = math.sqrt((xx1 - xx2)**2 + (yy1 - yy2)**2)
+    right_length = math.sqrt((xx4 - xx3)**2 + (yy4 - yy3)**2)
+    
+    max_length = left_length
+    oreintation =  right_length/ left_length
+    if(right_length > left_length):
+        right_length = max_length
+
+    distance = 2597*(1/max_length) + 3.9463    
+    x_centroid = (xx1 + xx2 + xx3 + xx4)/4 - 160
+    x_centroid * 100*160    
+    cv2.circle(res,(int(x_centroid) + 160 ,120), 5, (0,255,255), -1)
+    
+
+
+   
+    return (distance, x_centroid, oreintation)
+def getLeaveSignal(res2,yy1,yy2,xx1,xx2):
+
+    leave_signal = 0
+    
+    roi = res2[yy1:yy2,xx1:xx4]
+    canny2 = cv2.Canny(roi,100,200)
+
+    canny2, contours2, hierarchy = cv2.findContours(canny2,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+    a=len(contours2)
+
+    if a>=1:
+        leave_signal = 1
+    return leave_signal
+                    
+    
+
+    
+                
+oldMillis = 0
+millis = 0
+frameRate = 0
+
+         
+# define range of green color in HSV
+green_sensitivity = 10
+hue = 60
+#lower_green = np.array([hue-green_sensitivity,150,60])
+#upper_green = np.array([hue+green_sensitivity,255,255])
+lower_green = np.array([hue-green_sensitivity,60,40])
+upper_green = np.array([hue+green_sensitivity,255,255])
+
+# define range of red color in HSV
+red_sensitivity = 0;
+lower_red= np.array([150 - red_sensitivity,180,50])
+upper_red = np.array([180 + red_sensitivity,255,255])
+
+vs = PiVideoStream().start()
+time.sleep(1.0)
+
+#ser = serial.Serial('/dev/ttyUSB0')
+#time.sleep(2)
+ 
+# loop over some frames...this time using the threaded stream
+while 1:
+        millis = int(round(time.time() * 1000))
+        frameRate = 1000/(millis - oldMillis)
+        #print(frameRate)
+        
+        oldMillis = millis; 
+        # grab the frame from the threaded video stream and resize it
+        # to have a maximum width of 400 pixels
+        frame = vs.read()
+        #frame = cv2.bilateralFilter(frame,15,75,75)
+        
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
+        # Threshold the HSV image to get only green colors
+        mask = cv2.inRange(hsv, lower_green, upper_green)
+        res = cv2.bitwise_and(frame, frame, mask = mask)
+
+        red_mask = cv2.inRange(hsv, lower_red, upper_red)
+        res_red = cv2.bitwise_and(frame,frame, mask= red_mask)
+        
+	# show the images
+        #frame = imutils.resize(frame, width=640)
+	#res = imutils.resize(res, width=640)
+	## rectangle Detection
+        canny = mask
+        #canny = cv2.Canny(res,100,200)
+        
+        canny, contours, hierarchy = cv2.findContours(canny,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        raw_coor = getRectangle(contours)
+
+        
+	
+        if (raw_coor != None):
+            img = cv2.drawContours(frame, [raw_coor], -1, (0,0,255), 3)
+            xx1, yy1, xx2, yy2, xx3, yy3, xx4, yy4 = getOrderedCoordinates(raw_coor)
+            visualiseCorners(xx1, yy1, xx2, yy2, xx3, yy3, xx4, yy4, 5)
+            distance, direction, oreintation = getDistDirOreient(xx1, yy1, xx2, yy2, xx3, yy3, xx4, yy4)
+            print('distance:', int(distance), 'direction:', int(direction), 'oreintation:', oreintation)    
+            #if getLeaveSignal(res_red,yy1,yy2,xx1,xx2):
+                #print('LEAVE')
+            #else:
+                #print('DONT LEAVE')
+                
+            #print(int(distance), direction)
+
+	#cv2.imshow("canny", canny)
+        cv2.circle(res,(160 ,120), 5, (255,0,20), -1)
+
+        
+        cv2.imshow("images", np.hstack([frame, res]))
+        # color detection here
+        # check to see if the frame should be displayed to our screen
+        #cv2.imshow("Frame", frame)
+        key = cv2.waitKey(1) & 0xFF == ord('q') ## Exit on 
+        if key:
+                break
+
+cv2.destroyAllWindows()
+vs.stop()
+
+
+
