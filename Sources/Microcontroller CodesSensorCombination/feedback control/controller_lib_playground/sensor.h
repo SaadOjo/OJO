@@ -12,8 +12,6 @@
 #include "infraredReceiver.h"
 
 
-
-
 class sensor
 {
   public:
@@ -22,9 +20,9 @@ class sensor
     bool update();
     unsigned char isVisible();            //Tells if the robot is visible or not (problems with blinking)//Add timer
     unsigned char getLastOneFlagStatus(); //Tells if the robot is in the last position
-    unsigned char getDistance();                  //Relative distance between the robots
+    unsigned char getDistance();          //Relative distance between the robots
     bool getLeavingFlagStatus();          //The robot in front is leaving
-    char getDirection();                 //Relative direction of the robots
+    char getDirection();                  //Relative direction of the robots
     char getOrientation();                //Orientation of the robot in front (sic.)
     
   private:

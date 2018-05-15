@@ -129,7 +129,7 @@ bool controller::maintainDistance(int referenceDistance)
   
   _integralTerm += float(error)*(myTime - integralTimeOld)/1000.0f;
 
-  if(error<0)
+  if(error<4)
   {
     _integralTerm = 0;
   }

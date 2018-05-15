@@ -129,7 +129,7 @@ bool controller::maintainDistance(int referenceDistance)
   
   _integralTerm += float(error)*(myTime - integralTimeOld)/1000.0f;
 
-  if(error<0)
+  if(error<4)
   {
     _integralTerm = 0;
   }
@@ -227,7 +227,7 @@ bool controller::findMarker()
     _mySensor -> update();
 
   //Do Stuff here
-  _myMotion->setSpeed(100);
+  _myMotion->setSpeed(0); //Testing
   
   unsigned char eventSecond = ((millis() - _maneuverStartTime)/1000) % FIND_ROBOT_SWITCH_TIME;
   Serial.println(eventSecond);
@@ -292,7 +292,7 @@ bool controller::lateralExit()
       _lastDirectionSign = LEFT;
     }
     //Set test parameters
-    _lastDirectionSign = LEFT;  
+    _lastDirectionSign = RIGHT;  
     _leaveDirection = !_lastDirectionSign;
     
   }
@@ -511,7 +511,7 @@ bool controller::rejoin()
     else
     {
       _myMotion->setDirection(0); //Straightning
-      _myMotion->setSpeed(_lastSpeed); 
+      _myMotion->setSpeed(10); 
       Serial.println("moving straight!");
     }
 
@@ -534,6 +534,7 @@ bool controller::rejoin()
 
   if((_maneuverTime - _maneuverStartTime) > (REJOIN_ENTRY_TIME + 2*REJOIN_LEAVE_TURN_TIME + REJOIN_WAIT_TIME))
   {
+    _myMotion->setSpeed(10);
     _myMotion->setDirection(0);
     Serial.println("Waiting for visibility marker!");
 

@@ -32,11 +32,8 @@ unsigned char sensor::isVisible()
     switch (_debugInfo)
   {
     case 0: //Both Sensors
-      if(_myDirectionSensor.isVisible()||_myRpiDecoder.isVisible())
-      {
         visibility = 1;
-      }
-      break;
+        break;
 
     case 1: //Primary (Camera ect)
         visibility = 1;
@@ -67,7 +64,9 @@ unsigned char sensor::getDistance()
 
   switch (_debugInfo)
   {
+
     case 0: //Both Sensors
+       
       if(_myRpiDecoder.isVisible()&&!_myDirectionSensor.isVisible())
       {
         distance = piDistance;
@@ -80,7 +79,9 @@ unsigned char sensor::getDistance()
       {
         distance = min(piDistance, irDistance);
       }
+      
       break;
+      
 
     case 1: //Primary (Camera ect)
         distance = piDistance;
@@ -130,7 +131,7 @@ unsigned char sensor::getLastOneFlagStatus()
   switch (_debugInfo)
   {
     case 0: //Both Sensors
-      if(lastOneFlag||irFlag==1)
+      if(solar||irFlag==1)
       {
         lastOneFlag = 1;
       }
