@@ -13,7 +13,7 @@ bool dataAvailable = false;
 robotMotion myMotion(6,5);
 flagsTransmitter myFlagsTransmitter(4, 7);
 
-sensor mySensor(2); //Argument is debug info
+sensor mySensor(0); //Argument is debug info
 controller myController(mySensor, myMotion);
 
 // TEST DEFINITIONS

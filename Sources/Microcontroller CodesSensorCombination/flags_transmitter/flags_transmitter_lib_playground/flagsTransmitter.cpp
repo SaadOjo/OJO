@@ -3,7 +3,7 @@
  Library wrıtten by Abdullah Aslam
  */
 #include "flagsTransmitter.h"
-flagsTransmitter::flagsTransmitter(unsigned char laser_pin, unsigned char sevenSegment_pin): _myTransmitter(9)
+flagsTransmitter::flagsTransmitter(unsigned char laser_pin, unsigned char sevenSegment_pin): _myTransmitter(10)
 {
   _laser_pin = laser_pin;
   _sevenSegment_pin = sevenSegment_pin;
